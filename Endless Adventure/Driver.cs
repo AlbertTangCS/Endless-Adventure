@@ -2,11 +2,15 @@
 using System.Diagnostics;
 
 namespace EndlessAdventure {
+	/// <summary>
+	/// Main loop of the program that continually runs and determines whether
+	/// to update the game and the GUI.
+	/// </summary>
 	public class Driver {
 
 		public static void Main() {
 			Game game = new Game();
-			Gui gui = new Gui();
+			Gui gui = new Gui(game);
 
 			long frequency = Stopwatch.Frequency/1000;
 			Stopwatch stopwatch = new Stopwatch();
@@ -22,19 +26,20 @@ namespace EndlessAdventure {
 
 				game.ProcessInput();
 
-				while (tick_lag/frequency >= Config.LENGTH_TICK) {
+				// logic update, update for every elapsed tick
+				while (tick_lag/frequency >= Preferences.LENGTH_TICK) {
 					game.Update();
-					Console.WriteLine("Tick time: " + tick_lag / frequency + "ms");
-					tick_lag -= Config.LENGTH_TICK*frequency;
+					Console.WriteLine("\n[Tick time: " + tick_lag / frequency + "ms]");
+					tick_lag -= Preferences.LENGTH_TICK*frequency;
 				}
 
-				if (frame_lag/frequency >= Config.LENGTH_FRAME) {
+				// GUI update, only update once
+				if (frame_lag/frequency >= Preferences.LENGTH_FRAME) {
 					gui.Render();
-					Console.WriteLine("Frame time: " + frame_lag / frequency + "ms");
+					Console.WriteLine("\n[Frame time: " + frame_lag / frequency + "ms]");
 					frame_lag = 0;
 				}
 			}
 		}
-
 	}
 }

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EC474A3D-3771-4BAE-B935-98593CF7EC87}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Endless_Adventure</RootNamespace>
+    <RootNamespace>EndlessAdventure</RootNamespace>
     <AssemblyName>Endless Adventure</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Battle\Battlefield.cs" />
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Factories.cs" />
     <Compile Include="Characters\CharacterState.cs" />
     <Compile Include="Battle\Combatant.cs" />
     <Compile Include="Resources\Preferences.cs" />

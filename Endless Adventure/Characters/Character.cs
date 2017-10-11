@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EndlessAdventure.Resources;
 
 namespace EndlessAdventure.Characters {
@@ -9,35 +8,17 @@ namespace EndlessAdventure.Characters {
 		public string Name { get; private set; }
 		public Dictionary<StatType, Stat> Stats { get; private set; }
 
-		private CharacterState _state;
-		public event EventHandler StateChanged;
-		public CharacterState State {
-			get {
-				return _state;
-			}
-			private set {
-				if (_state != value) {
-					_state = value;
-					OnStateChanged(EventArgs.Empty);
-				}
-			}
-		}
-		private void OnStateChanged(EventArgs e) {
-			StateChanged?.Invoke(this, e);
-		}
+		public Character() : this(Defaults.CharacterName, null) { }
 
-		public Character() : this(Defaults.CharacterName) { }
+		public Character(Dictionary<StatType, Stat> stats) : this(Defaults.CharacterName, stats) { }
 
-		public Character(string name) {
+		public Character(string name, Dictionary<StatType, Stat> stats) {
 			Name = name;
-			RegisterStats();
-			State = CharacterState.Fighting;
-		}
-
-		public void RegisterStats() {
-			Stats = new Dictionary<StatType, Stat>();
-			foreach (StatType stat in Enum.GetValues(typeof(StatType))) {
-				Stats.Add(stat, new Stat(stat));
+			if (stats == null) {
+				Stats = StatsFactory.CreateStats();
+			}
+			else {
+				Stats = stats;
 			}
 		}
 
@@ -51,9 +32,21 @@ namespace EndlessAdventure.Characters {
 			else {
 				healthStat.Current -= pDamage;
 			}
+		}
 
-			if (healthStat.Current == 0) {
-				State = CharacterState.Fallen;
+		public int CurrentHealth {
+			get {
+				Stat health;
+				Stats.TryGetValue(StatType.Health, out health);
+				return health.Current;
+			}
+		}
+
+		public int MaxHealth {
+			get {
+				Stat health;
+				Stats.TryGetValue(StatType.Health, out health);
+				return health.Max;
 			}
 		}
 	}

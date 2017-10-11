@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace EndlessAdventure {
 	/// <summary>
@@ -29,14 +28,13 @@ namespace EndlessAdventure {
 				// logic update, update for every elapsed tick
 				while (tick_lag/frequency >= Preferences.LENGTH_TICK) {
 					game.Update();
-					Console.WriteLine("\n[Tick time: " + tick_lag / frequency + "ms]");
+					// Console.WriteLine("\n[Tick time: " + tick_lag / frequency + "ms]");
 					tick_lag -= Preferences.LENGTH_TICK*frequency;
 				}
 
 				// GUI update, only update once
 				if (frame_lag/frequency >= Preferences.LENGTH_FRAME) {
-					gui.Render();
-					Console.WriteLine("\n[Frame time: " + frame_lag / frequency + "ms]");
+					gui.Render(frame_lag/frequency);
 					frame_lag = 0;
 				}
 			}

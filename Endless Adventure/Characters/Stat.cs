@@ -1,6 +1,4 @@
-﻿using EndlessAdventure.Resources;
-
-namespace EndlessAdventure.Characters {
+﻿namespace EndlessAdventure.Characters {
 
 	public enum StatType {
 		Health,
@@ -21,36 +19,17 @@ namespace EndlessAdventure.Characters {
 		public int Current { get; set; }
 		public int Max { get; set; }
 
-		public Stat(StatType pType) : this (pType, GetDefaultStatValue(pType)) { }
-
+		/// <summary>
+		/// DO NOT CALL DIRECTLY. Use StatsFactory instead.
+		/// Creates a new Stat instance given a type and a base value.
+		/// </summary>
+		/// <param name="pType">The type of the Stat.</param>
+		/// <param name="pBase">The base value of the Stat.</param>
 		public Stat(StatType pType, int pBase) {
 			Type = pType;
 			Base = pBase;
 			Current = pBase;
 			Max = pBase;
-		}
-
-		private static int GetDefaultStatValue(StatType pType) {
-			switch (pType) {
-				case StatType.Health:
-					return Defaults.CharacterHealth;
-				case StatType.Energy:
-					return Defaults.CharacterEnergy;
-				case StatType.Attack:
-					return Defaults.CharacterAttack;
-				case StatType.Defense:
-					return Defaults.CharacterDefense;
-				case StatType.Strength:
-					return Defaults.CharacterStrength;
-				case StatType.Dexterity:
-					return Defaults.CharacterDexterity;
-				case StatType.Vitality:
-					return Defaults.CharacterVitality;
-				case StatType.Intelligence:
-					return Defaults.CharacterIntelligence;
-				default:
-					return 0;
-			}
 		}
 	}
 }

@@ -9,25 +9,25 @@ namespace EndlessAdventure {
 		public Gui(Game game) {
 			_game = game;
 		}
-
-		private bool _tickOrTock = true;
-		public void Render() {
+		
+		public void Render(long frametime) {
 			Console.Clear();
+			Console.WriteLine("[Frame time: " + frametime + "ms]");
+			Console.WriteLine("");
 
-			Characters.Character protagonist = _game.Battlefield.Protagonists[0].Character;
-			Console.WriteLine(protagonist.Name+":");
-			Console.WriteLine(protagonist.Stats[Characters.StatType.Health].Current + " / " + protagonist.Stats[Characters.StatType.Health].Max);
+			foreach (Battle.Combatant p in _game.Battlefield.Protagonists) {
+				Characters.Character protagonist = p.Character;
+				Console.WriteLine(protagonist.Name + ":");
+				Console.WriteLine(protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
+			}
 
 			Console.WriteLine("");
 
-			Characters.Character antagonist = _game.Battlefield.Antagonists[0].Character;
-			Console.WriteLine(antagonist.Name + ":");
-			Console.WriteLine(antagonist.Stats[Characters.StatType.Health].Current + " / " + antagonist.Stats[Characters.StatType.Health].Max);
-			/*
-			Console.Clear();
-			Console.WriteLine(_tickOrTock ? "tick" : "tock");
-			_tickOrTock = !_tickOrTock;
-			*/
+			foreach (Battle.Combatant a in _game.Battlefield.Antagonists) {
+				Characters.Character antagonist = a.Character;
+				Console.WriteLine(antagonist.Name + ":");
+				Console.WriteLine(antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
+			}
 		}
 	}
 }

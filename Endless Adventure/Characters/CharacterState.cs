@@ -1,5 +1,5 @@
-﻿namespace EndlessAdventure.Characters {
-	public enum CharacterState {
+﻿namespace EndlessAdventure.Battle {
+	public enum CombatantState {
 		Fighting,
 		Fallen
 	}

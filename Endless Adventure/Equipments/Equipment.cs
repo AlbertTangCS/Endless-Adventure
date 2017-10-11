@@ -1,4 +1,4 @@
 ﻿namespace EndlessAdventure.Equipments {
-	internal class Equipment {
+	public class Equipment {
 	}
 }

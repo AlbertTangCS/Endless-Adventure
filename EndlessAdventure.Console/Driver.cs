@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace EndlessAdventure {
+using EndlessAdventure.Common;
+
+namespace EndlessAdventure.ConsoleApp {
 	/// <summary>
 	/// Main loop of the program that continually runs and determines whether
 	/// to update the game and the GUI.

@@ -8,8 +8,9 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>EndlessAdventure</RootNamespace>
     <AssemblyName>Endless Adventure</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,22 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Battle\Battlefield.cs" />
-    <Compile Include="Characters\Character.cs" />
-    <Compile Include="Characters\Factories.cs" />
-    <Compile Include="Characters\CharacterState.cs" />
-    <Compile Include="Battle\Combatant.cs" />
-    <Compile Include="Resources\Preferences.cs" />
-    <Compile Include="Resources\Defaults.cs" />
     <Compile Include="Driver.cs" />
-    <Compile Include="Equipments\Equipment.cs" />
-    <Compile Include="Game.cs" />
     <Compile Include="Gui.cs" />
+    <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Characters\Stat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EndlessAdventure.Common\EndlessAdventure.Common.csproj">
+      <Project>{48f25d9f-21bf-4231-949a-f3f64b2fccb1}</Project>
+      <Name>EndlessAdventure.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

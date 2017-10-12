@@ -1,8 +1,8 @@
 ﻿using System;
-using EndlessAdventure.Characters;
-using EndlessAdventure.Equipments;
+using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Equipments;
 
-namespace EndlessAdventure.Battle {
+namespace EndlessAdventure.Common.Battle {
 	public class Combatant {
 
 		public Character Character { get; private set; }

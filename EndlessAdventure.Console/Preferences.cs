@@ -1,4 +1,5 @@
-﻿namespace EndlessAdventure {
+﻿namespace EndlessAdventure.ConsoleApp {
+
 	public class Preferences {
 
 		public const int LENGTH_TICK = 1000;

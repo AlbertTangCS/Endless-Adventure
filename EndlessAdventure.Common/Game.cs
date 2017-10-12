@@ -1,6 +1,6 @@
-﻿using EndlessAdventure.Battle;
+﻿using EndlessAdventure.Common.Battle;
 
-namespace EndlessAdventure {
+namespace EndlessAdventure.Common {
 
 	public class Game {
 

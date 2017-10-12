@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EndlessAdventure.Resources;
+using EndlessAdventure.Common.Resources;
 
-namespace EndlessAdventure.Characters {
+namespace EndlessAdventure.Common.Characters {
 
 	public class CharacterFactory {
 		public static Character CreateCharacter(StatType pType, int value) {

@@ -1,8 +1,12 @@
 ﻿using System;
+using EndlessAdventure.Common;
+using EndlessAdventure.Common.Battle;
+using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Interfaces;
 
-namespace EndlessAdventure {
+namespace EndlessAdventure.ConsoleApp {
 
-	public class Gui {
+	public class Gui : IGui {
 
 		private Game _game;
 
@@ -15,16 +19,16 @@ namespace EndlessAdventure {
 			Console.WriteLine("[Frame time: " + frametime + "ms]");
 			Console.WriteLine("");
 
-			foreach (Battle.Combatant p in _game.Battlefield.Protagonists) {
-				Characters.Character protagonist = p.Character;
+			foreach (Combatant p in _game.Battlefield.Protagonists) {
+				Character protagonist = p.Character;
 				Console.WriteLine(protagonist.Name + ":");
 				Console.WriteLine(protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
 			}
 
 			Console.WriteLine("");
 
-			foreach (Battle.Combatant a in _game.Battlefield.Antagonists) {
-				Characters.Character antagonist = a.Character;
+			foreach (Combatant a in _game.Battlefield.Antagonists) {
+				Character antagonist = a.Character;
 				Console.WriteLine(antagonist.Name + ":");
 				Console.WriteLine(antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 			}

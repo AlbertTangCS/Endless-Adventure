@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using EndlessAdventure.Resources;
 
-namespace EndlessAdventure.Characters {
+using EndlessAdventure.Common.Resources;
+
+namespace EndlessAdventure.Common.Characters {
 
 	public class Character {
 
@@ -49,5 +50,6 @@ namespace EndlessAdventure.Characters {
 				return health.Max;
 			}
 		}
+
 	}
 }

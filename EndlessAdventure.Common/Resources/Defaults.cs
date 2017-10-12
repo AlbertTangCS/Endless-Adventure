@@ -1,6 +1,7 @@
-﻿namespace EndlessAdventure.Resources {
+﻿namespace EndlessAdventure.Common.Resources {
 
 	public class Defaults {
+
 		public static string CharacterName = "Character";
 
 		public static int CharacterHealth = 10;
@@ -12,5 +13,6 @@
 		public static int CharacterVitality = 1;
 		public static int CharacterIntelligence = 1;
 		public static int CharacterLuck = 1;
+
 	}
 }

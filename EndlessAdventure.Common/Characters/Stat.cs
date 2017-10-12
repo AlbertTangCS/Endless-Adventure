@@ -1,4 +1,4 @@
-﻿namespace EndlessAdventure.Characters {
+﻿namespace EndlessAdventure.Common.Characters {
 
 	public enum StatType {
 		Health,

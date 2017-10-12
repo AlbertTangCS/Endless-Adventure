@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using EndlessAdventure.Characters;
+using EndlessAdventure.Common.Characters;
 
-namespace EndlessAdventure.Battle {
+namespace EndlessAdventure.Common.Battle {
 	public class Battlefield {
 
 		public List<Combatant> Protagonists { get; private set; }

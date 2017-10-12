@@ -4,5 +4,5 @@ install:
   - nuget restore EndlessAdventure.sln
   - nuget install NUnit.ConsoleRunner -Version 3.7.0 -OutputDirectory testrunner
 script:
-  - xbuild EndlessAdventure.sln /p:TargetFrameworkVersion="v4.6.1" /p:Configuration=Release
+  - msbuild EndlessAdventure.sln /p:TargetFrameworkVersion="v4.6.1" /p:Configuration=Release
 #  - ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./EndlessAdventure.Tests/bin/Release/netstandard1.4/EndlessAdventure.Tests.dll

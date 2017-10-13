@@ -1,5 +1,7 @@
 language: csharp
 solution: EndlessAdventure.sln
+dotnet: 1.1.4
+env: DOTNETCORE=1
 install:
   - nuget restore EndlessAdventure.sln
   - nuget install NUnit.Runners -Version 3.5.0 -OutputDirectory testrunner

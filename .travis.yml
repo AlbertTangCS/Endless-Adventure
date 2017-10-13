@@ -1,4 +1,5 @@
 language: csharp
+sudo: required
 solution: EndlessAdventure.sln
 matrix:
   include:
@@ -10,14 +11,13 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
-      dotnet: 1.0.1
+      dotnet: 1.1.4
       mono: none
       env: DOTNETCORE=1
 install:
-  - nuget restore EndlessAdventure.sln
-  - nuget install NUnit.ConsoleRunner -Version 3.7.0 -OutputDirectory testrunner
-script:
   - dotnet restore
+script:
   - dotnet build -c Release
+  - dotnet test ./EndlessAdventure.Tests
 #  - msbuild EndlessAdventure.sln /p:TargetFrameworkVersion="v4.6.1" /p:Configuration=Release
 #  - ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./EndlessAdventure.Tests/bin/Release/netstandard1.4/EndlessAdventure.Tests.dll

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using EndlessAdventure.Common.Resources;
-
 namespace EndlessAdventure.Common.Characters {
 
 	public class Character {
@@ -9,23 +7,16 @@ namespace EndlessAdventure.Common.Characters {
 		public string Name { get; private set; }
 		public Dictionary<StatType, Stat> Stats { get; private set; }
 
-		public Character() : this(Defaults.CharacterName, null) { }
-
-		public Character(Dictionary<StatType, Stat> stats) : this(Defaults.CharacterName, stats) { }
-
+		/// <summary>
+		/// DO NOT CALL DIRECTLY. Use CharacterFactory.
+		/// </summary>
 		public Character(string name, Dictionary<StatType, Stat> stats) {
 			Name = name;
-			if (stats == null) {
-				Stats = StatsFactory.CreateStats();
-			}
-			else {
-				Stats = stats;
-			}
+			Stats = stats;
 		}
 
 		public void ApplyDamage(int pDamage) {
-			Stat healthStat;
-			Stats.TryGetValue(StatType.Health, out healthStat);
+			Stats.TryGetValue(StatType.Health, out Stat healthStat);
 
 			if (healthStat.Current - pDamage < 0) {
 				healthStat.Current = 0;
@@ -37,16 +28,14 @@ namespace EndlessAdventure.Common.Characters {
 
 		public int CurrentHealth {
 			get {
-				Stat health;
-				Stats.TryGetValue(StatType.Health, out health);
+				Stats.TryGetValue(StatType.Health, out Stat health);
 				return health.Current;
 			}
 		}
 
 		public int MaxHealth {
 			get {
-				Stat health;
-				Stats.TryGetValue(StatType.Health, out health);
+				Stats.TryGetValue(StatType.Health, out Stat health);
 				return health.Max;
 			}
 		}

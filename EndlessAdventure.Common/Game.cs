@@ -1,13 +1,16 @@
 ﻿using EndlessAdventure.Common.Battle;
+using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common {
 
 	public class Game {
 
+		public World world { get; private set; }
 		public Battlefield Battlefield { get; private set; }
 
 		public Game() {
-			Battlefield = new Battlefield();
+			world = WorldFactory.CreateWorld(WorldDatabase.GreenPastures);
+			Battlefield = new Battlefield(world.GetEnemy);
 		}
 
 		public void Update() {

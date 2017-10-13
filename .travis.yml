@@ -1,23 +1,8 @@
 language: csharp
-sudo: required
 solution: EndlessAdventure.sln
-matrix:
-  include:
-    - os: osx
-      osx_image: xcode9
-      dotnet: 1.1.4
-      mono: none
-      env: DOTNETCORE=1
-    - os: linux
-      dist: trusty
-      sudo: required
-      dotnet: 1.1.4
-      mono: none
-      env: DOTNETCORE=1
 install:
-  - dotnet restore
+  - nuget restore EndlessAdventure.sln
+  - nuget install NUnit.Runners -Version 3.5.0 -OutputDirectory testrunner
 script:
-  - dotnet build -c Release
-  - dotnet test ./EndlessAdventure.Tests
-#  - msbuild EndlessAdventure.sln /p:TargetFrameworkVersion="v4.6.1" /p:Configuration=Release
-#  - ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./EndlessAdventure.Tests/bin/Release/netstandard1.4/EndlessAdventure.Tests.dll
+  - msbuild  /p:Configuration=Debug ./EndlessAdventure.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit-console.exe ./EndlessAdventure.Tests/bin/Debug/netcoreapp2.0/EndlessAdventure.Tests.dll

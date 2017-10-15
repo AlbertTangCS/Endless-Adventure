@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Equipments;
+using EndlessAdventure.Common.Equipments.Effects;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Battle {
@@ -10,7 +12,7 @@ namespace EndlessAdventure.Common.Battle {
 		public int Level { get; private set; }
 		public int Experience { get; private set; }
 		private int _expReward;
-		private Equipment Equipment;
+		public Inventory Inventory { get; private set; }
 
 		private int _pendingDamage;
 
@@ -19,10 +21,10 @@ namespace EndlessAdventure.Common.Battle {
 		/// <summary>
 		/// DO NOT CALL DIRECTLY. Use CombatantFactory.
 		/// </summary>
-		public Combatant(Character character, Equipment equipment, int level, int expReward) {
+		public Combatant(Character character, Inventory inventory, int level, int expReward) {
 
 			Character = character ?? throw new ArgumentException();
-			Equipment = equipment ?? throw new ArgumentException();
+			Inventory = inventory ?? throw new ArgumentException();
 			if (level < 1) throw new ArgumentException();
 			Level = level;
 			_expReward = expReward;
@@ -66,6 +68,24 @@ namespace EndlessAdventure.Common.Battle {
 				Fallen = true;
 			}
 		}
+
+#region Equipment
+
+		public void Equip(Equipment equipment) {
+			List<IEquipmentEffect> effects = Inventory.Equip(equipment);
+			foreach (IEquipmentEffect effect in effects) {
+				effect.Affect(Character);
+			}
+		}
+
+		public void Unequip(Equipment equipment) {
+			List<IEquipmentEffect> effects = Inventory.Unequip(equipment);
+			foreach (IEquipmentEffect effect in effects) {
+				effect.Affect(Character);
+			}
+		}
+
+#endregion
 
 #region Getters&Setters
 

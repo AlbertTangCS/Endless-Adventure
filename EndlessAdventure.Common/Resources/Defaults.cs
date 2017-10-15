@@ -12,7 +12,7 @@
 		public static int CharacterDexterity = 1;
 		public static int CharacterVitality = 1;
 		public static int CharacterIntelligence = 1;
-		public static int CharacterLuck = 1;
+		public static int CharacterLuck = 0;
 
 		public static int CombatantLevel = 1;
 		public static int CombatantExpReward = 1;
@@ -21,5 +21,9 @@
 			int exp = (int)(CombatantBaseLevelExp + ((level-1) * 3));
 			return exp;
 		}
+
+		public static string EquipmentName = "Equipment";
+		public static int EquipmentCost = 0;
+		public static string EquipmentDescription = "Default Equipment.";
 	}
 }

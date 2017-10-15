@@ -36,16 +36,6 @@ namespace EndlessAdventure.Common.Resources
 													 InventoryFactory.CreateInventory(),
 													 Defaults.CombatantLevel,
 													 Defaults.CombatantExpReward);
-
-			if (attack == -1) attack = Defaults.CharacterAttack;
-			if (defense == -1) defense = Defaults.CharacterDefense;
-			if (health == -1) health = Defaults.CharacterHealth;
-			if (energy == -1) energy = Defaults.CharacterEnergy;
-			if (strength == -1) strength = Defaults.CharacterStrength;
-			if (dexterity == -1) dexterity = Defaults.CharacterDexterity;
-			if (vitality == -1) vitality = Defaults.CharacterVitality;
-			if (intelligence == -1) intelligence = Defaults.CharacterIntelligence;
-			if (luck == -1) luck = Defaults.CharacterLuck;
 		}
 
 		public static Combatant CreateCombatant(string name, StatType pType, int value) {

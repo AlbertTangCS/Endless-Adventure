@@ -4,11 +4,11 @@ dotnet: 2.0.0
 env: DOTNETCORE=1
 sudo: required
 install:
-   - dotnet restore
+   - dotnet restore EndlessAdventure.Testing.sln
 #  - nuget restore EndlessAdventure.sln
 #  - nuget install NUnit.Runners -Version 3.5.0 -OutputDirectory testrunner
 script:
-   - dotnet build 
-   - dotnet test EndlessAdventure.Tests/EndlessAdventure.Tests/csproj
+   - dotnet build EndlessAdventure.Testing.sln
+   - dotnet test EndlessAdventure.Tests/EndlessAdventure.Tests.csproj
 #  - msbuild  /p:Configuration=Debug ./EndlessAdventure.sln
 #  - mono ./testrunner/NUnit.ConsoleRunner.3.5.0/tools/nunit-console.exe ./EndlessAdventure.Tests/bin/Debug/netcoreapp2.0/EndlessAdventure.Tests.dll

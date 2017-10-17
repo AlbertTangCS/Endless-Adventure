@@ -36,12 +36,7 @@ namespace EndlessAdventure.Common {
 			int key = _weights.FirstOrDefault( x => x >= result);
 			_enemyData.TryGetValue(key, out CombatantData data);
 
-			return CombatantFactory.CreateCombatant(data.Name,
-																							attack: data.Attack,
-																							defense: data.Defense,
-																							health: data.Health,
-																							energy: data.Energy,
-																							expReward: data.ExpReward);
+			return CombatantFactory.CreateCombatant(data);
 		}
 	}
 }

@@ -13,8 +13,8 @@ namespace EndlessAdventure.Common.Equipments.Effects {
 		}
 
 		public void Affect(Character character) {
-			character.Stats.TryGetValue(StatType.Attack, out Stat attack);
-			attack.Current -= Value;
+			//character.Stats.TryGetValue(StatType.Attack, out Stat attack);
+			//attack.Current -= Value;
 		}
 	}
 }

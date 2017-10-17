@@ -71,7 +71,7 @@ namespace EndlessAdventure.Common.Battle {
 		}
 
 		private void AddProtagonist() {
-			Combatant protagonist = CombatantFactory.CreateCombatant("Player", health: 5);
+			Combatant protagonist = CombatantFactory.CreateCombatant("Player", body: 2);
 			protagonist.Equip(EquipmentFactory.CreateWeapon(1));
 			Protagonists.Add(protagonist);
 		}

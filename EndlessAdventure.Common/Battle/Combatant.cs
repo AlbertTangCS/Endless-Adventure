@@ -21,31 +21,28 @@ namespace EndlessAdventure.Common.Battle {
 		/// <summary>
 		/// DO NOT CALL DIRECTLY. Use CombatantFactory.
 		/// </summary>
-		public Combatant(Character character, Inventory inventory, int level, int expReward) {
+		public Combatant(Character character, int level, int expReward) {
 
 			Character = character ?? throw new ArgumentException();
-			Inventory = inventory ?? throw new ArgumentException();
 			if (level < 1) throw new ArgumentException();
 			Level = level;
 			_expReward = expReward;
 
+			Inventory = new Inventory(new List<Equipment>(), new List<Equipment>(), new List<Equipment>());
 			Fallen = false;
 		}
 		
 		public void AutoHeal() {
-			Character.Stats.TryGetValue(StatType.Health, out Stat healthStat);
-			healthStat.Current += 1;
-			if (healthStat.Current == healthStat.Max) {
+			Character.Heal(1);
+			if (Character.CurrentHealth == Character.MaxHealth) {
 				Fallen = false;
 			}
 		}
 
 		public void AttackCombatant(Combatant antagonist) {
-			Character.Stats.TryGetValue(StatType.Attack, out Stat proAttack);
-			antagonist.Character.Stats.TryGetValue(StatType.Defense, out Stat antDefense);
-			antagonist._pendingDamage = proAttack.Current - antDefense.Current;
-			if (antagonist._pendingDamage < 0) {
-				antagonist._pendingDamage = 0;
+			int pendingDamage = Character.PhysicalAttack - antagonist.Character.Defense;
+			if (antagonist._pendingDamage > 0) {
+				antagonist._pendingDamage += pendingDamage;
 			}
 		}
 
@@ -59,8 +56,8 @@ namespace EndlessAdventure.Common.Battle {
 
 		public void AddExperience(int experience) {
 			Experience += experience;
-			if (Experience >= Defaults.LevelExpFormula(Level)) {
-				Experience %= Defaults.LevelExpFormula(Level);
+			if (Experience >= Defaults.NextLevelExpFormula(Level)) {
+				Experience %= Defaults.NextLevelExpFormula(Level);
 				Level++;
 			}
 		}

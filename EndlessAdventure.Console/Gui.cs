@@ -24,7 +24,8 @@ namespace EndlessAdventure.ConsoleApp {
 			foreach (Combatant p in _game.Battlefield.Protagonists) {
 				Character protagonist = p.Character;
 				Console.WriteLine("Level "+p.Level+": "+protagonist.Name);
-				Console.WriteLine("Exp: " + p.Experience + " / " + Defaults.LevelExpFormula(p.Level));
+				Console.WriteLine("Exp: " + p.Experience + " / " + Defaults.NextLevelExpFormula(p.Level));
+				Console.WriteLine("Attack: " + protagonist.PhysicalAttack + ", Defense: " + protagonist.Defense);
 				Console.WriteLine("Health: "+protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
 			}
 
@@ -33,6 +34,7 @@ namespace EndlessAdventure.ConsoleApp {
 			foreach (Combatant a in _game.Battlefield.Antagonists) {
 				Character antagonist = a.Character;
 				Console.WriteLine("Level "+a.Level+": "+antagonist.Name);
+				Console.WriteLine("Attack: " + antagonist.PhysicalAttack + ", Defense: " + antagonist.Defense);
 				Console.WriteLine("Health: "+antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 			}
 		}

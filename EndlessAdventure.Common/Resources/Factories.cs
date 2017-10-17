@@ -12,11 +12,27 @@ namespace EndlessAdventure.Common.Resources
 	/// </summary>
 	public class CombatantFactory {
 
+		public static Combatant CreateCombatant(CombatantData data) {
+
+			return CreateCombatant(name: data.Name,
+														 attack: data.Attack,
+														 defense: data.Defense,
+														 health: data.Health,
+														 energy: data.Energy,
+														 expReward: data.ExpReward,
+														 strength: data.Strength,
+														 dexterity: data.Dexterity,
+														 vitality: data.Vitality,
+														 intelligence: data.Intelligence,
+														 luck: data.Luck);
+		}
+
 		public static Combatant CreateCombatant(string name = "",
 																						int attack = -1,
 																						int defense = -1,
 																						int health = -1,
 																						int energy = -1,
+																						int expReward = -1,
 																						int strength = -1,
 																						int dexterity = -1,
 																						int vitality = -1,
@@ -24,45 +40,18 @@ namespace EndlessAdventure.Common.Resources
 																						int luck = -1) {
 
 			return new Combatant(CharacterFactory.CreateCharacter(name, 
-																														attack,
-																														defense,
-																														health,
-																														energy,
-																														strength,
-																														dexterity,
-																														vitality,
-																														intelligence,
-																														luck),
+																														attack: attack,
+																														defense: defense,
+																														health: health,
+																														energy: energy,
+																														strength: strength,
+																														dexterity: dexterity,
+																														vitality: vitality,
+																														intelligence: intelligence,
+																														luck: luck),
 													 InventoryFactory.CreateInventory(),
 													 Defaults.CombatantLevel,
-													 Defaults.CombatantExpReward);
-		}
-
-		public static Combatant CreateCombatant(string name, StatType pType, int value) {
-
-			Combatant created = new Combatant(CharacterFactory.CreateCharacter(name, pType, value),
-																				InventoryFactory.CreateInventory(),
-																				Defaults.CombatantLevel,
-																				Defaults.CombatantExpReward);
-			return created;
-		}
-
-		public static Combatant CreateCombatant(StatType pType, int value) {
-
-			Combatant created = new Combatant(CharacterFactory.CreateCharacter(pType, value),
-																				InventoryFactory.CreateInventory(),
-																				Defaults.CombatantLevel,
-																				Defaults.CombatantExpReward);
-			return created;
-		}
-
-		public static Combatant CreateCombatant(string name) {
-
-			Combatant created = new Combatant(CharacterFactory.CreateCharacter(name),
-																				InventoryFactory.CreateInventory(),
-																				Defaults.CombatantLevel,
-																				Defaults.CombatantExpReward);
-			return created;
+													 expReward == -1 ? Defaults.CombatantExpReward : expReward);
 		}
 	}
 
@@ -91,18 +80,6 @@ namespace EndlessAdventure.Common.Resources
 																													intelligence,
 																													luck));
 		}
-
-		public static Character CreateCharacter(string name, StatType pType, int value) {
-			return new Character(name, StatsFactory.CreateStats(pType, value));
-		}
-
-		public static Character CreateCharacter(StatType pType, int value) {
-			return CreateCharacter(Defaults.CharacterName, pType, value);
-		}
-
-		public static Character CreateCharacter(string name) {
-			return new Character(name, StatsFactory.CreateStats());
-		}
 	}
 
 	/// <summary>
@@ -130,27 +107,6 @@ namespace EndlessAdventure.Common.Resources
 			stats.Add(StatType.Intelligence, new Stat(StatType.Intelligence, intelligence == -1 ? GetDefaultStatValue(StatType.Intelligence) : intelligence));
 			stats.Add(StatType.Luck, new Stat(StatType.Luck, luck == -1 ? GetDefaultStatValue(StatType.Luck) : luck));
 
-			return stats;
-		}
-
-		public static Dictionary<StatType, Stat> CreateStats() {
-			Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
-			foreach (StatType stat in Enum.GetValues(typeof(StatType))) {
-				stats.Add(stat, new Stat(stat, GetDefaultStatValue(stat)));
-			}
-			return stats;
-		}
-
-		public static Dictionary<StatType, Stat> CreateStats(StatType pType, int value) {
-			Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
-			foreach (StatType stat in Enum.GetValues(typeof(StatType))) {
-				if (stat == pType) {
-					stats.Add(stat, new Stat(stat, value));
-				}
-				else {
-					stats.Add(stat, new Stat(stat, GetDefaultStatValue(stat)));
-				}
-			}
 			return stats;
 		}
 
@@ -257,7 +213,7 @@ namespace EndlessAdventure.Common.Resources
 
 	public class WorldFactory {
 		public static World CreateWorld(string name) {
-			List<EnemyData> enemyData = Loader.GetEnemyData(name);
+			List<CombatantData> enemyData = Loader.GetEnemyData(name);
 			World world = new World(name, enemyData);
 			return world;
 		}

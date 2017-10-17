@@ -16,9 +16,9 @@
 
 		public static int CombatantLevel = 1;
 		public static int CombatantExpReward = 1;
-		public static int CombatantBaseLevelExp = 3;
+		public static int CombatantBaseLevelExp = 10;
 		public static int LevelExpFormula(int level) {
-			int exp = (int)(CombatantBaseLevelExp + ((level-1) * 3));
+			int exp = (int)(CombatantBaseLevelExp + ((level-1) * 5));
 			return exp;
 		}
 

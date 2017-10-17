@@ -10,7 +10,7 @@ namespace EndlessAdventure.Common {
 
 		public Game() {
 			world = WorldFactory.CreateWorld(WorldDatabase.GreenPastures);
-			Battlefield = new Battlefield(world.GetEnemy);
+			Battlefield = new Battlefield(world.SpawnEnemy);
 		}
 
 		public void Update() {

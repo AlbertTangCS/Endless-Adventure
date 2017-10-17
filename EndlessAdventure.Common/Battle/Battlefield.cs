@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Battle {
@@ -72,7 +71,7 @@ namespace EndlessAdventure.Common.Battle {
 		}
 
 		private void AddProtagonist() {
-			Combatant protagonist = CombatantFactory.CreateCombatant("Player", defense: 1, health: 5);
+			Combatant protagonist = CombatantFactory.CreateCombatant("Player", health: 5);
 			protagonist.Equip(EquipmentFactory.CreateWeapon(1));
 			Protagonists.Add(protagonist);
 		}

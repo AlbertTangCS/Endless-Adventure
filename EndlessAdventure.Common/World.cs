@@ -27,12 +27,20 @@ namespace EndlessAdventure.Common {
 			_weights.Sort();
 		}
 
-		public Combatant GetEnemy() {
+		public Combatant SpawnEnemy() {
 			Random random = new Random();
 			int result = random.Next(_totalWeight);
+
+			// get the key that is the random value rounded up
 			int key = _weights.FirstOrDefault( x => x >= result);
 			_enemyData.TryGetValue(key, out EnemyData data);
-			return CombatantFactory.CreateCombatant(data.Name);
+
+			return CombatantFactory.CreateCombatant(data.Name,
+																							attack: data.Attack,
+																							defense: data.Defense,
+																							health: data.Health,
+																							energy: data.Energy,
+																							expReward: data.ExpReward);
 		}
 	}
 }

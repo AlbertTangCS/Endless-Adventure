@@ -51,6 +51,10 @@ namespace EndlessAdventure.Common.Battle {
 
 		public void DefeatCombatant(Combatant antagonist) {
 			AddExperience(antagonist._expReward);
+			Inventory.Equippables.AddRange(antagonist.Inventory.Equipped.Values);
+			Inventory.Equippables.AddRange(antagonist.Inventory.Equippables);
+			Inventory.Consumables.AddRange(antagonist.Inventory.Consumables);
+			Inventory.Miscellaneous.AddRange(antagonist.Inventory.Miscellaneous);
 		}
 
 		public void AddExperience(int experience) {

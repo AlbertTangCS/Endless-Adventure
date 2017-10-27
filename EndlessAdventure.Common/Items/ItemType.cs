@@ -1,6 +1,6 @@
-﻿namespace EndlessAdventure.Common.Equipments {
+﻿namespace EndlessAdventure.Common.Items {
 
-	public enum EquipmentType {
+	public enum ItemType {
 
 		Weapon,
 		Headgear,

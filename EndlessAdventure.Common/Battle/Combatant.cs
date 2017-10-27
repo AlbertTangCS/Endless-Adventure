@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EndlessAdventure.Common.Characters;
-using EndlessAdventure.Common.Equipments;
-using EndlessAdventure.Common.Equipments.Effects;
+using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Battle {
@@ -28,7 +27,7 @@ namespace EndlessAdventure.Common.Battle {
 			Level = level;
 			_expReward = expReward;
 
-			Inventory = new Inventory(new List<Equipment>(), new List<Equipment>(), new List<Equipment>());
+			Inventory = new Inventory(new List<Equipment>(), new List<Equipment>(), new List<Item>());
 			Fallen = false;
 		}
 		
@@ -41,7 +40,7 @@ namespace EndlessAdventure.Common.Battle {
 
 		public void AttackCombatant(Combatant antagonist) {
 			int pendingDamage = Character.PhysicalAttack - antagonist.Character.Defense;
-			if (antagonist._pendingDamage > 0) {
+			if (pendingDamage > 0) {
 				antagonist._pendingDamage += pendingDamage;
 			}
 		}
@@ -73,16 +72,20 @@ namespace EndlessAdventure.Common.Battle {
 #region Equipment
 
 		public void Equip(Equipment equipment) {
-			List<IEquipmentEffect> effects = Inventory.Equip(equipment);
-			foreach (IEquipmentEffect effect in effects) {
-				effect.Affect(Character);
+			Inventory.Equip(equipment, out List<ABuff> equip, out List<ABuff> unequip);
+			foreach (ABuff buff in equip) {
+				Character.AddBuff(buff);
+			}
+
+			foreach (ABuff buff in unequip) {
+				Character.RemoveBuff(buff);
 			}
 		}
 
 		public void Unequip(Equipment equipment) {
-			List<IEquipmentEffect> effects = Inventory.Unequip(equipment);
-			foreach (IEquipmentEffect effect in effects) {
-				effect.Affect(Character);
+			Inventory.Unequip(equipment, out List<ABuff> unequip);
+			foreach (ABuff buff in unequip) {
+				Character.RemoveBuff(buff);
 			}
 		}
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Characters;
-using EndlessAdventure.Common.Equipments;
-using EndlessAdventure.Common.Equipments.Effects;
+using EndlessAdventure.Common.Items;
+using EndlessAdventure.Common.Items.Effects;
 
 namespace EndlessAdventure.Common.Resources
 {
@@ -69,7 +69,7 @@ namespace EndlessAdventure.Common.Resources
 			Inventory inventory = new Inventory(
 				new List<Equipment>(),
 				new List<Equipment>(),
-				new List<Equipment>());
+				new List<Item>());
 
 			return inventory;
 		}
@@ -80,21 +80,20 @@ namespace EndlessAdventure.Common.Resources
 
 			Equipment equipment = new Equipment(
 					Defaults.EquipmentName,
-					EquipmentType.Miscellaneous,
+					ItemType.Miscellaneous,
 					Defaults.EquipmentCost,
 					Defaults.EquipmentDescription,
-					new List<IEquipmentEffect>(),
-					new List<IEquipmentEffect>());
+					new List<ABuff>());
 
 			return equipment;
 		}
 
-		public static Equipment CreateEquipment(EquipmentType type, int value) {
+		public static Equipment CreateEquipment(ItemType type, double value) {
 
-			if (type == EquipmentType.Weapon) {
+			if (type == ItemType.Weapon) {
 				return CreateWeapon(value);
 			}
-			else if (type == EquipmentType.Chestgear) {
+			else if (type == ItemType.Chestgear) {
 				return CreateChestgear(value);
 			}
 			else {
@@ -103,38 +102,33 @@ namespace EndlessAdventure.Common.Resources
 					type,
 					Defaults.EquipmentCost,
 					Defaults.EquipmentDescription,
-					new List<IEquipmentEffect>(),
-					new List<IEquipmentEffect>());
+					new List<ABuff>());
 
 				return equipment;
 			}
 		}
 
-		public static Equipment CreateWeapon(int value) {
+		public static Equipment CreateWeapon(double value) {
 			Equipment equipment = new Equipment(
 				"Weapon",
-				EquipmentType.Weapon,
+				ItemType.Weapon,
 				Defaults.EquipmentCost,
 				Defaults.EquipmentDescription,
-				new List<IEquipmentEffect>(),
-				new List<IEquipmentEffect>());
+				new List<ABuff>());
 
-			equipment.EquipEffects.Add(new WeaponEquipEffect("WeaponEquipEffect", value));
-			equipment.UnequipEffects.Add(new WeaponUnequipEffect("WeaponUnequipEffect", value));
+			equipment.Buffs.Add(new PhysicalWeaponBuff("WeaponEquipEffect", value));
 
 			return equipment;
 		}
 
-		public static Equipment CreateChestgear(int value) {
+		public static Equipment CreateChestgear(double value) {
 			Equipment equipment = new Equipment(
 				"Armor",
-				EquipmentType.Chestgear,
+				ItemType.Chestgear,
 				Defaults.EquipmentCost,
 				Defaults.EquipmentDescription,
-				new List<IEquipmentEffect>(),
-				new List<IEquipmentEffect>());
-			equipment.EquipEffects.Add(new ArmorEquipEffect("WeaponEquipEffect", value));
-			equipment.UnequipEffects.Add(new ArmorUnequipEffect("WeaponUnequipEffect", value));
+				new List<ABuff>());
+			equipment.Buffs.Add(new ArmorBuff("WeaponEquipEffect", value));
 
 			return equipment;
 		}

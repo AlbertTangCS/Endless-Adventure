@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using EndlessAdventure.Common.Equipments.Effects;
+using EndlessAdventure.Common.Characters;
 
-namespace EndlessAdventure.Common.Equipments
+namespace EndlessAdventure.Common.Items
 {
 	public class Inventory
 	{
-		public Dictionary<EquipmentType, Equipment> Equipped { get; private set; }
+		public Dictionary<ItemType, Equipment> Equipped { get; private set; }
 		public List<Equipment> Equippables { get; private set; }
 		public List<Equipment> Consumables { get; private set; }
-		public List<Equipment> Miscellaneous { get; private set; }
+		public List<Item> Miscellaneous { get; private set; }
 
 		public Inventory(List<Equipment> equippables,
 										 List<Equipment> consumables,
-										 List<Equipment> miscellaneous) {
-			Equipped = new Dictionary<EquipmentType, Equipment>(); ;
+										 List<Item> miscellaneous) {
+			Equipped = new Dictionary<ItemType, Equipment>(); ;
 			Equippables = equippables;
 			Consumables = consumables;
 			Miscellaneous = miscellaneous;
 		}
 
-		public List<IEquipmentEffect> Equip(Equipment equipment) {
-			if (equipment.Type == EquipmentType.Consumable || equipment.Type == EquipmentType.Miscellaneous) {
+		public void Equip(Equipment equipment, out List<ABuff> equip, out List<ABuff> unequip) {
+			if (equipment.Type == ItemType.Consumable || equipment.Type == ItemType.Miscellaneous) {
 				throw new ArgumentException();
 			}
 
@@ -30,34 +30,35 @@ namespace EndlessAdventure.Common.Equipments
 				Equipped.Add(equipment.Type, equipment);
 				Equippables.Add(equipped);
 
-				List<IEquipmentEffect> totalEffects = new List<IEquipmentEffect>();
-				totalEffects.AddRange(equipment.EquipEffects);
-				totalEffects.AddRange(equipped.UnequipEffects);
-				return totalEffects;
+				equip = equipment.Buffs;
+				unequip = equipped.Buffs;
 			}
 			else {
+				Equippables.Remove(equipment);
+
 				Equipped.Add(equipment.Type, equipment);
-				return equipment.EquipEffects;
+				equip = equipment.Buffs;
+				unequip = new List<ABuff>();
 			}
 		}
 
-		public List<IEquipmentEffect> Unequip(Equipment equipment) {
+		public void Unequip(Equipment equipment, out List<ABuff> unequip) {
 			Equipped.TryGetValue(equipment.Type, out Equipment equipped);
 			if (equipped == equipment) {
 				Equipped.Remove(equipment.Type);
 				Equippables.Add(equipped);
-				return equipped.UnequipEffects;
+				unequip = equipped.Buffs;
 			}
 			else {
-				return new List<IEquipmentEffect>();
+				unequip = new List<ABuff>();
 			}
 		}
 
 		public void Add(Equipment equipment) {
-			if (equipment.Type == EquipmentType.Consumable) {
+			if (equipment.Type == ItemType.Consumable) {
 				Consumables.Add(equipment);
 			}
-			else if (equipment.Type == EquipmentType.Miscellaneous) {
+			else if (equipment.Type == ItemType.Miscellaneous) {
 				Miscellaneous.Add(equipment);
 			}
 			else {

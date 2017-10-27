@@ -5,16 +5,18 @@ namespace EndlessAdventure.Common {
 
 	public class Game {
 
-		public World world { get; private set; }
+		public World World { get; private set; }
 		public Battlefield Battlefield { get; private set; }
 
 		public Game() {
-			world = WorldFactory.CreateWorld(WorldDatabase.GreenPastures);
-			Battlefield = new Battlefield(world.SpawnEnemy);
+			World = WorldFactory.CreateWorld(WorldDatabase.GreenPastures);
+			Battlefield = new Battlefield(Loader.GetProtagonists(), World.SpawnEnemy);
 		}
 
-		public void Update() {
-			Battlefield.Update();
+		public void Update(int ticks = 1) {
+			for (int i = 0; i < ticks; i++) {
+				Battlefield.Update();
+			}
 		}
 
 		public void ProcessInput() {

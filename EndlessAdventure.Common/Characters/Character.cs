@@ -8,7 +8,7 @@ namespace EndlessAdventure.Common.Characters {
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 		
-		private Dictionary<StatType, List<IBuff>> _statBonuses;
+		public Dictionary<StatType, List<ABuff>> StatBonuses { get; private set; }
 
 		/// <summary>
 		/// DO NOT CALL DIRECTLY. Use CharacterFactory.
@@ -21,7 +21,10 @@ namespace EndlessAdventure.Common.Characters {
 			BaseSoul = soul;
 			BaseFortune = fortune;
 
-			_statBonuses = new Dictionary<StatType, List<IBuff>>();
+			StatBonuses = new Dictionary<StatType, List<ABuff>>();
+
+			CurrentHealth = MaxHealth;
+			CurrentEnergy = MaxEnergy;
 		}
 
 		public void ApplyDamage(int pHealth) {
@@ -60,18 +63,18 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
-		public void AddBuff(IBuff buff) {
-			if (!_statBonuses.TryGetValue(buff.StatType, out List<IBuff> buffList)) {
-				List<IBuff> buffs = new List<IBuff> { buff };
-				_statBonuses.Add(buff.StatType, buffs);
+		public void AddBuff(ABuff buff) {
+			if (!StatBonuses.TryGetValue(buff.StatType, out List<ABuff> buffList)) {
+				List<ABuff> buffs = new List<ABuff> { buff };
+				StatBonuses.Add(buff.StatType, buffs);
 			}
 			else {
 				buffList.Add(buff);
 			}
 		}
 
-		public void RemoveBuff(IBuff buff) {
-			if (_statBonuses.TryGetValue(buff.StatType, out List<IBuff> buffList)) {
+		public void RemoveBuff(ABuff buff) {
+			if (StatBonuses.TryGetValue(buff.StatType, out List<ABuff> buffList)) {
 				buffList.Remove(buff);
 			}
 		}
@@ -79,9 +82,9 @@ namespace EndlessAdventure.Common.Characters {
 		#region Getters&Setters
 
 		private int GetBuffedStat(StatType type, int baseValue) {
-			if (_statBonuses.TryGetValue(type, out List<IBuff> buffs)) {
+			if (StatBonuses.TryGetValue(type, out List<ABuff> buffs)) {
 				int buffedValue = baseValue;
-				foreach (IBuff buff in buffs) {
+				foreach (ABuff buff in buffs) {
 					buffedValue = buff.Apply(buffedValue);
 				}
 				return buffedValue;

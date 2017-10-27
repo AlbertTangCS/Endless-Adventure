@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 using EndlessAdventure.Common;
 
@@ -9,10 +10,25 @@ namespace EndlessAdventure.ConsoleApp {
 	/// </summary>
 	public class Driver {
 
-		public static void Main() {
-			Game game = new Game();
-			Gui gui = new Gui(game);
+		private static Game game = new Game();
+		private static Gui gui = new Gui(game);
 
+		public static void Main() {
+			Parser.Game = game;
+
+			string input = string.Empty;
+			while (true) {
+				if (input == "quit") break;
+				else {
+					Parser.Parse(input);
+				}
+				gui.Render(-1);
+
+				input = Console.ReadLine();
+			}
+		}
+
+			/*
 			long frequency = Stopwatch.Frequency/1000;
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -40,6 +56,6 @@ namespace EndlessAdventure.ConsoleApp {
 					frame_lag = 0;
 				}
 			}
-		}
+		}*/
 	}
 }

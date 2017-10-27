@@ -11,13 +11,12 @@ namespace EndlessAdventure.Common.Battle {
 		private List<Combatant> _antagonistQueue;
 		private Func<Combatant> _generateAntagonist;
 
-		public Battlefield(Func<Combatant> generateAntagonist) {
-			Protagonists = new List<Combatant>();
+		public Battlefield(List<Combatant> protagonists, Func<Combatant> generateAntagonist) {
+			Protagonists = protagonists;
 			Antagonists = new List<Combatant>();
 			_antagonistQueue = new List<Combatant>();
 			_generateAntagonist = generateAntagonist;
 
-			AddProtagonist();
 			AddAntagonistToQueue();
 		}
 
@@ -68,12 +67,6 @@ namespace EndlessAdventure.Common.Battle {
 				Antagonists.Add(antagonist);
 			}
 			_antagonistQueue.Clear();
-		}
-
-		private void AddProtagonist() {
-			Combatant protagonist = CombatantFactory.CreateCombatant("Player", body: 2);
-			protagonist.Equip(EquipmentFactory.CreateWeapon(1));
-			Protagonists.Add(protagonist);
 		}
 
 		private void AddAntagonistToQueue() {

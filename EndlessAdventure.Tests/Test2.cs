@@ -3,9 +3,9 @@ using EndlessAdventure.Common.Battle;
 using Xunit;
 
 namespace EndlessAdventure.Common.Tests {
-	public class Test {
+	public class Test2 {
 		[Fact]
-		public void TestTrue () {
+		public void TestTrue() {
 			Assert.True(true);
 		}
 
@@ -13,6 +13,6 @@ namespace EndlessAdventure.Common.Tests {
 		public void TestFalse() {
 			Assert.False(false);
 		}
-		
+
 	}
 }

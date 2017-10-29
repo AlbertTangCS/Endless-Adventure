@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Battle {
 	public class Battlefield {
@@ -71,7 +70,16 @@ namespace EndlessAdventure.Common.Battle {
 
 		private void AddAntagonistToQueue() {
 			Combatant antagonist = _generateAntagonist();
-			_antagonistQueue.Add(antagonist);
+			if (antagonist != null) {
+				_antagonistQueue.Add(antagonist);
+			}
+		}
+
+		public void Flee() {
+			while (Antagonists.Count > 0) {
+				Antagonists.RemoveAt(0);
+				_antagonistQueue.Add(_generateAntagonist());
+			}
 		}
 	}
 }

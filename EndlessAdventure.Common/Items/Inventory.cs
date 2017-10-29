@@ -6,63 +6,92 @@ namespace EndlessAdventure.Common.Items
 {
 	public class Inventory
 	{
-		public Dictionary<ItemType, Equipment> Equipped { get; private set; }
-		public List<Equipment> Equippables { get; private set; }
-		public List<Equipment> Consumables { get; private set; }
+		public Dictionary<ItemType, Item> Equipped { get; private set; }
+		public List<Item> Equippables { get; private set; }
+		public List<Item> Consumables { get; private set; }
 		public List<Item> Miscellaneous { get; private set; }
 
-		public Inventory(List<Equipment> equippables,
-										 List<Equipment> consumables,
+		public Inventory(Dictionary<ItemType, Item> equipped,
+		                 List<Item> equippables,
+										 List<Item> consumables,
 										 List<Item> miscellaneous) {
-			Equipped = new Dictionary<ItemType, Equipment>(); ;
-			Equippables = equippables;
-			Consumables = consumables;
-			Miscellaneous = miscellaneous;
+			Equipped = equipped ?? new Dictionary<ItemType, Item>();
+			Equippables = equippables ?? new List<Item>();
+			Consumables = consumables ?? new List<Item>();
+			Miscellaneous = miscellaneous ?? new List<Item>();
 		}
 
-		public void Equip(Equipment equipment, out List<ABuff> equip, out List<ABuff> unequip) {
-			if (equipment.Type == ItemType.Consumable || equipment.Type == ItemType.Miscellaneous) {
+		public void Equip(Item item, Character character) {
+			if (item.Type == ItemType.Consumable || item.Type == ItemType.Miscellaneous) {
 				throw new ArgumentException();
 			}
 
-			if (Equipped.TryGetValue(equipment.Type, out Equipment equipped)) {
-				Equipped.Remove(equipment.Type);
-				Equipped.Add(equipment.Type, equipment);
+			// add/remove buffs depending on what was equipped/unequipped
+			List<ABuff> buffsToAdd = null;
+			List<ABuff> buffsToRemove = null;
+			if (Equipped.TryGetValue(item.Type, out Item equipped)) {
+				Equipped.Remove(item.Type);
+				Equipped.Add(item.Type, item);
 				Equippables.Add(equipped);
 
-				equip = equipment.Buffs;
-				unequip = equipped.Buffs;
+				buffsToAdd = item.Buffs;
+				buffsToRemove = equipped.Buffs;
 			}
 			else {
-				Equippables.Remove(equipment);
+				Equippables.Remove(item);
 
-				Equipped.Add(equipment.Type, equipment);
-				equip = equipment.Buffs;
-				unequip = new List<ABuff>();
+				Equipped.Add(item.Type, item);
+				buffsToAdd = item.Buffs;
+			}
+
+			if (buffsToAdd != null) {
+				foreach (ABuff buff in buffsToAdd) {
+					character.AddBuff(buff);
+				}
+			}
+			if (buffsToRemove != null) {
+				foreach (ABuff buff in buffsToRemove) {
+					character.RemoveBuff(buff);
+				}
 			}
 		}
 
-		public void Unequip(Equipment equipment, out List<ABuff> unequip) {
-			Equipped.TryGetValue(equipment.Type, out Equipment equipped);
+		public void Unequip(Item equipment, Character character) {
+			if (!Equipped.TryGetValue(equipment.Type, out Item equipped)) {
+				throw new ArgumentException();
+			}
+
+			// remove buffs depending on what was unequipped
+			List<ABuff> buffsToRemove = null;
 			if (equipped == equipment) {
 				Equipped.Remove(equipment.Type);
 				Equippables.Add(equipped);
-				unequip = equipped.Buffs;
+				buffsToRemove = equipped.Buffs;
 			}
-			else {
-				unequip = new List<ABuff>();
+			if (buffsToRemove != null) {
+				foreach (ABuff buff in buffsToRemove) {
+					character.RemoveBuff(buff);
+				}
 			}
 		}
 
-		public void Add(Equipment equipment) {
-			if (equipment.Type == ItemType.Consumable) {
-				Consumables.Add(equipment);
+		public void Consume(Item item, Character character) {
+			if (item.Type != ItemType.Consumable) throw new ArgumentException();
+			if (!Consumables.Contains(item)) return;
+
+			Consumables.Remove(item);
+			item.Consume(character);
+		}
+
+		public void Add(Item item) {
+			if (item.Type == ItemType.Consumable) {
+				Consumables.Add(item);
 			}
-			else if (equipment.Type == ItemType.Miscellaneous) {
-				Miscellaneous.Add(equipment);
+			else if (item.Type == ItemType.Miscellaneous) {
+				Miscellaneous.Add(item);
 			}
 			else {
-				Equippables.Add(equipment);
+				Equippables.Add(item);
 			}
 		}
 

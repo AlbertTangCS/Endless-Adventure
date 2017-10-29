@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
@@ -16,18 +16,25 @@ namespace EndlessAdventure.Common.Battle {
 		private int _pendingDamage;
 
 		private bool _fallen;
-		
-		/// <summary>
-		/// DO NOT CALL DIRECTLY. Use CombatantFactory.
-		/// </summary>
-		public Combatant(Character character, int level, int expReward) {
 
-			Character = character ?? throw new ArgumentException();
-			if (level < 1) throw new ArgumentException();
-			Level = level;
-			_expReward = expReward;
+		public Combatant(CombatantData combatantData, Inventory inventory = null) {
+			Character = new Character(combatantData.Name, combatantData.Description, combatantData.Body, combatantData.Mind, combatantData.Soul, 0);
+			_expReward = combatantData.ExpReward;
 
-			Inventory = new Inventory(new List<Equipment>(), new List<Equipment>(), new List<Item>());
+			Inventory = inventory ?? new Inventory(null, null, null, null);
+
+			if (combatantData.Drops != null) {
+
+				Random random = new Random();
+				foreach (string key in combatantData.Drops.Keys) {
+					double chance = random.NextDouble();
+					if (combatantData.Drops[key] - chance > 0) {
+						Item item = new Item(Database.Items[key]);
+						Inventory.Add(item);
+					}
+				}
+			}
+
 			Fallen = false;
 		}
 		
@@ -71,22 +78,16 @@ namespace EndlessAdventure.Common.Battle {
 
 #region Equipment
 
-		public void Equip(Equipment equipment) {
-			Inventory.Equip(equipment, out List<ABuff> equip, out List<ABuff> unequip);
-			foreach (ABuff buff in equip) {
-				Character.AddBuff(buff);
-			}
-
-			foreach (ABuff buff in unequip) {
-				Character.RemoveBuff(buff);
-			}
+		public void Equip(Item item) {
+			Inventory.Equip(item, Character);
 		}
 
-		public void Unequip(Equipment equipment) {
-			Inventory.Unequip(equipment, out List<ABuff> unequip);
-			foreach (ABuff buff in unequip) {
-				Character.RemoveBuff(buff);
-			}
+		public void Unequip(Item equipment) {
+			Inventory.Unequip(equipment, Character);
+		}
+
+		public void Consume(Item item) {
+			Inventory.Consume(item, Character);
 		}
 
 #endregion

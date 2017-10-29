@@ -26,6 +26,8 @@ namespace EndlessAdventure.ConsoleApp {
 
 				input = Console.ReadLine();
 			}
+
+			gui.DisplayQuit();
 		}
 
 			/*

@@ -1,4 +1,5 @@
-﻿using EndlessAdventure.Common.Battle;
+﻿using System.Collections.Generic;
+using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common {
@@ -9,8 +10,10 @@ namespace EndlessAdventure.Common {
 		public Battlefield Battlefield { get; private set; }
 
 		public Game() {
-			World = WorldFactory.CreateWorld(WorldDatabase.GreenPastures);
-			Battlefield = new Battlefield(Loader.GetProtagonists(), World.SpawnEnemy);
+			Database.Initialize();
+			World = new World(Database.Worlds[Database.GREEN_PASTURES_KEY]);
+			List<Combatant> protagonists = new List<Combatant> { new Combatant(Database.Combatants[Database.PLAYER_KEY]) };
+			Battlefield = new Battlefield(protagonists, World.SpawnEnemy);
 		}
 
 		public void Update(int ticks = 1) {

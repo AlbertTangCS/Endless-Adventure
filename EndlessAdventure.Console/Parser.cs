@@ -56,11 +56,19 @@ namespace EndlessAdventure {
 						_message = "Missing argument.";
 						break;
 					}
-					Equipment equipment = protagonist.Inventory.Equippables.FirstOrDefault(x => x.Name == args[1]);
+					Item equipment = protagonist.Inventory.Equippables.FirstOrDefault(x => x.Name == args[1]);
 					if (equipment != null) {
 						protagonist.Equip(equipment);
 						_message = equipment.Name + " equipped.";
 					}
+					else {
+						_message = "Invalid equipment.";
+					}
+					break;
+
+				case "flee":
+					Game.Battlefield.Flee();
+					_message = "Fled from enemy!";
 					break;
 
 				case "game":
@@ -94,20 +102,38 @@ namespace EndlessAdventure {
 					}
 					switch (args[1]) {
 						case "weapon":
-							if (protagonist.Inventory.Equipped.TryGetValue(ItemType.Weapon, out Equipment weapon)) {
+							if (protagonist.Inventory.Equipped.TryGetValue(ItemType.Weapon, out Item weapon)) {
 								protagonist.Unequip(weapon);
 								_message = weapon.Name + " unequipped.";
 							}
 							break;
 
 						default:
-							Equipment unequipped = protagonist.Inventory.Equipped.Values.FirstOrDefault(x => x.Name == args[1]);
+							Item unequipped = protagonist.Inventory.Equipped.Values.FirstOrDefault(x => x.Name == args[1]);
 							if (unequipped != null) {
 								protagonist.Unequip(unequipped);
+							}
+							else {
+								_message = "Invalid equipment.";
 							}
 							break;
 					}
 
+					break;
+
+				case "use":
+					if (args.Length == 1) {
+						_message = "Missing argument.";
+						break;
+					}
+					Item consumable = protagonist.Inventory.Consumables.FirstOrDefault(x => x.Name == args[1]);
+					if (consumable != null) {
+						protagonist.Consume(consumable);
+						_message = consumable.Name + " consumed.";
+					}
+					else {
+						_message = "Invalid consumable.";
+					}
 					break;
 
 				default:

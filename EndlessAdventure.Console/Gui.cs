@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using EndlessAdventure.Common;
 using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Characters;
@@ -41,19 +40,23 @@ namespace EndlessAdventure.ConsoleApp {
 
 			foreach (Combatant p in _game.Battlefield.Protagonists) {
 				Character protagonist = p.Character;
-				Console.WriteLine("Level " + p.Level + ": " + protagonist.Name);
-				Console.WriteLine("Exp: " + p.Experience + " / " + Defaults.NextLevelExpFormula(p.Level));
-				Console.WriteLine("Attack: " + protagonist.PhysicalAttack + ", Defense: " + protagonist.Defense);
+				Console.Write("<-- Lvl. " + p.Level + " " + protagonist.Name);
+				Console.WriteLine(" (" + p.Experience + "/" + Defaults.NextLevelExpFormula(p.Level) + ") -->");
 				Console.WriteLine("Health: " + protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
+				Console.WriteLine("Energy: " + protagonist.CurrentEnergy + " / " + protagonist.MaxEnergy);
+				Console.Write("PA: " + protagonist.BasePhysicalAttack + " (+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
+				Console.WriteLine("D: " + protagonist.BaseDefense + " (+" + (protagonist.Defense - protagonist.BaseDefense) + ")");
 			}
 
 			Console.WriteLine("");
 
 			foreach (Combatant a in _game.Battlefield.Antagonists) {
 				Character antagonist = a.Character;
-				Console.WriteLine("Level " + a.Level + ": " + antagonist.Name);
-				Console.WriteLine("Attack: " + antagonist.PhysicalAttack + ", Defense: " + antagonist.Defense);
+				Console.WriteLine("<-- " + antagonist.Name +" -->");
 				Console.WriteLine("Health: " + antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
+				Console.WriteLine("Energy: " + antagonist.CurrentEnergy + " / " + antagonist.MaxEnergy);
+				Console.Write("PA: " + antagonist.BasePhysicalAttack + " (+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
+				Console.WriteLine("D: " + antagonist.BaseDefense + " (+" + (antagonist.Defense - antagonist.BaseDefense) + ")");
 			}
 
 			Console.WriteLine("");
@@ -65,26 +68,26 @@ namespace EndlessAdventure.ConsoleApp {
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 
 			Console.WriteLine("Equipped");
-			foreach (Equipment equipped in protagonist.Inventory.Equipped.Values) {
+			foreach (Item equipped in protagonist.Inventory.Equipped.Values) {
 				Console.WriteLine(equipped.Name);
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("Equippables");
-			foreach (Equipment equippable in protagonist.Inventory.Equippables) {
+			foreach (Item equippable in protagonist.Inventory.Equippables) {
 				Console.WriteLine(equippable.Name);
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("Consumables");
-			foreach (Equipment consumable in protagonist.Inventory.Consumables) {
+			foreach (Item consumable in protagonist.Inventory.Consumables) {
 				Console.WriteLine(consumable.Name);
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("Miscellaneous");
-			foreach (Equipment equipment in protagonist.Inventory.Miscellaneous) {
-				Console.WriteLine(equipment.Name);
+			foreach (Item miscellaneous in protagonist.Inventory.Miscellaneous) {
+				Console.WriteLine(miscellaneous.Name);
 			}
 
 			Console.WriteLine("");
@@ -104,6 +107,17 @@ namespace EndlessAdventure.ConsoleApp {
 			Console.WriteLine("");
 			Console.WriteLine(Parser.Message);
 			Console.Write("> ");
+		}
+
+		public void DisplayQuit() {
+			Console.Clear();
+			Console.WriteLine("<-----|===========================|----->");
+			Console.WriteLine("<-----|                           |----->");
+			Console.WriteLine("<-----|   THANK YOU FOR PLAYING   |----->");
+			Console.WriteLine("<-----|     ENDLESS ADVENTURE!    |----->");
+			Console.WriteLine("<-----|                           |----->");
+			Console.WriteLine("<-----|===========================|----->");
+			Console.ReadLine();
 		}
 	}
 }

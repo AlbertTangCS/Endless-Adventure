@@ -3,7 +3,7 @@
 namespace EndlessAdventure.Common.Items.Effects {
 	public class ArmorBuff : ABuff {
 		
-		public ArmorBuff(string name, double value) : base(name, StatType.Defense, value) { }
+		public ArmorBuff(double value) : base("Armor Buff", StatType.Defense, value) { }
 
 		public override int Apply(int stat) {
 			return stat + (int)Value;

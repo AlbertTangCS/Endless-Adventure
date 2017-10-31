@@ -63,6 +63,18 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
+		public void AddBody() {
+			BaseBody += 1;
+		}
+
+		public void AddMind() {
+			BaseMind += 1;
+		}
+
+		public void AddSoul() {
+			BaseSoul += 1;
+		}
+
 		public void AddBuff(ABuff buff) {
 			if (!StatBonuses.TryGetValue(buff.StatType, out List<ABuff> buffList)) {
 				List<ABuff> buffs = new List<ABuff> { buff };

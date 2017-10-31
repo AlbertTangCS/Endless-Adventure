@@ -12,6 +12,7 @@ namespace EndlessAdventure.Common.Battle {
 		public int Experience { get; private set; }
 		private int _expReward;
 		public Inventory Inventory { get; private set; }
+		public int SkillPoints { get; private set; }
 
 		private int _pendingDamage;
 
@@ -60,14 +61,6 @@ namespace EndlessAdventure.Common.Battle {
 			Inventory.Miscellaneous.AddRange(antagonist.Inventory.Miscellaneous);
 		}
 
-		public void AddExperience(int experience) {
-			Experience += experience;
-			if (Experience >= Defaults.NextLevelExpFormula(Level)) {
-				Experience %= Defaults.NextLevelExpFormula(Level);
-				Level++;
-			}
-		}
-
 		public void ApplyPendingDamage() {
 			Character.ApplyDamage(_pendingDamage);
 			_pendingDamage = 0;
@@ -76,7 +69,38 @@ namespace EndlessAdventure.Common.Battle {
 			}
 		}
 
-#region Equipment
+		public void AddExperience(int experience) {
+			Experience += experience;
+			if (Experience >= Defaults.NextLevelExpFormula(Level)) {
+				Experience %= Defaults.NextLevelExpFormula(Level);
+				Level++;
+				SkillPoints += 3;
+			}
+		}
+
+		public void AddSkillPoint(StatType type) {
+			if (SkillPoints == 0) return;
+			else {
+				bool validSkill = true;
+				switch (type) {
+					case StatType.Body:
+						Character.AddBody();
+						break;
+					case StatType.Mind:
+						Character.AddMind();
+						break;
+					case StatType.Soul:
+						Character.AddSoul();
+						break;
+					default:
+						validSkill = false;
+						break;
+				}
+				if (validSkill) SkillPoints -= 1;
+			}
+		}
+
+		#region Equipment
 
 		public void Equip(Item item) {
 			Inventory.Equip(item, Character);
@@ -104,6 +128,8 @@ namespace EndlessAdventure.Common.Battle {
 				}
 			}
 		}
+
+		public int Luck { get; private set; }
 
 #endregion
 

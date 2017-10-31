@@ -5,6 +5,7 @@ using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Resources;
+using System.Collections.Generic;
 
 namespace EndlessAdventure.ConsoleApp {
 
@@ -28,6 +29,10 @@ namespace EndlessAdventure.ConsoleApp {
 
 				case Mode.Inventory:
 					DisplayInventory();
+					break;
+
+				case Mode.Skills:
+					DisplaySkills();
 					break;
 
 				case Mode.Buffs:
@@ -67,28 +72,68 @@ namespace EndlessAdventure.ConsoleApp {
 		private void DisplayInventory() {
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 
-			Console.WriteLine("Equipped");
+			Console.WriteLine("> Equipped");
 			foreach (Item equipped in protagonist.Inventory.Equipped.Values) {
 				Console.WriteLine(equipped.Name);
 			}
 
 			Console.WriteLine("");
-			Console.WriteLine("Equippables");
+			Console.WriteLine("> Equippables");
+			Dictionary<string, int> equippableCount = new Dictionary<string, int>();
 			foreach (Item equippable in protagonist.Inventory.Equippables) {
-				Console.WriteLine(equippable.Name);
+				if (!equippableCount.ContainsKey(equippable.Name)) {
+					equippableCount.Add(equippable.Name, 1);
+				}
+				else {
+					equippableCount[equippable.Name] += 1;
+				}
+			}
+			foreach (string key in equippableCount.Keys) {
+				Console.WriteLine(key + " x" + equippableCount[key]);
 			}
 
 			Console.WriteLine("");
-			Console.WriteLine("Consumables");
+			Console.WriteLine("> Consumables");
+			Dictionary<string, int> consumableCount = new Dictionary<string, int>();
 			foreach (Item consumable in protagonist.Inventory.Consumables) {
-				Console.WriteLine(consumable.Name);
+				if (!consumableCount.ContainsKey(consumable.Name)) {
+					consumableCount.Add(consumable.Name, 1);
+				}
+				else {
+					consumableCount[consumable.Name] += 1;
+				}
+			}
+			foreach (string key in consumableCount.Keys) {
+				Console.WriteLine(key + " x" + consumableCount[key]);
 			}
 
 			Console.WriteLine("");
-			Console.WriteLine("Miscellaneous");
+			Console.WriteLine("> Miscellaneous");
+			Dictionary<string, int> miscellaneousCount = new Dictionary<string, int>();
 			foreach (Item miscellaneous in protagonist.Inventory.Miscellaneous) {
-				Console.WriteLine(miscellaneous.Name);
+				if (!miscellaneousCount.ContainsKey(miscellaneous.Name)) {
+					miscellaneousCount.Add(miscellaneous.Name, 1);
+				}
+				else {
+					miscellaneousCount[miscellaneous.Name] += 1;
+				}
 			}
+			foreach (string key in miscellaneousCount.Keys) {
+				Console.WriteLine(key + " x" + miscellaneousCount[key]);
+			}
+
+			Console.WriteLine("");
+			Console.WriteLine(Parser.Message);
+			Console.Write("> ");
+		}
+
+		private void DisplaySkills() {
+			Combatant protagonist = _game.Battlefield.Protagonists[0];
+			Console.WriteLine("POINTS TO ALLOCATE: " + protagonist.SkillPoints);
+			Console.WriteLine("Body: " + protagonist.Character.BaseBody + " (+" + (protagonist.Character.Body - protagonist.Character.BaseBody) + ")");
+			Console.WriteLine("Mind: " + protagonist.Character.BaseMind + " (+" + (protagonist.Character.Mind - protagonist.Character.BaseMind) + ")");
+			Console.WriteLine("Soul: " + protagonist.Character.BaseSoul + " (+" + (protagonist.Character.Soul - protagonist.Character.BaseSoul) + ")");
+			Console.WriteLine("Luck: " + protagonist.Luck);
 
 			Console.WriteLine("");
 			Console.WriteLine(Parser.Message);

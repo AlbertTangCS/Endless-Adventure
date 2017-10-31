@@ -2,11 +2,12 @@
 using System.Linq;
 using EndlessAdventure.Common;
 using EndlessAdventure.Common.Battle;
+using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 
 namespace EndlessAdventure {
 	public enum Mode {
-		Game, Inventory, Buffs
+		Game, Inventory, Skills, Buffs
 	}
 
 	public class Parser {
@@ -43,8 +44,43 @@ namespace EndlessAdventure {
 					}
 					break;
 
-				case "consume":
+				case "addskill":
+					if (args.Length == 1) {
+						_message = "Missing argument.";
+						break;
+					}
+					int numpoints = -1;
+					if (args.Length == 3) {
+						if (Int32.TryParse(args[2], out int parsed) && parsed>0 && parsed<=protagonist.SkillPoints) {
+							numpoints = parsed;
+						}
+						else {
+							_message = "Invalid number of points to allocate.";
+							break;
+						}
+					}
 
+					StatType type = StatType.Fortune;
+					switch (args[1]) {
+						case "body":
+							type = StatType.Body;
+							break;
+						case "mind":
+							type = StatType.Mind;
+							break;
+						case "soul":
+							type = StatType.Soul;
+							break;
+					}
+					if (type != StatType.Fortune) {
+						for (int i = 0; i < numpoints; i++) {
+							protagonist.AddSkillPoint(type);
+						}
+						_message = numpoints + " skill point(s) added to " + args[1] + "!";
+					}
+					else {
+						_message = "Invalid skill.";
+					}
 					break;
 
 				case "buffs":
@@ -92,6 +128,10 @@ namespace EndlessAdventure {
 					else {
 						_message = "Invalid command.";
 					}
+					break;
+
+				case "skills":
+					Mode = Mode.Skills;
 					break;
 
 				case "unequip":

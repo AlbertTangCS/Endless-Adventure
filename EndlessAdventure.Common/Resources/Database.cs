@@ -6,8 +6,7 @@ using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Items.Consumables.Effects;
 using EndlessAdventure.Common.Items.Effects;
 
-namespace EndlessAdventure.Common.Resources
-{
+namespace EndlessAdventure.Common.Resources {
 	public class Database {
 
 		public static void Initialize() {
@@ -51,17 +50,17 @@ namespace EndlessAdventure.Common.Resources
 		public static readonly string UNICORN_KEY = "EnemyUnicorn";
 
 		private static void InitializeEnemies() {
-			Combatants.Add(PLAYER_KEY, new CombatantData("Player", "player", /*stats*/ 2, 2, 2, /*rewards*/ 0, null));
+			Combatants.Add(PLAYER_KEY, new CombatantData("Player", "player", /*stats*/ 3, 3, 3, /*rewards*/ 0, null));
 
 			Combatants.Add(CHICKEN_KEY, new CombatantData("Chicken", "chicken", /*stats*/ 1, 0, 0, /*rewards*/ 1, null));
-			Combatants.Add(SHEEP_KEY, new CombatantData("Sheep", "sheep", /*stats*/ 2, 0, 0, /*rewards*/ 2, null));
-			Combatants.Add(PONY_KEY, new CombatantData("Pony", "pony", /*stats*/ 3, 1, 0, /*rewards*/ 3, null));
+			Combatants.Add(SHEEP_KEY, new CombatantData("Sheep", "sheep", /*stats*/ 3, 0, 0, /*rewards*/ 2, null));
+			Combatants.Add(PONY_KEY, new CombatantData("Pony", "pony", /*stats*/ 5, 1, 0, /*rewards*/ 3, null));
 			Dictionary<string, double> goblin_drops = new Dictionary<string, double>();
 			goblin_drops.Add(POTION_KEY, 1);
-			Combatants.Add(GOBLIN_DESERTER_KEY, new CombatantData("Goblin Deserter", "goblin deserter", /*stats*/ 3, 2, 0, /*rewards*/ 0, goblin_drops));
+			Combatants.Add(GOBLIN_DESERTER_KEY, new CombatantData("Goblin Deserter", "goblin deserter", /*stats*/ 5, 2, 0, /*rewards*/ 0, goblin_drops));
 			Dictionary<string, double> unicorn_drops = new Dictionary<string, double>();
 			unicorn_drops.Add(UNICORN_HORN_KEY, 1);
-			Combatants.Add(UNICORN_KEY, new CombatantData("Unicorn", "unicorn", /*stats*/ 3, 3, 1, /*rewards*/ 3, unicorn_drops));
+			Combatants.Add(UNICORN_KEY, new CombatantData("Unicorn", "unicorn", /*stats*/ 5, 5, 1, /*rewards*/ 3, unicorn_drops));
 		}
 
 		#endregion

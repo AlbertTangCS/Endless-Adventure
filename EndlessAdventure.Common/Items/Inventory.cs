@@ -22,24 +22,23 @@ namespace EndlessAdventure.Common.Items
 		}
 
 		public void Equip(Item item, Character character) {
-			if (item.Type == ItemType.Consumable || item.Type == ItemType.Miscellaneous) {
+			if (item.Type == ItemType.Consumable || item.Type == ItemType.Miscellaneous || !Equippables.Contains(item)) {
 				throw new ArgumentException();
 			}
 
 			// add/remove buffs depending on what was equipped/unequipped
+			Equippables.Remove(item);
 			List<ABuff> buffsToAdd = null;
 			List<ABuff> buffsToRemove = null;
 			if (Equipped.TryGetValue(item.Type, out Item equipped)) {
 				Equipped.Remove(item.Type);
-				Equipped.Add(item.Type, item);
 				Equippables.Add(equipped);
 
+				Equipped.Add(item.Type, item);
 				buffsToAdd = item.Buffs;
 				buffsToRemove = equipped.Buffs;
 			}
 			else {
-				Equippables.Remove(item);
-
 				Equipped.Add(item.Type, item);
 				buffsToAdd = item.Buffs;
 			}

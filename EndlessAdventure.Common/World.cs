@@ -14,6 +14,7 @@ namespace EndlessAdventure.Common {
 		// cumulative spawn weights - if enemy1 has weight 10 and enemy2 has weight 5, dictionary has <15, enemy2>
 		private Dictionary<int, string> _enemySpawns;
 		private int _totalWeight;
+		private Random _random;
 
 		public World(WorldData data) {
 			Name = data.Name;
@@ -27,6 +28,8 @@ namespace EndlessAdventure.Common {
 					_enemySpawns.Add(_totalWeight, key);
 				}
 			}
+
+			_random = new Random();
 		}
 
 		public Combatant SpawnEnemy() {
@@ -34,8 +37,7 @@ namespace EndlessAdventure.Common {
 
 			// randomly generate an integer between 0 and the total weight
 			// round up to the nearest cumulative weight, and 
-			Random random = new Random();
-			int result = random.Next(_totalWeight);
+			int result = _random.Next(1, _totalWeight+1);
 
 			// get the key that is the random value rounded up
 			int key = _enemySpawns.Keys.FirstOrDefault( x => x >= result);

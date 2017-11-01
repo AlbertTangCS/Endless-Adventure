@@ -15,8 +15,9 @@ namespace EndlessAdventure.Common.Battle {
 		public int SkillPoints { get; private set; }
 
 		private int _pendingDamage;
-
 		private bool _fallen;
+
+		private static Random _random = new Random();
 
 		public Combatant(CombatantData combatantData, Inventory inventory = null) {
 			Character = new Character(combatantData.Name, combatantData.Description, combatantData.Body, combatantData.Mind, combatantData.Soul, 0);
@@ -25,10 +26,9 @@ namespace EndlessAdventure.Common.Battle {
 			Inventory = inventory ?? new Inventory(null, null, null, null);
 
 			if (combatantData.Drops != null) {
-
-				Random random = new Random();
+				
 				foreach (string key in combatantData.Drops.Keys) {
-					double chance = random.NextDouble();
+					double chance = _random.NextDouble();
 					if (combatantData.Drops[key] - chance > 0) {
 						Item item = new Item(Database.Items[key]);
 						Inventory.Add(item);

@@ -3,13 +3,12 @@ using EndlessAdventure.Common;
 using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
-using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Resources;
 using System.Collections.Generic;
 
 namespace EndlessAdventure.ConsoleApp {
 
-	public class Gui : IGui {
+	public class Gui {
 
 		private Game _game;
 
@@ -49,8 +48,8 @@ namespace EndlessAdventure.ConsoleApp {
 				Console.WriteLine(" (" + p.Experience + "/" + Defaults.NextLevelExpFormula(p.Level) + ") -->");
 				Console.WriteLine("Health: " + protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
 				Console.WriteLine("Energy: " + protagonist.CurrentEnergy + " / " + protagonist.MaxEnergy);
-				Console.Write("PA: " + protagonist.BasePhysicalAttack + " (+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
-				Console.WriteLine("D: " + protagonist.BaseDefense + " (+" + (protagonist.Defense - protagonist.BaseDefense) + ")");
+				Console.Write("PA: " + protagonist.PhysicalAttack + "(+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
+				Console.WriteLine("D: " + protagonist.Defense + "(+" + (protagonist.Defense - protagonist.BaseDefense) + ")");
 			}
 
 			Console.WriteLine("");
@@ -60,8 +59,8 @@ namespace EndlessAdventure.ConsoleApp {
 				Console.WriteLine("<-- " + antagonist.Name +" -->");
 				Console.WriteLine("Health: " + antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 				Console.WriteLine("Energy: " + antagonist.CurrentEnergy + " / " + antagonist.MaxEnergy);
-				Console.Write("PA: " + antagonist.BasePhysicalAttack + " (+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
-				Console.WriteLine("D: " + antagonist.BaseDefense + " (+" + (antagonist.Defense - antagonist.BaseDefense) + ")");
+				Console.Write("PA: " + antagonist.PhysicalAttack + "(+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
+				Console.WriteLine("D: " + antagonist.Defense + "(+" + (antagonist.Defense - antagonist.BaseDefense) + ")");
 			}
 
 			Console.WriteLine("");

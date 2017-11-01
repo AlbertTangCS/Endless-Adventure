@@ -57,6 +57,8 @@ namespace EndlessAdventure.Common.Resources {
 			Combatants.Add(PONY_KEY, new CombatantData("Pony", "pony", /*stats*/ 5, 1, 0, /*rewards*/ 3, null));
 			Dictionary<string, double> goblin_drops = new Dictionary<string, double>();
 			goblin_drops.Add(POTION_KEY, 1);
+			goblin_drops.Add(STICK_KEY, 0.5);
+			goblin_drops.Add(SHIRT_KEY, 0.5);
 			Combatants.Add(GOBLIN_DESERTER_KEY, new CombatantData("Goblin Deserter", "goblin deserter", /*stats*/ 5, 2, 0, /*rewards*/ 0, goblin_drops));
 			Dictionary<string, double> unicorn_drops = new Dictionary<string, double>();
 			unicorn_drops.Add(UNICORN_HORN_KEY, 1);
@@ -77,9 +79,9 @@ namespace EndlessAdventure.Common.Resources {
 		private static readonly string UNICORN_HORN_KEY = "ItemUnicornHorn";
 
 		private static void InitializeItems() {
-			Dictionary<string, double> stick_key_dict = new Dictionary<string, double> { { PHYSICAL_WEAPON_BUFF_KEY, 1 } };
+			Dictionary<string, double> stick_key_dict = new Dictionary<string, double> { { PHYSICAL_WEAPON_BUFF_INC_KEY, 1 } };
 			Items.Add(STICK_KEY, new ItemData("Stick", "stick", ItemType.Weapon, 1, stick_key_dict, null));
-			Dictionary<string, double> shirt_key_dict = new Dictionary<string, double> { { ARMOR_BUFF_KEY, 1 } };
+			Dictionary<string, double> shirt_key_dict = new Dictionary<string, double> { { ARMOR_BUFF_INC_KEY, 1 }, { PHYSICAL_WEAPON_BUFF_MULT_KEY, 0.5 } };
 			Items.Add(SHIRT_KEY, new ItemData("Shirt", "shirt", ItemType.Chestgear, 1, shirt_key_dict, null));
 
 			Dictionary<string, double> potion_key_dict = new Dictionary<string, double> { { HEAL_EFFECT_KEY, 3 } };
@@ -94,12 +96,14 @@ namespace EndlessAdventure.Common.Resources {
 
 		public static readonly Dictionary<string, Func<double, ABuff>> Buffs = new Dictionary<string, Func<double, ABuff>>();
 
-		public static readonly string PHYSICAL_WEAPON_BUFF_KEY = "BuffPhysicalWeapon";
-		public static readonly string ARMOR_BUFF_KEY = "BuffArmor";
+		public static readonly string PHYSICAL_WEAPON_BUFF_INC_KEY = "BuffPhysicalWeaponInc";
+		public static readonly string PHYSICAL_WEAPON_BUFF_MULT_KEY = "BuffPhysicalWeaponMult";
+		public static readonly string ARMOR_BUFF_INC_KEY = "BuffArmorInc";
 
 		private static void InitializeBuffs() {
-			Buffs.Add(PHYSICAL_WEAPON_BUFF_KEY, (value) => new PhysicalWeaponBuff(value));
-			Buffs.Add(ARMOR_BUFF_KEY, (value) => new ArmorBuff(value));
+			Buffs.Add(PHYSICAL_WEAPON_BUFF_INC_KEY, (value) => new PhysicalWeaponIncBuff(value));
+			Buffs.Add(PHYSICAL_WEAPON_BUFF_MULT_KEY, (value) => new PhysicalWeaponMultBuff(value));
+			Buffs.Add(ARMOR_BUFF_INC_KEY, (value) => new ArmorIncBuff(value));
 		}
 
 		#endregion Buffs

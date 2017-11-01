@@ -1,9 +1,9 @@
 ﻿using EndlessAdventure.Common.Characters;
 
 namespace EndlessAdventure.Common.Items.Effects {
-	public class PhysicalWeaponBuff : ABuff {
+	public class PhysicalWeaponIncBuff : ABuff {
 
-		public PhysicalWeaponBuff(double value) : base("Physical Weapon Buff", StatType.PhysicalAttack, value) { }
+		public PhysicalWeaponIncBuff(double value) : base("Physical Weapon Buff", StatType.PhysicalAttack, value) { }
 
 		public override int Apply(int stat) {
 			return stat + (int)Value;

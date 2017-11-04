@@ -17,8 +17,6 @@ namespace EndlessAdventure.Common.Battle {
 		private int _pendingDamage;
 		private bool _fallen;
 
-		private static Random _random = new Random();
-
 		public Combatant(CombatantData combatantData, Inventory inventory = null) {
 			Character = new Character(combatantData.Name, combatantData.Description, combatantData.Body, combatantData.Mind, combatantData.Soul, 0);
 			_expReward = combatantData.ExpReward;
@@ -28,7 +26,7 @@ namespace EndlessAdventure.Common.Battle {
 			if (combatantData.Drops != null) {
 				
 				foreach (string key in combatantData.Drops.Keys) {
-					double chance = _random.NextDouble();
+					double chance = Utilities.Random.NextDouble();
 					if (combatantData.Drops[key] - chance > 0) {
 						Item item = new Item(Database.Items[key]);
 						Inventory.Add(item);
@@ -46,11 +44,17 @@ namespace EndlessAdventure.Common.Battle {
 			}
 		}
 
-		public void AttackCombatant(Combatant antagonist) {
-			int pendingDamage = Character.PhysicalAttack - antagonist.Character.Defense;
-			if (pendingDamage > 0) {
-				antagonist._pendingDamage += pendingDamage;
+		public bool TryAttackCombatant(Combatant antagonist, out int damage) {
+			if (!Defaults.DidMiss(Character.Accuracy, antagonist.Character.Evasion)) {
+				int pendingDamage = Character.PhysicalAttack - antagonist.Character.Defense;
+				if (pendingDamage > 0) {
+					antagonist._pendingDamage += pendingDamage;
+				}
+				damage = pendingDamage;
+				return true;
 			}
+			damage = 0;
+			return false;
 		}
 
 		public void DefeatCombatant(Combatant antagonist) {
@@ -61,12 +65,14 @@ namespace EndlessAdventure.Common.Battle {
 			Inventory.Miscellaneous.AddRange(antagonist.Inventory.Miscellaneous);
 		}
 
-		public void ApplyPendingDamage() {
+		public int ApplyPendingDamage() {
+			int pendingDamage = _pendingDamage;
 			Character.ApplyDamage(_pendingDamage);
 			_pendingDamage = 0;
 			if (Character.CurrentHealth == 0) {
 				Fallen = true;
 			}
+			return pendingDamage;
 		}
 
 		public void AddExperience(int experience) {

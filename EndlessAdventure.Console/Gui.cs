@@ -18,8 +18,8 @@ namespace EndlessAdventure.ConsoleApp {
 		
 		public void Render(long frametime) {
 			Console.Clear();
-			Console.WriteLine("[Frame time: " + frametime + "ms]");
-			Console.WriteLine("");
+			//Console.WriteLine("[Frame time: " + frametime + "ms]");
+			//Console.WriteLine("");
 
 			switch (Parser.Mode) {
 				case Mode.Game:
@@ -38,9 +38,13 @@ namespace EndlessAdventure.ConsoleApp {
 					DisplayBuffs();
 					break;
 			}
+
+			DisplayMessages();
 		}
 
 		private void PrintGame() {
+			Console.WriteLine("<========== " + _game.World.Name.ToUpper() + " ==========>");
+			Console.WriteLine("");
 
 			foreach (Combatant p in _game.Battlefield.Protagonists) {
 				Character protagonist = p.Character;
@@ -48,8 +52,10 @@ namespace EndlessAdventure.ConsoleApp {
 				Console.WriteLine(" (" + p.Experience + "/" + Defaults.NextLevelExpFormula(p.Level) + ") -->");
 				Console.WriteLine("Health: " + protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
 				Console.WriteLine("Energy: " + protagonist.CurrentEnergy + " / " + protagonist.MaxEnergy);
-				Console.Write("PA: " + protagonist.PhysicalAttack + "(+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
-				Console.WriteLine("D: " + protagonist.Defense + "(+" + (protagonist.Defense - protagonist.BaseDefense) + ")");
+				Console.Write("PA:" + protagonist.PhysicalAttack + "(+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
+				Console.Write("D:" + protagonist.Defense + "(+" + (protagonist.Defense - protagonist.BaseDefense) + "), ");
+				Console.Write("ACC:" + protagonist.Accuracy + ", ");
+				Console.Write("EVA:" + protagonist.Evasion+"\n");
 			}
 
 			Console.WriteLine("");
@@ -59,16 +65,18 @@ namespace EndlessAdventure.ConsoleApp {
 				Console.WriteLine("<-- " + antagonist.Name +" -->");
 				Console.WriteLine("Health: " + antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 				Console.WriteLine("Energy: " + antagonist.CurrentEnergy + " / " + antagonist.MaxEnergy);
-				Console.Write("PA: " + antagonist.PhysicalAttack + "(+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
-				Console.WriteLine("D: " + antagonist.Defense + "(+" + (antagonist.Defense - antagonist.BaseDefense) + ")");
-			}
+				Console.Write("PA:" + antagonist.PhysicalAttack + "(+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
+				Console.Write("D:" + antagonist.Defense + "(+" + (antagonist.Defense - antagonist.BaseDefense) + "), ");
+				Console.Write("ACC:" + antagonist.Accuracy + ", ");
+				Console.Write("EVA:" + antagonist.Evasion + "\n");
 
-			Console.WriteLine("");
-			Console.WriteLine(Parser.Message);
-			Console.Write("> ");
+			}
 		}
 
 		private void DisplayInventory() {
+			Console.WriteLine("<========== INVENTORY ==========>");
+			Console.WriteLine("");
+
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 
 			Console.WriteLine("> Equipped");
@@ -120,26 +128,24 @@ namespace EndlessAdventure.ConsoleApp {
 			foreach (string key in miscellaneousCount.Keys) {
 				Console.WriteLine(key + " x" + miscellaneousCount[key]);
 			}
-
-			Console.WriteLine("");
-			Console.WriteLine(Parser.Message);
-			Console.Write("> ");
 		}
 
 		private void DisplaySkills() {
+			Console.WriteLine("<========== SKILLS ==========>");
+			Console.WriteLine("");
+
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 			Console.WriteLine("POINTS TO ALLOCATE: " + protagonist.SkillPoints);
 			Console.WriteLine("Body: " + protagonist.Character.BaseBody + " (+" + (protagonist.Character.Body - protagonist.Character.BaseBody) + ")");
 			Console.WriteLine("Mind: " + protagonist.Character.BaseMind + " (+" + (protagonist.Character.Mind - protagonist.Character.BaseMind) + ")");
 			Console.WriteLine("Soul: " + protagonist.Character.BaseSoul + " (+" + (protagonist.Character.Soul - protagonist.Character.BaseSoul) + ")");
 			Console.WriteLine("Luck: " + protagonist.Luck);
-
-			Console.WriteLine("");
-			Console.WriteLine(Parser.Message);
-			Console.Write("> ");
 		}
 
 		private void DisplayBuffs() {
+			Console.WriteLine("<========== BUFFS ==========>");
+			Console.WriteLine("");
+
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 			foreach (StatType type in protagonist.Character.StatBonuses.Keys) {
 				Console.WriteLine("Type: " + type);
@@ -147,8 +153,11 @@ namespace EndlessAdventure.ConsoleApp {
 					Console.WriteLine(buff.Name + " (" + buff.Value + ")");
 				}
 			}
+		}
 
+		public void DisplayMessages() {
 			Console.WriteLine("");
+			Console.Write(_game.Battlefield.Message);
 			Console.WriteLine(Parser.Message);
 			Console.Write("> ");
 		}
@@ -161,6 +170,8 @@ namespace EndlessAdventure.ConsoleApp {
 			Console.WriteLine("<-----|     ENDLESS ADVENTURE!    |----->");
 			Console.WriteLine("<-----|                           |----->");
 			Console.WriteLine("<-----|===========================|----->");
+			Console.WriteLine("");
+			Console.WriteLine("Press ENTER to quit.");
 			Console.ReadLine();
 		}
 	}

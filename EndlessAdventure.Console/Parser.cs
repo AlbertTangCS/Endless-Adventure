@@ -4,6 +4,7 @@ using EndlessAdventure.Common;
 using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
+using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure {
 	public enum Mode {
@@ -134,8 +135,25 @@ namespace EndlessAdventure {
 					Mode = Mode.Skills;
 					break;
 
-				case "unequip":
+				case "travelto":
+					if (args.Length == 1) {
+						_message = "Missing argument.";
+						break;
+					}
+					switch (args[1]) {
+						case "greenpastures":
+							Game.TravelToWorld(Database.GREEN_PASTURES_KEY);
+							break;
+						case "shadywoods":
+							Game.TravelToWorld(Database.SHADY_WOODS_KEY);
+							break;
+						default:
+							_message = "Invalid World.";
+							break;
+					}
+					break;
 
+				case "unequip":
 					if (args.Length == 1) {
 						_message = "Missing argument.";
 						break;

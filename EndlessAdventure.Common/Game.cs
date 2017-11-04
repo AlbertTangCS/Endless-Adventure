@@ -16,6 +16,13 @@ namespace EndlessAdventure.Common {
 			Battlefield = new Battlefield(protagonists, World.SpawnEnemy);
 		}
 
+		public string Message => Battlefield.Message;
+
+		public void TravelToWorld(string pWorldKey) {
+			World = new World(Database.Worlds[pWorldKey]);
+			Battlefield.SwitchWorlds(World.SpawnEnemy);
+		}
+
 		public void Update(int ticks = 1) {
 			for (int i = 0; i < ticks; i++) {
 				Battlefield.Update();

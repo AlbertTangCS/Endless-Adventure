@@ -158,6 +158,18 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
+		public int Accuracy {
+			get {
+				return Defaults.CalculateAccuracy(Body, Mind, Soul);
+			}
+		}
+
+		public int Evasion {
+			get {
+				return Defaults.CalculateEvasion(Body, Mind, Soul);
+			}
+		}
+
 		public int BaseDefense {
 			get {
 				return Defaults.CalculateDefense(Body, Mind, Soul);

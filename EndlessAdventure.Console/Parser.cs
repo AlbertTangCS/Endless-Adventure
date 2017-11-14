@@ -105,7 +105,6 @@ namespace EndlessAdventure {
 
 				case "flee":
 					Game.Battlefield.Flee();
-					_message = "Fled from enemy!";
 					break;
 
 				case "game":
@@ -142,10 +141,10 @@ namespace EndlessAdventure {
 					}
 					switch (args[1]) {
 						case "greenpastures":
-							Game.TravelToWorld(Database.GREEN_PASTURES_KEY);
+							Game.TravelToWorld(Database.KEY_WORLD_GREEN_PASTURES);
 							break;
 						case "shadywoods":
-							Game.TravelToWorld(Database.SHADY_WOODS_KEY);
+							Game.TravelToWorld(Database.KEY_WORLD_SHADY_WOODS);
 							break;
 						default:
 							_message = "Invalid World.";

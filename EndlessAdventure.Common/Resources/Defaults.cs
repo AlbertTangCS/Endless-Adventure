@@ -25,34 +25,44 @@ namespace EndlessAdventure.Common.Resources {
 		}
 
 		public static int CalculatePhysicalAttack(int body, int mind, int soul) {
-			double physicalAttack = 0.7 * body + 0.3 * mind;
+			double physicalAttack = 0.8 * body + 0.2 * mind;
 			return (int)Math.Round(physicalAttack);
 		}
 
 		public static int CalculateEnergyAttack(int body, int mind, int soul) {
-			double energyAttack = 0.85 * soul + 0.15 * mind;
+			double energyAttack = 0.9 * soul + 0.1 * mind;
 			return (int)Math.Round(energyAttack);
 		}
 
 		public static int CalculateDefense(int body, int mind, int soul) {
-			double defense = 0.5 * body + 0.4 * mind + 0.25 * soul;
+			double defense = 0.4 * body + 0.5 * mind + 0.25 * soul;
 			return (int)Math.Round(defense);
 		}
 
 		public static int CalculateAccuracy(int body, int mind, int soul) {
-			double defense = 0.1 * body + 0.9 * mind + 0 * soul;
+			double defense = 0.1 * body + 0.9 * mind;
 			return (int)Math.Round(defense);
 		}
 
 		public static int CalculateEvasion(int body, int mind, int soul) {
-			double defense = 0.3 * body + 0.7 * mind + 0 * soul;
+			double defense = 0.3 * body + 0.7 * mind;
 			return (int)Math.Round(defense);
 		}
 
 		private static readonly int CONST_HIT_CHANCE = 10;
 		private static readonly int CONST_MISS_CHANCE = 5;
-		private static readonly int AVERAGE_HIT_CHANCE = 80;
-		private static readonly int DIFFERENCE_MULTIPLIER = 5;
+		private static readonly int AVERAGE_HIT_CHANCE = 75;
+		private static readonly int DIFFERENCE_MULTIPLIER = 2;
+
+		public static int HitChance(int pAccuracy, int pEvasion) {
+			int difference = Math.Abs(pAccuracy - pEvasion);
+			int total = 0;
+			for (int i = 0; i < difference; i++) {
+				total += DIFFERENCE_MULTIPLIER;
+			}
+			return AVERAGE_HIT_CHANCE + (pAccuracy < pEvasion ? -1 * total : total);
+		}
+
 		public static bool DidMiss(int pAccuracy, int pEvasion) {
 			int chance = Utilities.Random.Next(100);
 			if (chance < CONST_HIT_CHANCE)
@@ -60,13 +70,7 @@ namespace EndlessAdventure.Common.Resources {
 			else if (chance >= 100-CONST_MISS_CHANCE)
 				return true;
 			else {
-				int difference = Math.Abs(pAccuracy - pEvasion);
-				int total = 0;
-				for (int i = 0; i < difference; i++) {
-					total += i + 1;
-				}
-				int success = AVERAGE_HIT_CHANCE + (pAccuracy < pEvasion ? -1 * total : total);
-				return chance >= success;
+				return chance >= HitChance(pAccuracy, pEvasion);
 			}
 		}
 	}

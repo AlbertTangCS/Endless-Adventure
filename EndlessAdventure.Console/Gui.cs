@@ -5,6 +5,9 @@ using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 using System.Collections.Generic;
+using EndlessAdventure.Common.Buffs.Statbuffs;
+using EndlessAdventure.Common.Buffs.Effects;
+using EndlessAdventure.Common.Buffs.OnHitBuffs;
 
 namespace EndlessAdventure.ConsoleApp {
 
@@ -46,7 +49,10 @@ namespace EndlessAdventure.ConsoleApp {
 			Console.WriteLine("<========== " + _game.World.Name.ToUpper() + " ==========>");
 			Console.WriteLine("");
 
+			int hitchance = -1;
 			foreach (Combatant p in _game.Battlefield.Protagonists) {
+				if (hitchance == -1)
+					hitchance = p.Character.Accuracy;
 				Character protagonist = p.Character;
 				Console.Write("<-- Lvl. " + p.Level + " " + protagonist.Name);
 				Console.WriteLine(" (" + p.Experience + "/" + Defaults.NextLevelExpFormula(p.Level) + ") -->");
@@ -62,7 +68,7 @@ namespace EndlessAdventure.ConsoleApp {
 
 			foreach (Combatant a in _game.Battlefield.Antagonists) {
 				Character antagonist = a.Character;
-				Console.WriteLine("<-- " + antagonist.Name +" -->");
+				Console.WriteLine("<-- " + antagonist.Name +" ("+Defaults.HitChance(hitchance, a.Character.Evasion)+"%) -->");
 				Console.WriteLine("Health: " + antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 				Console.WriteLine("Energy: " + antagonist.CurrentEnergy + " / " + antagonist.MaxEnergy);
 				Console.Write("PA:" + antagonist.PhysicalAttack + "(+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
@@ -143,15 +149,27 @@ namespace EndlessAdventure.ConsoleApp {
 		}
 
 		private void DisplayBuffs() {
-			Console.WriteLine("<========== BUFFS ==========>");
+			Console.WriteLine("<========== EFFECTS ==========>");
 			Console.WriteLine("");
 
+			Console.WriteLine("Buffs:");
 			Combatant protagonist = _game.Battlefield.Protagonists[0];
 			foreach (StatType type in protagonist.Character.StatBonuses.Keys) {
-				Console.WriteLine("Type: " + type);
-				foreach (ABuff buff in protagonist.Character.StatBonuses[type]) {
-					Console.WriteLine(buff.Name + " (" + buff.Value + ")");
+				Console.WriteLine("Buffs to " + type + ":");
+				foreach (AStatBuff buff in protagonist.Character.StatBonuses[type]) {
+					Console.WriteLine(buff.Name + " (+" + buff.Value + ")");
 				}
+			}
+			if (protagonist.Character.OnHitBuffs.Count > 0)
+				Console.WriteLine("On Hit Effects:");
+			foreach (AOnHitBuff onhit in protagonist.Character.OnHitBuffs) {
+				Console.WriteLine(onhit.Name + " (" + onhit.Value + "): " + onhit.Description);
+			}
+
+			Console.WriteLine("");
+			Console.WriteLine("Active Effects:");
+			foreach (AEffect effect in protagonist.Character.ActiveEffects) {
+				Console.WriteLine(effect.Name + " (" + effect.Value+"): " + effect.Description);
 			}
 		}
 

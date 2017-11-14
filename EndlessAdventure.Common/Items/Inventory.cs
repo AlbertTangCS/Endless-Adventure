@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Characters;
 
 namespace EndlessAdventure.Common.Items
@@ -28,8 +29,8 @@ namespace EndlessAdventure.Common.Items
 
 			// add/remove buffs depending on what was equipped/unequipped
 			Equippables.Remove(item);
-			List<ABuff> buffsToAdd = null;
-			List<ABuff> buffsToRemove = null;
+			List<AStatBuff> buffsToAdd = null;
+			List<AStatBuff> buffsToRemove = null;
 			if (Equipped.TryGetValue(item.Type, out Item equipped)) {
 				Equipped.Remove(item.Type);
 				Equippables.Add(equipped);
@@ -44,12 +45,12 @@ namespace EndlessAdventure.Common.Items
 			}
 
 			if (buffsToAdd != null) {
-				foreach (ABuff buff in buffsToAdd) {
+				foreach (AStatBuff buff in buffsToAdd) {
 					character.AddBuff(buff);
 				}
 			}
 			if (buffsToRemove != null) {
-				foreach (ABuff buff in buffsToRemove) {
+				foreach (AStatBuff buff in buffsToRemove) {
 					character.RemoveBuff(buff);
 				}
 			}
@@ -61,14 +62,14 @@ namespace EndlessAdventure.Common.Items
 			}
 
 			// remove buffs depending on what was unequipped
-			List<ABuff> buffsToRemove = null;
+			List<AStatBuff> buffsToRemove = null;
 			if (equipped == equipment) {
 				Equipped.Remove(equipment.Type);
 				Equippables.Add(equipped);
 				buffsToRemove = equipped.Buffs;
 			}
 			if (buffsToRemove != null) {
-				foreach (ABuff buff in buffsToRemove) {
+				foreach (AStatBuff buff in buffsToRemove) {
 					character.RemoveBuff(buff);
 				}
 			}

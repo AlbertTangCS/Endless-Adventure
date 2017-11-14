@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EndlessAdventure.Common.Buffs.Effects;
+using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Characters;
-using EndlessAdventure.Common.Items.Consumables.Effects;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Items {
@@ -12,7 +13,7 @@ namespace EndlessAdventure.Common.Items {
 		public int Cost { get; private set; }
 
 		// for Consumables and Equippables
-		public List<ABuff> Buffs { get; private set; }
+		public List<AStatBuff> Buffs { get; private set; }
 		// for Consumables
 		public List<AEffect> Effects { get; private set; }
 
@@ -23,16 +24,16 @@ namespace EndlessAdventure.Common.Items {
 			Cost = data.Cost;
 
 			if (data.BuffValueDict != null) {
-				Buffs = new List<ABuff>();
+				Buffs = new List<AStatBuff>();
 				foreach (string key in data.BuffValueDict.Keys) {
-					Buffs.Add(Database.Buffs[key](data.BuffValueDict[key]));
+					Buffs.Add(Database.Buffs[key](data.BuffValueDict[key], -1));
 				}
 			}
 
 			if (data.EffectValueDict != null) {
 				Effects = new List<AEffect>();
 				foreach (string key in data.EffectValueDict.Keys) {
-					Effects.Add(Database.Effects[key](data.EffectValueDict[key]));
+					Effects.Add(Database.Effects[key](data.EffectValueDict[key], -1));
 				}
 			}
 		}
@@ -40,7 +41,7 @@ namespace EndlessAdventure.Common.Items {
 		public void Equip(Character character) {
 			if (Type == ItemType.Consumable || Type == ItemType.Miscellaneous) throw new InvalidOperationException();
 			if (Buffs != null) {
-				foreach (ABuff buff in Buffs) {
+				foreach (AStatBuff buff in Buffs) {
 					character.AddBuff(buff);
 				}
 			}
@@ -49,7 +50,7 @@ namespace EndlessAdventure.Common.Items {
 		public void Unequip(Character character) {
 			if (Type != ItemType.Consumable || Type == ItemType.Miscellaneous) throw new InvalidOperationException();
 			if (Buffs != null) {
-				foreach (ABuff buff in Buffs) {
+				foreach (AStatBuff buff in Buffs) {
 					character.RemoveBuff(buff);
 				}
 			}
@@ -64,7 +65,7 @@ namespace EndlessAdventure.Common.Items {
 				}
 			}
 			if (Buffs != null) {
-				foreach (ABuff buff in Buffs) {
+				foreach (AStatBuff buff in Buffs) {
 					character.AddBuff(buff);
 				}
 			}

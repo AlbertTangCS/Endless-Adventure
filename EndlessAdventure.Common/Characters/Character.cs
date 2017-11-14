@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using EndlessAdventure.Common.Buffs.Effects;
+using EndlessAdventure.Common.Buffs.OnHitBuffs;
+using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Characters {
@@ -8,7 +11,9 @@ namespace EndlessAdventure.Common.Characters {
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 
-		public Dictionary<StatType, List<ABuff>> StatBonuses { get; private set; }
+		public Dictionary<StatType, List<AStatBuff>> StatBonuses { get; private set; }
+		public List<AEffect> ActiveEffects { get; private set; }
+		public List<AOnHitBuff> OnHitBuffs { get; private set; }
 
 		/// <summary>
 		/// DO NOT CALL DIRECTLY. Use CharacterFactory.
@@ -21,7 +26,9 @@ namespace EndlessAdventure.Common.Characters {
 			BaseSoul = soul;
 			BaseFortune = fortune;
 
-			StatBonuses = new Dictionary<StatType, List<ABuff>>();
+			StatBonuses = new Dictionary<StatType, List<AStatBuff>>();
+			ActiveEffects = new List<AEffect>();
+			OnHitBuffs = new List<AOnHitBuff>();
 
 			CurrentHealth = MaxHealth;
 			CurrentEnergy = MaxEnergy;
@@ -75,9 +82,9 @@ namespace EndlessAdventure.Common.Characters {
 			BaseSoul += 1;
 		}
 
-		public void AddBuff(ABuff buff) {
-			if (!StatBonuses.TryGetValue(buff.StatType, out List<ABuff> buffList)) {
-				List<ABuff> buffs = new List<ABuff> { buff };
+		public void AddBuff(AStatBuff buff) {
+			if (!StatBonuses.TryGetValue(buff.StatType, out List<AStatBuff> buffList)) {
+				List<AStatBuff> buffs = new List<AStatBuff> { buff };
 				StatBonuses.Add(buff.StatType, buffs);
 			}
 			else {
@@ -85,8 +92,8 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
-		public void RemoveBuff(ABuff buff) {
-			if (StatBonuses.TryGetValue(buff.StatType, out List<ABuff> buffList)) {
+		public void RemoveBuff(AStatBuff buff) {
+			if (StatBonuses.TryGetValue(buff.StatType, out List<AStatBuff> buffList)) {
 				buffList.Remove(buff);
 			}
 		}
@@ -94,10 +101,10 @@ namespace EndlessAdventure.Common.Characters {
 		#region Getters&Setters
 
 		private int GetBuffedStat(StatType type, int baseValue) {
-			if (StatBonuses.TryGetValue(type, out List<ABuff> buffs)) {
+			if (StatBonuses.TryGetValue(type, out List<AStatBuff> buffs)) {
 				int buffedValue = baseValue;
-				foreach (ABuff buff in buffs) {
-					buffedValue = buff.Apply(buffedValue);
+				foreach (AStatBuff buff in buffs) {
+					buffedValue += buff.GetStatBonus(this);
 				}
 				return buffedValue;
 			}
@@ -158,15 +165,27 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
-		public int Accuracy {
+		public int BaseAccuracy {
 			get {
 				return Defaults.CalculateAccuracy(Body, Mind, Soul);
 			}
 		}
 
-		public int Evasion {
+		public int Accuracy {
+			get {
+				return GetBuffedStat(StatType.Accuracy, BaseAccuracy);
+			}
+		}
+
+		public int BaseEvasion {
 			get {
 				return Defaults.CalculateEvasion(Body, Mind, Soul);
+			}
+		}
+
+		public int Evasion {
+			get {
+				return GetBuffedStat(StatType.Evasion, BaseEvasion);
 			}
 		}
 

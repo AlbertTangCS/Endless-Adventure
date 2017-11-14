@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using EndlessAdventure.Common.Buffs.Effects;
 
 namespace EndlessAdventure.Common.Battle {
 	public class Battlefield {
@@ -59,11 +59,25 @@ namespace EndlessAdventure.Common.Battle {
 				}
 			}
 
+			// apply active Effects on all combatants
+			foreach (Combatant p in Protagonists) {
+				foreach (AEffect e in p.Character.ActiveEffects) {
+					e.ApplyEffect(p.Character);
+					Message += e.Name + " applied on "+p.Character.Name+" for " + e.Value + " value!\n";
+				}
+			}
+			foreach (Combatant a in Antagonists) {
+				foreach (AEffect e in a.Character.ActiveEffects) {
+					e.ApplyEffect(a.Character);
+					Message += e.Name + " applied on " + a.Character.Name+" for " + e.Value + " value!\n";
+				}
+			}
+
 			// apply pending damage to all protagonists
-			for (int i = 0; i < Protagonists.Count; i++) {
-				Protagonists[i].ApplyPendingDamage();
-				if (Protagonists[i].Fallen) {
-					Message += Protagonists[i].Character.Name + " has fallen!\n";
+			foreach (Combatant p in Protagonists) {
+					p.ApplyPendingDamage();
+				if (p.Fallen) {
+					Message += p.Character.Name + " has fallen!\n";
 					Antagonists.Clear();
 				}
 				else {

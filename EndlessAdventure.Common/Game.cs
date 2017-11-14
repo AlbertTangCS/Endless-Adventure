@@ -11,8 +11,8 @@ namespace EndlessAdventure.Common {
 
 		public Game() {
 			Database.Initialize();
-			World = new World(Database.Worlds[Database.GREEN_PASTURES_KEY]);
-			List<Combatant> protagonists = new List<Combatant> { new Combatant(Database.Combatants[Database.PLAYER_KEY]) };
+			World = new World(Database.Worlds[Database.KEY_WORLD_GREEN_PASTURES]);
+			List<Combatant> protagonists = new List<Combatant> { new Combatant(Database.Combatants[Database.KEY_COMBATANT_PLAYER]) };
 			Battlefield = new Battlefield(protagonists, World.SpawnEnemy);
 		}
 

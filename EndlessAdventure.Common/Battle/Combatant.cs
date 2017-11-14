@@ -1,6 +1,4 @@
-﻿using System;
-
-using EndlessAdventure.Common.Characters;
+﻿using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 
@@ -21,10 +19,14 @@ namespace EndlessAdventure.Common.Battle {
 			Character = new Character(combatantData.Name, combatantData.Description, combatantData.Body, combatantData.Mind, combatantData.Soul, 0);
 			_expReward = combatantData.ExpReward;
 
-			Inventory = inventory ?? new Inventory(null, null, null, null);
+			if (combatantData.Buffs != null) {
+				foreach (string key in combatantData.Buffs.Keys) {
+					Character.AddBuff(Database.Buffs[key](combatantData.Buffs[key], -1));
+				}
+			}
 
+			Inventory = inventory ?? new Inventory(null, null, null, null);
 			if (combatantData.Drops != null) {
-				
 				foreach (string key in combatantData.Drops.Keys) {
 					double chance = Utilities.Random.NextDouble();
 					if (combatantData.Drops[key] - chance > 0) {

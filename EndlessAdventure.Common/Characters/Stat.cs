@@ -13,10 +13,11 @@
 		Defense,
 		Health,
 		Energy,
+		Accuracy,
+		Evasion,
 
 		// Combatant
 		HealAmount,
 		CritChance
 	}
-
 }

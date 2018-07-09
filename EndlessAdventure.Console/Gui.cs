@@ -13,10 +13,12 @@ namespace EndlessAdventure.ConsoleApp {
 
 	public class Gui {
 
-		private Game _game;
+		private readonly Game _game;
+		private readonly MainView _parser;
 
-		public Gui(Game game) {
-			_game = game;
+		public Gui(Game pGame, MainView pParser) {
+			_game = pGame;
+			_parser = pParser;
 		}
 		
 		public void Render(long frametime) {
@@ -24,8 +26,8 @@ namespace EndlessAdventure.ConsoleApp {
 			//Console.WriteLine("[Frame time: " + frametime + "ms]");
 			//Console.WriteLine("");
 
-			switch (Parser.Mode) {
-				case Mode.Game:
+			switch (_parser.Mode) {
+				case Mode.Battle:
 					PrintGame();
 					break;
 
@@ -33,7 +35,7 @@ namespace EndlessAdventure.ConsoleApp {
 					DisplayInventory();
 					break;
 
-				case Mode.Skills:
+				case Mode.Stats:
 					DisplaySkills();
 					break;
 
@@ -176,7 +178,7 @@ namespace EndlessAdventure.ConsoleApp {
 		public void DisplayMessages() {
 			Console.WriteLine("");
 			Console.Write(_game.Battlefield.Message);
-			Console.WriteLine(Parser.Message);
+			Console.WriteLine(_parser.FetchMessage());
 			Console.Write("> ");
 		}
 

@@ -9,25 +9,30 @@ namespace EndlessAdventure.ConsoleApp {
 	/// to update the game and the GUI.
 	/// </summary>
 	public class Driver {
-
-		private static Game game = new Game();
-		private static Gui gui = new Gui(game);
+		
+		private static Game _game;
+		private static MainView _parser;
+		private static Gui _gui;
 
 		public static void Main() {
-			Parser.Game = game;
+
+			_game = new Game();
+			_parser = new MainView(_game);
+			_gui = new Gui(_game, _parser);
 
 			string input = string.Empty;
 			while (true) {
-				if (input == "quit") break;
+				if (input == "quit" || input == "q") break;
 				else {
-					Parser.Parse(input);
+					var args = input.Split(' ');
+					_parser.ProcessInput(args);
 				}
-				gui.Render(-1);
+				_gui.Render(-1);
 
 				input = Console.ReadLine();
 			}
 
-			gui.DisplayQuit();
+			_gui.DisplayQuit();
 		}
 
 			/*

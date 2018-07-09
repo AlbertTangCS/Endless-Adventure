@@ -45,12 +45,20 @@ namespace EndlessAdventure.Common.Battle {
 					foreach (Combatant antagonist in Antagonists) {
 						if (protagonist.TryAttackCombatant(antagonist, out int damage)) {
 							Message += protagonist.Character.Name + " attacks " + antagonist.Character.Name + " for "+damage+" damage.\n";
+							foreach (var onhit in protagonist.Character.OnHitBuffs) {
+								onhit.ApplyToEnemy(antagonist.Character);
+								Message += onhit.Name + " applied to " + antagonist.Character.Name + "!\n";
+							}
 						}
 						else {
 							Message += protagonist.Character.Name + " attacks " + antagonist.Character.Name + " and misses.\n";
 						}
 						if (antagonist.TryAttackCombatant(protagonist, out damage)) {
 							Message += antagonist.Character.Name + " attacks " + protagonist.Character.Name + " for "+damage+" damage.\n";
+							foreach (var onhit in antagonist.Character.OnHitBuffs) {
+								onhit.ApplyToEnemy(protagonist.Character);
+								Message += onhit.Name + " applied to " + protagonist.Character.Name + "!\n";
+							}
 						}
 						else {
 							Message += antagonist.Character.Name + " attacks " + protagonist.Character.Name + " and misses.\n";
@@ -61,15 +69,31 @@ namespace EndlessAdventure.Common.Battle {
 
 			// apply active Effects on all combatants
 			foreach (Combatant p in Protagonists) {
+				var decayedEffects = new List<AEffect>();
 				foreach (AEffect e in p.Character.ActiveEffects) {
 					e.ApplyEffect(p.Character);
+					e.Decay();
+					if (e.DurationRemaining <= 0)
+						decayedEffects.Add(e);
 					Message += e.Name + " applied on "+p.Character.Name+" for " + e.Value + " value!\n";
+				}
+				foreach (var effect in decayedEffects) {
+					p.Character.RemoveEffect(effect);
+					Message += effect + " removed from " + p.Character.Name+ ".\n";
 				}
 			}
 			foreach (Combatant a in Antagonists) {
+				var decayedEffects = new List<AEffect>();
 				foreach (AEffect e in a.Character.ActiveEffects) {
 					e.ApplyEffect(a.Character);
+					e.Decay();
+					if (e.DurationRemaining <= 0)
+						decayedEffects.Add(e);
 					Message += e.Name + " applied on " + a.Character.Name+" for " + e.Value + " value!\n";
+				}
+				foreach (var effect in decayedEffects) {
+					a.Character.RemoveEffect(effect);
+					Message += effect + " removed from " + a.Character.Name + ".\n";
 				}
 			}
 

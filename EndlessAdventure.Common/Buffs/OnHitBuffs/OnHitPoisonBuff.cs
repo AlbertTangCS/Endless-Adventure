@@ -1,4 +1,5 @@
-﻿using EndlessAdventure.Common.Characters;
+﻿using System.Linq;
+using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Resources;
 
 namespace EndlessAdventure.Common.Buffs.OnHitBuffs {
@@ -7,7 +8,13 @@ namespace EndlessAdventure.Common.Buffs.OnHitBuffs {
 		}
 
 		public override void ApplyToEnemy(Character enemy) {
-			enemy.AddBuff(Database.Buffs[Database.KEY_EFFECT_POISON](Value, DurationRemaining));
+			var isEffect = Database.Effects.TryGetValue(Database.KEY_EFFECT_POISON, out var effectResult);
+			if (isEffect) {
+				var newEffect = effectResult(Value, DurationRemaining);
+				var stackCount = enemy.ActiveEffects.Count(x => x.Name == newEffect.Name);
+				if (stackCount < newEffect.StackCount)
+					enemy.AddEffect(effectResult(Value, DurationRemaining));
+			}
 		}
 	}
 }

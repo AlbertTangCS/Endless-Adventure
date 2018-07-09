@@ -1,4 +1,5 @@
-﻿using EndlessAdventure.Common.Characters;
+﻿using EndlessAdventure.Common.Buffs.Statbuffs;
+using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 
@@ -21,7 +22,16 @@ namespace EndlessAdventure.Common.Battle {
 
 			if (combatantData.Buffs != null) {
 				foreach (string key in combatantData.Buffs.Keys) {
-					Character.AddBuff(Database.Buffs[key](combatantData.Buffs[key], -1));
+					var isBuff = Database.Buffs.TryGetValue(key, out var buffResult);
+					if (isBuff) {
+						Character.AddBuff(buffResult(combatantData.Buffs[key], -1));
+					}
+					else {
+						var isOnHit = Database.OnHits.TryGetValue(key, out var onHitResult);
+						if (isOnHit) {
+							Character.AddOnHit(onHitResult(combatantData.Buffs[key], 5));
+						}
+					}
 				}
 			}
 

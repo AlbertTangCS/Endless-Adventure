@@ -98,6 +98,18 @@ namespace EndlessAdventure.Common.Characters {
 			}
 		}
 
+		public void AddOnHit(AOnHitBuff buff) {
+			OnHitBuffs.Add(buff);
+		}
+
+		public void AddEffect(AEffect effect) {
+			ActiveEffects.Add(effect);
+		}
+
+		public void RemoveEffect(AEffect effect) {
+			ActiveEffects.Remove(effect);
+		}
+
 		#region Getters&Setters
 
 		private int GetBuffedStat(StatType type, int baseValue) {

@@ -44,7 +44,7 @@ namespace EndlessAdventure.Common.Resources {
 				{ KEY_COMBATANT_DEER, 10 },
 				{ KEY_COMBATANT_OWL, 10 },
 				{ KEY_COMBATANT_WOLF, 5 },
-				{ KEY_COMBATANT_SHROOMLING, 1 }
+				{ KEY_COMBATANT_SHROOMLING, 50 }
 			};
 			Worlds.Add(KEY_WORLD_SHADY_WOODS,
 				new WorldData(Localization.WORLD_SHADY_WOODS_NAME, Localization.WORLD_SHADY_WOODS_DESCRIPTION, shady_woods_spawns));
@@ -121,9 +121,12 @@ namespace EndlessAdventure.Common.Resources {
 			Combatants.Add(KEY_COMBATANT_WOLF,
 				new CombatantData(Localization.COMBATANT_WOLF_NAME, Localization.COMBATANT_WOLF_DESCRIPTION,
 				/*stats*/ 7, 5, 2, null, /*rewards*/ 5, null));
+			Dictionary<string, double> shroomling_buffs = new Dictionary<string, double> {
+				{ KEY_ONHIT_POISON, 1 }
+			};
 			Combatants.Add(KEY_COMBATANT_SHROOMLING,
 				new CombatantData(Localization.COMBATANT_SHROOMLING_NAME, Localization.COMBATANT_SHROOMLING_DESCRIPTION,
-				/*stats*/ 10, 5, 5, null, /*rewards*/ 10, null));
+				/*stats*/ 10, 5, 5, shroomling_buffs, /*rewards*/ 10, null));
 		}
 
 		#endregion

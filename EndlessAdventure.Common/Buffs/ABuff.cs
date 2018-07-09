@@ -20,7 +20,7 @@ namespace EndlessAdventure.Common.Buffs {
 		}
 
 		public void Decay() {
-			if (DurationRemaining != 0)
+			if (DurationRemaining > 0)
 				DurationRemaining--;
 		}
 

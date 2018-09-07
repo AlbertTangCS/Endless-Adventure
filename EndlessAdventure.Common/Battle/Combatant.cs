@@ -1,11 +1,12 @@
-﻿using EndlessAdventure.Common.Buffs.Statbuffs;
-using EndlessAdventure.Common.Characters;
+﻿using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 
-namespace EndlessAdventure.Common.Battle {
-	public class Combatant {
-
+namespace EndlessAdventure.Common.Battle
+{
+	public class Combatant : ICombatant
+	{
 		public Character Character { get; private set; }
 		public int Level { get; private set; }
 		public int Experience { get; private set; }
@@ -48,6 +49,8 @@ namespace EndlessAdventure.Common.Battle {
 
 			Fallen = false;
 		}
+		
+		
 		
 		public void AutoHeal() {
 			Character.Heal(1);
@@ -120,23 +123,27 @@ namespace EndlessAdventure.Common.Battle {
 
 		#region Equipment
 
-		public void Equip(Item item) {
+		public void Equip(Item item)
+		{
 			Inventory.Equip(item, Character);
 		}
 
-		public void Unequip(Item equipment) {
+		public void Unequip(Item equipment)
+		{
 			Inventory.Unequip(equipment, Character);
 		}
 
-		public void Consume(Item item) {
+		public void Consume(Item item)
+		{
 			Inventory.Consume(item, Character);
 		}
 
 #endregion
 
-#region Getters&Setters
+		#region Getters&Setters
 
-		public bool Fallen {
+		public bool Fallen
+		{
 			get {
 				return _fallen;
 			}
@@ -149,7 +156,7 @@ namespace EndlessAdventure.Common.Battle {
 
 		public int Luck { get; private set; }
 
-#endregion
+		#endregion
 
 	}
 }

@@ -1,11 +1,13 @@
-﻿using EndlessAdventure.Common.Characters;
+﻿using EndlessAdventure.Common.Interfaces;
 
-namespace EndlessAdventure.Common.Buffs.OnHitBuffs {
-	public abstract class AOnHitBuff : ABuff {
+namespace EndlessAdventure.Common.Buffs.OnHitBuffs
+{
+	public abstract class AOnHitBuff : ABuff
+	{
+		protected AOnHitBuff(string pName, string pDescription, double pValue, int pDuration) : base(pName, pDescription,pValue, pDuration)
+		{
+		}
 
-		public AOnHitBuff(string pName, string pDescription, double pValue, int pDuration) :
-				base(pName, pDescription, pValue, pDuration) { }
-
-		public abstract void ApplyToEnemy(Character enemy);
+		public abstract void ApplyToEnemy(ICombatant enemy);
 	}
 }

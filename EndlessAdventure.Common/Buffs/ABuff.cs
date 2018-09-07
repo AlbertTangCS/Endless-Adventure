@@ -1,16 +1,12 @@
-﻿using EndlessAdventure.Common.Characters;
+﻿using EndlessAdventure.Common.Interfaces;
 
-namespace EndlessAdventure.Common.Buffs {
-	public class ABuff {
+namespace EndlessAdventure.Common.Buffs
+{
+	public abstract class ABuff
+	{
 
-		public string Name { get; private set; }
-		public string Description { get; private set; }
-		public double Value { get; private set; }
-
-		public int DurationTotal { get; private set; }
-		public int DurationRemaining { get; private set; }
-
-		protected ABuff(string pName, string pDescription, double pValue, int pDuration) {
+		protected ABuff(string pName, string pDescription, double pValue, int pDuration)
+		{
 			Name = pName;
 			Description = pDescription;
 			Value = pValue;
@@ -19,12 +15,20 @@ namespace EndlessAdventure.Common.Buffs {
 			DurationRemaining = pDuration;
 		}
 
-		public void Decay() {
+		public string Name { get; }
+		public string Description { get; }
+		public double Value { get; }
+
+		public int DurationTotal { get; }
+		public int DurationRemaining { get; private set; }
+		
+		public void Decay()
+		{
 			if (DurationRemaining > 0)
 				DurationRemaining--;
 		}
 
-		public virtual void Equip(Character c) { }
-		public virtual void Unequip(Character c) { }
+		public abstract void Equip(ICombatant c);
+		public abstract void Unequip(ICombatant c);
 	}
 }

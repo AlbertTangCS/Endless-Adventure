@@ -7,11 +7,13 @@ namespace EndlessAdventure {
 		protected readonly Game _game;
 		protected readonly Dictionary<string, string> _commandDictionary = new Dictionary<string, string>();
 
-		public View(Game pGame) {
+		public View(Game pGame)
+		{
 			_game = pGame;
 		}
 
-		public string GetHelpMessage() {
+		public string GetHelpMessage()
+		{
 			var helpMessage = string.Empty;
 			foreach (var command in _commandDictionary.Keys) {
 				helpMessage += command;
@@ -22,7 +24,8 @@ namespace EndlessAdventure {
 		}
 		
 		protected string _parseMessage;
-		public string FetchParseMessage() {
+		public string FetchParseMessage()
+		{
 			var message = _parseMessage;
 			_parseMessage = string.Empty;
 			return message;

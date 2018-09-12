@@ -67,6 +67,21 @@ namespace EndlessAdventure.Common.Battle
 			_antagonistQueue.Clear();
 		}
 
+		public void Flee()
+		{
+			string enemyName = null;
+			while (Antagonists.Count > 0) {
+				enemyName = Antagonists[0].Name;
+				_antagonists.RemoveAt(0);
+				_antagonistQueue.Add(_world.SpawnEnemy());
+			}
+			if (enemyName != null) {
+				Message += "Fled from " + enemyName + "!\n";
+			}
+		}
+		
+		#region Private Implementation
+		
 		private void AddAntagonistToQueue()
 		{
 			var antagonist = _world.SpawnEnemy();
@@ -176,7 +191,7 @@ namespace EndlessAdventure.Common.Battle
 				Antagonists[i].ApplyPendingDamage();
 				if (Antagonists[i].Fallen) {
 					Message += Antagonists[i].Name + " has been defeated!\n";
-					_protagonists.ForEach(p => p.DefeatCombatant(Antagonists[i]));
+					_protagonists.ForEach(p => DefeatCombatant(p, Antagonists[i]));
 					_antagonists.RemoveAt(i);
 					i--;
 					AddAntagonistToQueue();
@@ -184,17 +199,15 @@ namespace EndlessAdventure.Common.Battle
 			}
 		}
 
-		public void Flee()
+		private void DefeatCombatant(ICombatant pVictor, ICombatant pDefeated)
 		{
-			string enemyName = null;
-			while (Antagonists.Count > 0) {
-				enemyName = Antagonists[0].Name;
-				_antagonists.RemoveAt(0);
-				_antagonistQueue.Add(_world.SpawnEnemy());
-			}
-			if (enemyName != null) {
-				Message += "Fled from " + enemyName + "!\n";
-			}
+			pVictor.AddExperience(pDefeated.ExpReward);
+				/*Inventory.Equippables.AddRange(antagonist.Inventory.Equipped.Values);
+				Inventory.Equippables.AddRange(antagonist.Inventory.Equippables);
+				Inventory.Consumables.AddRange(antagonist.Inventory.Consumables);
+				Inventory.Miscellaneous.AddRange(antagonist.Inventory.Miscellaneous);*/
 		}
+			
+		#endregion Private Implementation
 	}
 }

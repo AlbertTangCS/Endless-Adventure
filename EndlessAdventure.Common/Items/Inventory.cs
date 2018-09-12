@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Interfaces;
 
 namespace EndlessAdventure.Common.Items
 {
-	public class Inventory
+	public class Inventory : IInventory
 	{
+		private List<Item> _equippables;
+		private List<Item> _consumables;
+		private List<Item> _miscellaneous;
+		
 		public Dictionary<ItemType, Item> Equipped { get; private set; }
 		public List<Item> Equippables { get; private set; }
 		public List<Item> Consumables { get; private set; }
@@ -22,7 +27,8 @@ namespace EndlessAdventure.Common.Items
 			Miscellaneous = miscellaneous ?? new List<Item>();
 		}
 
-		public void Equip(Item item, Character character) {
+		public void Equip(Item item, Character character)
+		{
 			if (item.Type == ItemType.Consumable || item.Type == ItemType.Miscellaneous || !Equippables.Contains(item)) {
 				throw new ArgumentException();
 			}
@@ -83,7 +89,7 @@ namespace EndlessAdventure.Common.Items
 			item.Consume(character);
 		}
 
-		public void Add(Item item) {
+		public void AddItem(IItem item) {
 			if (item.Type == ItemType.Consumable) {
 				Consumables.Add(item);
 			}

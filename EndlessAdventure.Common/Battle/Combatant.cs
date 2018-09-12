@@ -12,67 +12,80 @@ namespace EndlessAdventure.Common.Battle
 	public class Combatant : ICombatant
 	{
 		#region Private Fields
+
+		private readonly Inventory _inventory;
 		
-		private readonly int _expReward;
 		private int _pendingDamage;
 
-		private Dictionary<StatType, List<AStatBuff>> _statBonuses;
+		private readonly Dictionary<StatType, List<AStatBuff>> _statBonuses;
 		private readonly List<AEffect> _activeEffects;
 		private readonly List<AOnHitBuff> _onHitBuffs;
 		
 		#endregion Private Fields;
 		
-		public Combatant(CombatantData combatantData, Inventory inventory = null)
+		public Combatant(CombatantData pCombatantData)
 		{
-			_expReward = combatantData.ExpReward;
-
-			if (combatantData.Buffs != null)
+			Name = pCombatantData.Name;
+			Description = pCombatantData.Description;
+			ExpReward = pCombatantData.ExpReward;
+			
+			BaseBody = pCombatantData.Body;
+			BaseMind = pCombatantData.Mind;
+			BaseSoul = pCombatantData.Soul;
+			
+			_inventory =  new Inventory(null, null, null, null);
+			if (pCombatantData.Drops != null)
 			{
-				foreach (var key in combatantData.Buffs.Keys)
+				foreach (var key in pCombatantData.Drops.Keys)
+				{
+					var chance = Utilities.Random.NextDouble();
+					if (!(pCombatantData.Drops[key] - chance > 0))
+						continue;
+					
+					var item = new Item(Database.Items[key]);
+					Inventory.AddItem(item);
+				}
+			}
+
+			if (pCombatantData.Buffs != null)
+			{
+				foreach (var key in pCombatantData.Buffs.Keys)
 				{
 					var isBuff = Database.Buffs.TryGetValue(key, out var buffResult);
 					if (isBuff)
 					{
-						AddBuff(buffResult(combatantData.Buffs[key], -1));
+						AddBuff(buffResult(pCombatantData.Buffs[key], -1));
 					}
 					else
 					{
 						var isOnHit = Database.OnHits.TryGetValue(key, out var onHitResult);
 						if (isOnHit)
 						{
-							AddOnHit(onHitResult(combatantData.Buffs[key], 5));
+							AddOnHit(onHitResult(pCombatantData.Buffs[key], 5));
 						}
 					}
 				}
 			}
 
-			Inventory = inventory ?? new Inventory(null, null, null, null);
-			if (combatantData.Drops != null)
-			{
-				foreach (var key in combatantData.Drops.Keys)
-				{
-					var chance = Utilities.Random.NextDouble();
-					if (!(combatantData.Drops[key] - chance > 0))
-						continue;
-					
-					var item = new Item(Database.Items[key]);
-					Inventory.Add(item);
-				}
-			}
+			Experience = pCombatantData.Experience;
+			SkillPoints = pCombatantData.SkillPoints;
 
-			Fallen = false;
+			_statBonuses = new Dictionary<StatType, List<AStatBuff>>();
+			_activeEffects = new List<AEffect>();
+			_onHitBuffs = new List<AOnHitBuff>();
 		}
 
 		#region Public Fields
 		
 		public string Name { get; }
 		public string Description { get; }
-
+		public int ExpReward { get; }
+		
 		public int Level { get; private set; }
 		public int Experience { get; private set; }
 		public int SkillPoints { get; private set; }
-		
-		public Inventory Inventory { get; }
+
+		public IInventory Inventory => _inventory;
 		
 		#region Base Stats
 
@@ -123,30 +136,30 @@ namespace EndlessAdventure.Common.Battle
 		public IEnumerable<AOnHitBuff> OnHitBuffs => _onHitBuffs;
 		
 		#endregion Public Fields
+
+		#region Public Methods
+
+		public void AddPendingDamage(int pDamage)
+		{
+			_pendingDamage += pDamage;
+		}
 		
-		public void ApplyDamage(int pHealth)
+		public int ApplyPendingDamage()
 		{
-			if (CurrentHealth - pHealth < 0)
-			{
-				CurrentHealth = 0;
+			var pendingDamage = _pendingDamage;
+			ApplyDamage(_pendingDamage);
+			_pendingDamage = 0;
+			if (CurrentHealth == 0) {
+				Fallen = true;
 			}
-			else
-			{
-				CurrentHealth -= pHealth;
-			}
+			return pendingDamage;
 		}
-
-		public void Heal(int pHealth)
+		
+		public void AutoHeal()
 		{
-			if (CurrentHealth + pHealth > MaxHealth)
-			{
-				CurrentHealth = MaxHealth;
-			}
-			else {
-				CurrentHealth += pHealth;
-			}
+			Heal(1);
 		}
-
+		
 		public void SpendEnergy(int pEnergy) {
 			if (CurrentEnergy - pEnergy < 0) {
 				CurrentEnergy = 0;
@@ -204,68 +217,40 @@ namespace EndlessAdventure.Common.Battle
 			}
 			return true;
 		}
-		
-		public void AutoHeal()
-		{
-			Heal(1);
-			if (CurrentHealth == MaxHealth) {
-				Fallen = false;
-			}
-		}
 
-		public bool TryAttack(ICombatant pCombatant, out int pDamage)
+		/*public bool TryAttack(ICombatant pCombatant, out int pDamage)
 		{
 			if (!Defaults.DidMiss(Accuracy, pCombatant.Evasion)) {
 				int pendingDamage = PhysicalAttack - pCombatant.Defense;
 				if (pendingDamage > 0) {
-					pCombatant._pendingDamage += pendingDamage;
+					pCombatant.AddPendingDamage(pendingDamage);
 				}
 				pDamage = pendingDamage;
 				return true;
 			}
 			pDamage = 0;
 			return false;
-		}
-
-		public void DefeatCombatant(ICombatant antagonist)
-		{
-			AddExperience(antagonist._expReward);
-			Inventory.Equippables.AddRange(antagonist.Inventory.Equipped.Values);
-			Inventory.Equippables.AddRange(antagonist.Inventory.Equippables);
-			Inventory.Consumables.AddRange(antagonist.Inventory.Consumables);
-			Inventory.Miscellaneous.AddRange(antagonist.Inventory.Miscellaneous);
-		}
-
-		public int ApplyPendingDamage()
-		{
-			int pendingDamage = _pendingDamage;
-			Character.ApplyDamage(_pendingDamage);
-			_pendingDamage = 0;
-			if (Character.CurrentHealth == 0) {
-				Fallen = true;
-			}
-			return pendingDamage;
-		}
+		}*/
 		
-		public void Equip(Item item)
+		public void Equip(IItem item)
 		{
-			Inventory.Equip(item, Character);
+			//Inventory.Equip(item, Character);
 		}
 
-		public void Unequip(Item equipment)
+		public void Unequip(IItem equipment)
 		{
-			Inventory.Unequip(equipment, Character);
+			//Inventory.Unequip(equipment, Character);
 		}
 
-		public void Consume(Item item)
+		public void Consume(IItem item)
 		{
-			Inventory.Consume(item, Character);
+			//Inventory.Consume(item, Character);
 		}
 		
 		public void AddBuff(AStatBuff buff) {
-			if (!StatBonuses.TryGetValue(buff.StatType, out var buffList)) {
+			if (!_statBonuses.TryGetValue(buff.StatType, out var buffList)) {
 				List<AStatBuff> buffs = new List<AStatBuff> { buff };
-				StatBonuses.Add(buff.StatType, buffs);
+				_statBonuses.Add(buff.StatType, buffs);
 			}
 			else {
 				buffList.Add(buff);
@@ -273,27 +258,29 @@ namespace EndlessAdventure.Common.Battle
 		}
 
 		public void RemoveBuff(AStatBuff buff) {
-			if (StatBonuses.TryGetValue(buff.StatType, out var buffList)) {
+			if (_statBonuses.TryGetValue(buff.StatType, out var buffList)) {
 				buffList.Remove(buff);
 			}
 		}
 
 		public void AddOnHit(AOnHitBuff buff) {
-			OnHitBuffs.Add(buff);
+			_onHitBuffs.Add(buff);
 		}
 
 		public void AddEffect(AEffect effect) {
-			ActiveEffects.Add(effect);
+			_activeEffects.Add(effect);
 		}
 
 		public void RemoveEffect(AEffect effect) {
-			ActiveEffects.Remove(effect);
+			_activeEffects.Remove(effect);
 		}
+		
+		#endregion Public Methods
 		
 		#region Private Implementation
 		
 		private int GetBuffedStat(StatType type, int baseValue) {
-			if (!StatBonuses.TryGetValue(type, out var buffs))
+			if (!_statBonuses.TryGetValue(type, out var buffs))
 				return baseValue;
 			
 			var buffedValue = baseValue;
@@ -303,6 +290,31 @@ namespace EndlessAdventure.Common.Battle
 			}
 			return buffedValue;
 
+		}
+		
+		private void ApplyDamage(int pHealth)
+		{
+			if (CurrentHealth - pHealth < 0)
+			{
+				CurrentHealth = 0;
+			}
+			else
+			{
+				CurrentHealth -= pHealth;
+			}
+		}
+
+		private void Heal(int pHealth)
+		{
+			if (CurrentHealth + pHealth > MaxHealth)
+			{
+				CurrentHealth = MaxHealth;
+				if (Fallen)
+					Fallen = false;
+			}
+			else {
+				CurrentHealth += pHealth;
+			}
 		}
 		
 		#endregion Private Implementation

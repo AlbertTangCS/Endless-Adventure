@@ -10,7 +10,10 @@ namespace EndlessAdventure.Common.Interfaces
     {
         string Name { get; }
         string Description { get; }
+        int ExpReward { get; }
 
+        IInventory Inventory { get; }
+        
         int Level { get; }
         int Experience { get; }
         int SkillPoints { get; }
@@ -48,17 +51,17 @@ namespace EndlessAdventure.Common.Interfaces
         IEnumerable<AEffect> ActiveEffects { get; }
         IEnumerable<AOnHitBuff> OnHitBuffs { get; }
 
-        void ApplyDamage(int pHealth);
-        void Heal(int pHealth);
+        //void ApplyDamage(int pHealth);
+        //void Heal(int pHealth);
         
         void AddExperience(int pExperience);
         bool AddSkillPoint(StatType pType, int pCount = 1);
         
         void AutoHeal();
-        bool TryAttack(ICombatant pCombatant, out int pDamage);
+        //bool TryAttack(ICombatant pCombatant, out int pDamage);
+        void AddPendingDamage(int pDamage);
         int ApplyPendingDamage();
-        // TODO: remove this method
-        void DefeatCombatant(ICombatant pCombatant);
+        //void DefeatCombatant(ICombatant pCombatant);
 
         void AddEffect(AEffect pEffect);
         void RemoveEffect(AEffect pEffect);

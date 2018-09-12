@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using EndlessAdventure.Common.Buffs.Effects;
 using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Resources;
 
-namespace EndlessAdventure.Common.Items {
-	public class Item {
+namespace EndlessAdventure.Common.Items
+{
+	public class Item : IItem
+	{
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 		public ItemType Type { get; private set; }

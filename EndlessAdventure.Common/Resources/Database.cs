@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using EndlessAdventure.Common.Battle;
-using EndlessAdventure.Common.Buffs.Effects;
 using EndlessAdventure.Common.Buffs.OnHitBuffs;
-using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources.Data;
 
-namespace EndlessAdventure.Common.Resources {
-	public class Database {
-
-		public static void Initialize() {
+namespace EndlessAdventure.Common.Resources
+{
+	public class Database
+	{
+		public static void Initialize()
+		{
 			InitializeWorlds();
 			InitializeEnemies();
-			InitializeItems();
 			InitializeEffects();
-			InitializeBuffs();
-			InitializeOnHits();
+			InitializeItems();
 		}
 
 		#region Worlds
@@ -26,35 +24,39 @@ namespace EndlessAdventure.Common.Resources {
 		public const string KEY_WORLD_GREEN_PASTURES = "WorldGreenPastures";
 		public const string KEY_WORLD_SHADY_WOODS = "WorldShadyWoods";
 
-		private static void InitializeWorlds() {
-			var green_pastures_spawns = new Dictionary<string, int> {
-				{ KEY_COMBATANT_CHICKEN, 50 },
-				{ KEY_COMBATANT_SHEEP, 10 },
-				{ KEY_COMBATANT_PIG, 10 },
-				{ KEY_COMBATANT_PONY, 5 },
-				{ KEY_COMBATANT_GOBLIN_DESERTER, 5 },
-				{ KEY_COMBATANT_UNICORN, 1 }
-			};
+		private static void InitializeWorlds()
+		{
 			Worlds.Add(KEY_WORLD_GREEN_PASTURES,
-				new WorldData(Localization.WORLD_GREEN_PASTURES_NAME, Localization.WORLD_GREEN_PASTURES_DESCRIPTION, green_pastures_spawns));
-
-			var shady_woods_spawns = new Dictionary<string, int> {
-				{ KEY_COMBATANT_SQUIRREL, 50 },
-				{ KEY_COMBATANT_RACCOON, 20 },
-				{ KEY_COMBATANT_DEER, 10 },
-				{ KEY_COMBATANT_OWL, 10 },
-				{ KEY_COMBATANT_WOLF, 5 },
-				{ KEY_COMBATANT_SHROOMLING, 50 }
-			};
+				new WorldData(
+					Localization.WORLD_GREEN_PASTURES_NAME,
+					Localization.WORLD_GREEN_PASTURES_DESCRIPTION,
+					new Dictionary<string, int> {
+						{ KEY_COMBATANT_CHICKEN, 50 },
+						{ KEY_COMBATANT_SHEEP, 10 },
+						{ KEY_COMBATANT_PIG, 10 },
+						{ KEY_COMBATANT_PONY, 5 },
+						{ KEY_COMBATANT_GOBLIN_DESERTER, 5 },
+						{ KEY_COMBATANT_UNICORN, 1 }
+					}));
 			Worlds.Add(KEY_WORLD_SHADY_WOODS,
-				new WorldData(Localization.WORLD_SHADY_WOODS_NAME, Localization.WORLD_SHADY_WOODS_DESCRIPTION, shady_woods_spawns));
+				new WorldData(
+					Localization.WORLD_SHADY_WOODS_NAME,
+					Localization.WORLD_SHADY_WOODS_DESCRIPTION,
+					new Dictionary<string, int> {
+						{ KEY_COMBATANT_SQUIRREL, 50 },
+						{ KEY_COMBATANT_RACCOON, 20 },
+						{ KEY_COMBATANT_DEER, 10 },
+						{ KEY_COMBATANT_OWL, 10 },
+						{ KEY_COMBATANT_WOLF, 5 },
+						{ KEY_COMBATANT_SHROOMLING, 50 }
+					}));
 		}
 
 		#endregion
 
 		#region Combatants
 
-		private static readonly Dictionary<string, CombatantData> Combatants = new Dictionary<string, CombatantData>();
+		public static readonly Dictionary<string, CombatantData> Combatants = new Dictionary<string, CombatantData>();
 
 		private const string KEY_COMBATANT_PLAYER = "Player";
 
@@ -240,104 +242,118 @@ namespace EndlessAdventure.Common.Resources {
 
 		#endregion
 
-		#region Items
-
-		public static readonly Dictionary<string, ItemData> Items = new Dictionary<string, ItemData>();
-		
-		private static readonly string KEY_ITEM_STICK = "ItemStick";
-		private static readonly string KEY_ITEM_SHIRT = "ItemShirt";
-		
-		private static readonly string KEY_ITEM_POTION = "ItemPotion";
-
-		private static readonly string KEY_ITEM_UNICORN_HORN = "ItemUnicornHorn";
-
-		private static void InitializeItems() {
-			Dictionary<string, double> stick_key_dict = new Dictionary<string, double> {
-				{ KEY_STATBUFF_INC_PHYSICAL_ATTACK, 1 }
-			};
-			Items.Add(KEY_ITEM_STICK,
-				new ItemData(Localization.ITEM_STICK_NAME, Localization.ITEM_STICK_DESCRIPTION,
-				ItemType.Weapon, 1, stick_key_dict, null));
-
-			Dictionary<string, double> shirt_key_dict = new Dictionary<string, double> {
-				{ KEY_STATBUFF_INC_DEFENSE, 1 },
-				{ KEY_STATBUFF_MULT_PHYSICAL_ATTACK, 0.5 }
-			};
-			Items.Add(KEY_ITEM_SHIRT,
-				new ItemData(Localization.ITEM_SHIRT_NAME, Localization.ITEM_SHIRT_DESCRIPTION,
-				ItemType.Chestgear, 1, shirt_key_dict, null));
-
-			Dictionary<string, double> potion_key_dict = new Dictionary<string, double> { { KEY_EFFECT_HEAL, 3 } };
-			Items.Add(KEY_ITEM_POTION,
-				new ItemData(Localization.ITEM_POTION_NAME, Localization.ITEM_POTION_DESCRIPTION,
-				ItemType.Consumable, 5, null, potion_key_dict));
-
-			Items.Add(KEY_ITEM_UNICORN_HORN,
-				new ItemData(Localization.ITEM_UNICORN_HORN_NAME, Localization.ITEM_UNICORN_HORN_DESCRIPTION,
-				ItemType.Miscellaneous, 100, null, null));
-		}
-
-		#endregion
-
 		#region Effects
 
-		private static readonly Dictionary<string, EffectData> Effects = new Dictionary<string, EffectData>();//Func<double, int, IEffect>> Effects = new Dictionary<string, Func<double, int, IEffect>>();
+		public static readonly Dictionary<string, EffectData> Effects = new Dictionary<string, EffectData>();//Func<double, int, IEffect>> Effects = new Dictionary<string, Func<double, int, IEffect>>();
 
 		public const string KEY_EFFECT_HEAL = "EffectHeal";
 		public const string KEY_EFFECT_POISON = "EffectPoison";
-
-		private static void InitializeEffects() {
-			// active effects
-			Effects.Add(KEY_EFFECT_HEAL, (pValue, pDuration) =>
-			new HealEffect(Localization.EFFECT_HEAL_NAME, Localization.EFFECT_HEAL_DESCRIPTION,
-			pValue, pDuration));
-			Effects.Add(KEY_EFFECT_POISON, (pValue, pDuration) =>
-			new PoisonEffect(Localization.EFFECT_POISON_NAME, Localization.EFFECT_POISON_DESCRIPTION,
-			pValue, pDuration));
-			
-			// stat buffs
-			
-			// on hits
-		}
-
-		#endregion Effects
-
-		#region Buffs
-
-		private static readonly Dictionary<string, Func<double, int, AStatBuff>> Buffs = new Dictionary<string, Func<double, int, AStatBuff>>();
 
 		public const string KEY_STATBUFF_INC_PHYSICAL_ATTACK = "StatbuffIncPhysicalAttack";
 		public const string KEY_STATBUFF_MULT_PHYSICAL_ATTACK = "StatbuffMultPhysicalAttack";
 		public const string KEY_STATBUFF_INC_DEFENSE = "StatbuffIncDefense";
 		public const string KEY_STATBUFF_INC_EVASION = "StatbuffIncEvasion";
 
-		private static void InitializeBuffs() {
-			Buffs.Add(KEY_STATBUFF_INC_PHYSICAL_ATTACK, (pValue, pDuration) =>
-			new BuffStatAdditive(Localization.STATBUFF_PHYSICAL_ATTACK_NAME, Localization.STATBUFF_INC_PHYSICAL_ATTACK_DESCRIPTION,
-			pValue, pDuration, StatType.PhysicalAttack));
-			Buffs.Add(KEY_STATBUFF_MULT_PHYSICAL_ATTACK, (pValue, pDuration) =>
-			new BuffStatAdditive(Localization.STATBUFF_PHYSICAL_ATTACK_NAME, Localization.STATBUFF_MULT_PHYSICAL_ATTACK_DESCRIPTION,
-			pValue, pDuration, StatType.PhysicalAttack));
-			Buffs.Add(KEY_STATBUFF_INC_DEFENSE, (pValue, pDuration) =>
-			new BuffStatAdditive(Localization.STATBUFF_DEFENSE_NAME, Localization.STATBUFF_INC_DEFENSE_DESCRIPTION,
-			pValue, pDuration, StatType.Defense));
-			Buffs.Add(KEY_STATBUFF_INC_EVASION, (pValue, pDuration) =>
-			new BuffStatAdditive(Localization.STATBUFF_EVASION_NAME, Localization.STATBUFF_INC_EVASION_DESCRIPTION,
-			pValue, pDuration, StatType.Evasion));
-		}
-
-		#endregion Buffs
-
-		#region OnHits
-
-		private static readonly Dictionary<string, Func<double, int, AOnHitBuff>> OnHits = new Dictionary<string, Func<double, int, AOnHitBuff>>();
-
 		public const string KEY_ONHIT_POISON = "OnHitPoison";
 
-		private static void InitializeOnHits() {
-			OnHits.Add(KEY_ONHIT_POISON, (pValue, pDuration) =>
-			new OnHitPoisonBuff(Localization.ONHIT_POISON_NAME, Localization.ONHIT_POISON_DESCRIPTION,
-			pValue, pDuration));
+		private static void InitializeEffects() {
+			// active effects
+			Effects.Add(KEY_EFFECT_HEAL,
+				new EffectData(
+					Localization.EFFECT_HEAL_NAME,
+					Localization.EFFECT_HEAL_DESCRIPTION,
+					EffectType.Active));
+			Effects.Add(KEY_EFFECT_POISON,
+				new EffectData(
+					Localization.EFFECT_POISON_NAME,
+					Localization.EFFECT_POISON_DESCRIPTION,
+					EffectType.Active));
+			
+			// stat buffs
+			Effects.Add(KEY_STATBUFF_INC_PHYSICAL_ATTACK,
+				new EffectData(
+					Localization.STATBUFF_PHYSICAL_ATTACK_NAME,
+					Localization.STATBUFF_INC_PHYSICAL_ATTACK_DESCRIPTION,
+					EffectType.Stat));
+			Effects.Add(KEY_STATBUFF_MULT_PHYSICAL_ATTACK,
+				new EffectData(
+					Localization.STATBUFF_PHYSICAL_ATTACK_NAME,
+					Localization.STATBUFF_MULT_PHYSICAL_ATTACK_DESCRIPTION,
+					EffectType.Stat));
+			Effects.Add(KEY_STATBUFF_INC_DEFENSE,
+				new EffectData(
+					Localization.STATBUFF_DEFENSE_NAME,
+					Localization.STATBUFF_INC_DEFENSE_DESCRIPTION,
+					EffectType.Stat));
+			Effects.Add(KEY_STATBUFF_INC_EVASION,
+				new EffectData(
+					Localization.STATBUFF_EVASION_NAME,
+					Localization.STATBUFF_INC_EVASION_DESCRIPTION,
+					EffectType.Stat));
+
+			// on hits
+			Effects.Add(KEY_ONHIT_POISON,
+				new EffectData(
+					Localization.ONHIT_POISON_NAME,
+					Localization.ONHIT_POISON_DESCRIPTION,
+					EffectType.OnHit));
+		}
+
+		#endregion Effects
+
+		#region Items
+
+		public static readonly Dictionary<string, ItemData> Items = new Dictionary<string, ItemData>();
+
+		private static readonly string KEY_ITEM_STICK = "ItemStick";
+		private static readonly string KEY_ITEM_SHIRT = "ItemShirt";
+
+		private static readonly string KEY_ITEM_POTION = "ItemPotion";
+
+		private static readonly string KEY_ITEM_UNICORN_HORN = "ItemUnicornHorn";
+
+		private static void InitializeItems()
+		{
+			//equippables
+			Items.Add(KEY_ITEM_STICK,
+				new ItemData(
+					Localization.ITEM_STICK_NAME,
+					Localization.ITEM_STICK_DESCRIPTION,
+					ItemType.Weapon,
+					1,
+					new Dictionary<string, double> {
+						{ KEY_STATBUFF_INC_PHYSICAL_ATTACK, 1 }
+					}));
+			Items.Add(KEY_ITEM_SHIRT,
+				new ItemData(
+					Localization.ITEM_SHIRT_NAME,
+					Localization.ITEM_SHIRT_DESCRIPTION,
+					ItemType.Chestgear,
+					1,
+					new Dictionary<string, double> {
+						{ KEY_STATBUFF_INC_DEFENSE, 1 },
+						{ KEY_STATBUFF_MULT_PHYSICAL_ATTACK, 0.5 }
+					}));
+
+			// consumables
+			Items.Add(KEY_ITEM_POTION,
+				new ItemData(
+					Localization.ITEM_POTION_NAME,
+					Localization.ITEM_POTION_DESCRIPTION,
+					ItemType.Consumable,
+					5,
+					new Dictionary<string, double> {
+						{ KEY_EFFECT_HEAL, 3 }
+					}));
+
+			// miscellaneous
+			Items.Add(KEY_ITEM_UNICORN_HORN,
+				new ItemData(
+					Localization.ITEM_UNICORN_HORN_NAME,
+					Localization.ITEM_UNICORN_HORN_DESCRIPTION,
+					ItemType.Miscellaneous,
+					100,
+					null));
 		}
 
 		#endregion

@@ -12,14 +12,14 @@ namespace EndlessAdventure.Common.Items
 		
 		#endregion Private Fields
 		
-		public Item(ItemData data)
+		public Item(string pName, string pDescription, ItemType pType, int pCost, List<IEffect> pEquipEffects)
 		{
-			Name = data.Name;
-			Description = data.Description;
-			Type = data.Type;
-			Cost = data.Cost;
+			Name = pName;
+			Description = pDescription;
+			Type = pType;
+			Cost = pCost;
 
-			_equipEffects = new List<IEffect>();
+			_equipEffects = pEquipEffects;
 
 			/*if (data.BuffValueDict != null) {
 				Buffs = new List<AStatBuff>();

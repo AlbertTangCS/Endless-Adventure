@@ -14,6 +14,7 @@ namespace EndlessAdventure.Common
 		// cumulative spawn weights - if enemy1 has weight 10 and enemy2 has weight 5, dictionary has <15, enemy2>
 		private readonly SortedDictionary<int, string> _enemySpawns;
 		private readonly int _totalWeight;
+		private readonly Func<ICombatant> _spawnFunction;
 
 		#endregion Private Fields
 		
@@ -33,17 +34,25 @@ namespace EndlessAdventure.Common
 			}
 		}
 
+		public World(string pName, string pDescription, Func<ICombatant> pSpawnFunction)
+		{
+			Name = pName;
+			Description = pDescription;
+			_spawnFunction = pSpawnFunction;
+		}
+
 		#region Public Fields
 		
 		public string Name { get; }
 		public string Description { get; }
-		
+
 		#endregion Public Fields
-		
+
 		#region Public Methods
-		
-		public ICombatant SpawnEnemy()
-		{
+
+		public ICombatant SpawnEnemy() => _spawnFunction();
+		/*{
+			return _spawnFunction();
 			if (_enemySpawns == null) return null;
 
 			// randomly generate an integer between 0 and the total weight
@@ -57,7 +66,7 @@ namespace EndlessAdventure.Common
 			}
 
 			return Factory.CreateCombatant(combatantKey);
-		}
+		}*/
 		
 		#endregion Public Methods
 	}

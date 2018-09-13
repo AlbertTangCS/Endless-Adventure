@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using EndlessAdventure.Common.Buffs.Effects;
-using EndlessAdventure.Common.Buffs.OnHitBuffs;
-using EndlessAdventure.Common.Buffs.Statbuffs;
 using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;

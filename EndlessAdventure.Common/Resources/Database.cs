@@ -4,8 +4,8 @@ using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Buffs.Effects;
 using EndlessAdventure.Common.Buffs.OnHitBuffs;
 using EndlessAdventure.Common.Buffs.Statbuffs;
-using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
+using EndlessAdventure.Common.Resources.Data;
 
 namespace EndlessAdventure.Common.Resources {
 	public class Database {
@@ -23,11 +23,11 @@ namespace EndlessAdventure.Common.Resources {
 
 		public static readonly Dictionary<string, WorldData> Worlds = new Dictionary<string, WorldData>();
 
-		public static readonly string KEY_WORLD_GREEN_PASTURES = "WorldGreenPastures";
-		public static readonly string KEY_WORLD_SHADY_WOODS = "WorldShadyWoods";
+		public const string KEY_WORLD_GREEN_PASTURES = "WorldGreenPastures";
+		public const string KEY_WORLD_SHADY_WOODS = "WorldShadyWoods";
 
 		private static void InitializeWorlds() {
-			Dictionary<string, int> green_pastures_spawns = new Dictionary<string, int> {
+			var green_pastures_spawns = new Dictionary<string, int> {
 				{ KEY_COMBATANT_CHICKEN, 50 },
 				{ KEY_COMBATANT_SHEEP, 10 },
 				{ KEY_COMBATANT_PIG, 10 },
@@ -38,9 +38,9 @@ namespace EndlessAdventure.Common.Resources {
 			Worlds.Add(KEY_WORLD_GREEN_PASTURES,
 				new WorldData(Localization.WORLD_GREEN_PASTURES_NAME, Localization.WORLD_GREEN_PASTURES_DESCRIPTION, green_pastures_spawns));
 
-			Dictionary<string, int> shady_woods_spawns = new Dictionary<string, int> {
+			var shady_woods_spawns = new Dictionary<string, int> {
 				{ KEY_COMBATANT_SQUIRREL, 50 },
-				{ KEY_COMBATANT_RACOON, 20 },
+				{ KEY_COMBATANT_RACCOON, 20 },
 				{ KEY_COMBATANT_DEER, 10 },
 				{ KEY_COMBATANT_OWL, 10 },
 				{ KEY_COMBATANT_WOLF, 5 },
@@ -54,79 +54,188 @@ namespace EndlessAdventure.Common.Resources {
 
 		#region Combatants
 
-		public static readonly Dictionary<string, CombatantData> Combatants = new Dictionary<string, CombatantData>();
+		private static readonly Dictionary<string, CombatantData> Combatants = new Dictionary<string, CombatantData>();
 
-		public static readonly string KEY_COMBATANT_PLAYER = "Player";
+		private const string KEY_COMBATANT_PLAYER = "Player";
 
-		public static readonly string KEY_COMBATANT_CHICKEN = "EnemyChicken";
-		public static readonly string KEY_COMBATANT_SHEEP = "EnemySheep";
-		public static readonly string KEY_COMBATANT_PIG = "EnemyPig";
-		public static readonly string KEY_COMBATANT_PONY = "EnemyPony";
-		public static readonly string KEY_COMBATANT_GOBLIN_DESERTER = "EnemyGoblinDeserter";
-		public static readonly string KEY_COMBATANT_UNICORN = "EnemyUnicorn";
+		private const string KEY_COMBATANT_CHICKEN = "EnemyChicken";
+		private const string KEY_COMBATANT_SHEEP = "EnemySheep";
+		private const string KEY_COMBATANT_PIG = "EnemyPig";
+		private const string KEY_COMBATANT_PONY = "EnemyPony";
+		private const string KEY_COMBATANT_GOBLIN_DESERTER = "EnemyGoblinDeserter";
+		private const string KEY_COMBATANT_UNICORN = "EnemyUnicorn";
 
-		public static readonly string KEY_COMBATANT_SQUIRREL = "EnemySquirrel";
-		public static readonly string KEY_COMBATANT_RACOON = "EnemyRacoon";
-		public static readonly string KEY_COMBATANT_DEER = "EnemyDeer";
-		public static readonly string KEY_COMBATANT_OWL = "EnemyOwl";
-		public static readonly string KEY_COMBATANT_WOLF = "EnemyWolf";
-		public static readonly string KEY_COMBATANT_SHROOMLING = "EnemyShroomling";
+		private const string KEY_COMBATANT_SQUIRREL = "EnemySquirrel";
+		private const string KEY_COMBATANT_RACCOON = "EnemyRacoon";
+		private const string KEY_COMBATANT_DEER = "EnemyDeer";
+		private const string KEY_COMBATANT_OWL = "EnemyOwl";
+		private const string KEY_COMBATANT_WOLF = "EnemyWolf";
+		private const string KEY_COMBATANT_SHROOMLING = "EnemyShroomling";
 
-		private static void InitializeEnemies() {
+		private static void InitializeEnemies()
+		{
+			// player
 			Combatants.Add(KEY_COMBATANT_PLAYER,
-				new CombatantData(Localization.COMBATANT_PLAYER_NAME, Localization.COMBATANT_PLAYER_DESCRIPTION,
-				/*stats*/ 3, 3, 3, null, /*rewards*/ 0, null));
+				new CombatantData(
+					Localization.COMBATANT_PLAYER_NAME,
+					Localization.COMBATANT_PLAYER_DESCRIPTION,
+					0,
+					new Dictionary<string, double>(),
+					1,
+					3,
+					3,
+					3,
+					new Dictionary<string, double>()));
+			
+			// green pastures
 			Combatants.Add(KEY_COMBATANT_CHICKEN,
-				new CombatantData(Localization.COMBATANT_CHICKEN_NAME, Localization.COMBATANT_CHICKEN_DESCRIPTION,
-				/*stats*/ 1, 0, 0, null, /*rewards*/ 1, null));
+				new CombatantData(
+					Localization.COMBATANT_CHICKEN_NAME,
+					Localization.COMBATANT_CHICKEN_DESCRIPTION,
+					1,
+					new Dictionary<string, double>(),
+					1,
+					1,
+					0,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_SHEEP,
-				new CombatantData(Localization.COMBATANT_SHEEP_NAME, Localization.COMBATANT_SHEEP_DESCRIPTION,
-				/*stats*/ 3, 0, 0, null, /*rewards*/ 2, null));
+				new CombatantData(
+					Localization.COMBATANT_SHEEP_NAME,
+					Localization.COMBATANT_SHEEP_DESCRIPTION,
+					2,
+					new Dictionary<string, double>(),
+					1,
+					3,
+					0,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_PIG,
-				new CombatantData(Localization.COMBATANT_PIG_NAME, Localization.COMBATANT_PIG_DESCRIPTION,
-				/*stats*/ 3, 1, 0, null, /*rewards*/ 2, null));
+				new CombatantData(
+					Localization.COMBATANT_PIG_NAME,
+					Localization.COMBATANT_PIG_DESCRIPTION,
+					2,
+					new Dictionary<string, double>(),
+					1,
+					3,
+					1,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_PONY,
-				new CombatantData(Localization.COMBATANT_PONY_NAME, Localization.COMBATANT_PONY_DESCRIPTION,
-				/*stats*/ 5, 1, 0, null,/*rewards*/ 3, null));
-			Dictionary<string, double> goblin_drops = new Dictionary<string, double> {
-				{ KEY_ITEM_POTION, 1 },
-				{ KEY_ITEM_STICK, 0.5 },
-				{ KEY_ITEM_SHIRT, 0.5 }
-			};
+				new CombatantData(
+					Localization.COMBATANT_PONY_NAME,
+					Localization.COMBATANT_PONY_DESCRIPTION,
+					3,
+					new Dictionary<string, double>(),
+					1,
+					5,
+					1,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_GOBLIN_DESERTER,
-				new CombatantData(Localization.COMBATANT_GOBLIN_DESERTER_NAME, Localization.COMBATANT_GOBLIN_DESERTER_DESCRIPTION,
-				/*stats*/ 5, 2, 0, null,/*rewards*/ 0, goblin_drops));
-			Dictionary<string, double> unicorn_drops = new Dictionary<string, double> {
-				{ KEY_ITEM_UNICORN_HORN, 1 }
-			};
+				new CombatantData(
+					Localization.COMBATANT_GOBLIN_DESERTER_NAME,
+					Localization.COMBATANT_GOBLIN_DESERTER_DESCRIPTION,
+					5,
+					new Dictionary<string, double>
+					{
+						{KEY_ITEM_POTION, 1},
+						{KEY_ITEM_STICK, 0.5},
+						{KEY_ITEM_SHIRT, 0.5}
+					},
+					1,
+					5,
+					2,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_UNICORN,
-				new CombatantData(Localization.COMBATANT_UNICORN_NAME, Localization.COMBATANT_UNICORN_DESCRIPTION,
-				/*stats*/ 5, 5, 1, null, /*rewards*/ 3, unicorn_drops));
+				new CombatantData(
+					Localization.COMBATANT_UNICORN_NAME,
+					Localization.COMBATANT_UNICORN_DESCRIPTION,
+					3,
+					new Dictionary<string, double>
+					{
+						{KEY_ITEM_UNICORN_HORN, 1}
+					},
+					1,
+					5,
+					5,
+					1,
+					new Dictionary<string, double>()));
 
+			// shady woods
 			Combatants.Add(KEY_COMBATANT_SQUIRREL,
-				new CombatantData(Localization.COMBATANT_SQUIRREL_NAME, Localization.COMBATANT_SQUIRREL_DESCRIPTION,
-				/*stats*/ 1, 0, 0, null, /*rewards*/ 1, null));
-			Combatants.Add(KEY_COMBATANT_RACOON,
-				new CombatantData(Localization.COMBATANT_RACOON_NAME, Localization.COMBATANT_RACOON_DESCRIPTION,
-				/*stats*/ 2, 2, 0, null, /*rewards*/ 2, null));
+				new CombatantData(
+					Localization.COMBATANT_SQUIRREL_NAME,
+					Localization.COMBATANT_SQUIRREL_DESCRIPTION,
+					1,
+					new Dictionary<string, double>(),
+					1,
+					1,
+					0,
+					0,
+					new Dictionary<string, double>()));
+			Combatants.Add(KEY_COMBATANT_RACCOON,
+				new CombatantData(
+					Localization.COMBATANT_RACOON_NAME,
+					Localization.COMBATANT_RACOON_DESCRIPTION,
+					2,
+					new Dictionary<string, double>(),
+					1,
+					2,
+					2,
+					0,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_DEER,
-				new CombatantData(Localization.COMBATANT_DEER_NAME, Localization.COMBATANT_DEER_DESCRIPTION,
-				/*stats*/ 5, 1, 1, null, /*rewards*/ 3, null));
-			Dictionary<string, double> owl_buffs = new Dictionary<string, double> {
-				{ KEY_STATBUFF_INC_EVASION, 7 }
-			};
+				new CombatantData(
+					Localization.COMBATANT_DEER_NAME,
+					Localization.COMBATANT_DEER_DESCRIPTION,
+					3,
+					new Dictionary<string, double>(),
+					1,
+					5,
+					1,
+					1,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_OWL,
-				new CombatantData(Localization.COMBATANT_OWL_NAME, Localization.COMBATANT_OWL_DESCRIPTION,
-				/*stats*/ 1, 7, 0, owl_buffs, /*rewards*/ 3, null));
+				new CombatantData(
+					Localization.COMBATANT_OWL_NAME,
+					Localization.COMBATANT_OWL_DESCRIPTION,
+					3,
+					new Dictionary<string, double>(),
+					1,
+					1,
+					7,
+					0,
+					new Dictionary<string, double>
+					{
+						{KEY_STATBUFF_INC_EVASION, 7}
+					}));
 			Combatants.Add(KEY_COMBATANT_WOLF,
-				new CombatantData(Localization.COMBATANT_WOLF_NAME, Localization.COMBATANT_WOLF_DESCRIPTION,
-				/*stats*/ 7, 5, 2, null, /*rewards*/ 5, null));
-			Dictionary<string, double> shroomling_buffs = new Dictionary<string, double> {
-				{ KEY_ONHIT_POISON, 1 }
-			};
+				new CombatantData(
+					Localization.COMBATANT_WOLF_NAME,
+					Localization.COMBATANT_WOLF_DESCRIPTION,
+					5,
+					new Dictionary<string, double>(),
+					1,
+					7,
+					5,
+					2,
+					new Dictionary<string, double>()));
 			Combatants.Add(KEY_COMBATANT_SHROOMLING,
-				new CombatantData(Localization.COMBATANT_SHROOMLING_NAME, Localization.COMBATANT_SHROOMLING_DESCRIPTION,
-				/*stats*/ 10, 5, 5, shroomling_buffs, /*rewards*/ 10, null));
+				new CombatantData(
+					Localization.COMBATANT_SHROOMLING_NAME,
+					Localization.COMBATANT_SHROOMLING_DESCRIPTION,
+					10,
+					new Dictionary<string, double>(),
+					1,
+					10,
+					5,
+					5,
+					new Dictionary<string, double>
+					{
+						{KEY_ONHIT_POISON, 1}
+					}));
 		}
 
 		#endregion
@@ -172,30 +281,35 @@ namespace EndlessAdventure.Common.Resources {
 
 		#region Effects
 
-		public static readonly Dictionary<string, Func<double, int, AEffect>> Effects = new Dictionary<string, Func<double, int, AEffect>>();
+		private static readonly Dictionary<string, EffectData> Effects = new Dictionary<string, EffectData>();//Func<double, int, IEffect>> Effects = new Dictionary<string, Func<double, int, IEffect>>();
 
-		public static readonly string KEY_EFFECT_HEAL = "EffectHeal";
-		public static readonly string KEY_EFFECT_POISON = "EffectPoison";
+		public const string KEY_EFFECT_HEAL = "EffectHeal";
+		public const string KEY_EFFECT_POISON = "EffectPoison";
 
 		private static void InitializeEffects() {
+			// active effects
 			Effects.Add(KEY_EFFECT_HEAL, (pValue, pDuration) =>
 			new HealEffect(Localization.EFFECT_HEAL_NAME, Localization.EFFECT_HEAL_DESCRIPTION,
 			pValue, pDuration));
 			Effects.Add(KEY_EFFECT_POISON, (pValue, pDuration) =>
 			new PoisonEffect(Localization.EFFECT_POISON_NAME, Localization.EFFECT_POISON_DESCRIPTION,
 			pValue, pDuration));
+			
+			// stat buffs
+			
+			// on hits
 		}
 
 		#endregion Effects
 
 		#region Buffs
 
-		public static readonly Dictionary<string, Func<double, int, AStatBuff>> Buffs = new Dictionary<string, Func<double, int, AStatBuff>>();
+		private static readonly Dictionary<string, Func<double, int, AStatBuff>> Buffs = new Dictionary<string, Func<double, int, AStatBuff>>();
 
-		public static readonly string KEY_STATBUFF_INC_PHYSICAL_ATTACK = "StatbuffIncPhysicalAttack";
-		public static readonly string KEY_STATBUFF_MULT_PHYSICAL_ATTACK = "StatbuffMultPhysicalAttack";
-		public static readonly string KEY_STATBUFF_INC_DEFENSE = "StatbuffIncDefense";
-		public static readonly string KEY_STATBUFF_INC_EVASION = "StatbuffIncEvasion";
+		public const string KEY_STATBUFF_INC_PHYSICAL_ATTACK = "StatbuffIncPhysicalAttack";
+		public const string KEY_STATBUFF_MULT_PHYSICAL_ATTACK = "StatbuffMultPhysicalAttack";
+		public const string KEY_STATBUFF_INC_DEFENSE = "StatbuffIncDefense";
+		public const string KEY_STATBUFF_INC_EVASION = "StatbuffIncEvasion";
 
 		private static void InitializeBuffs() {
 			Buffs.Add(KEY_STATBUFF_INC_PHYSICAL_ATTACK, (pValue, pDuration) =>
@@ -216,9 +330,9 @@ namespace EndlessAdventure.Common.Resources {
 
 		#region OnHits
 
-		public static readonly Dictionary<string, Func<double, int, AOnHitBuff>> OnHits = new Dictionary<string, Func<double, int, AOnHitBuff>>();
+		private static readonly Dictionary<string, Func<double, int, AOnHitBuff>> OnHits = new Dictionary<string, Func<double, int, AOnHitBuff>>();
 
-		public static readonly string KEY_ONHIT_POISON = "OnHitPoison";
+		public const string KEY_ONHIT_POISON = "OnHitPoison";
 
 		private static void InitializeOnHits() {
 			OnHits.Add(KEY_ONHIT_POISON, (pValue, pDuration) =>

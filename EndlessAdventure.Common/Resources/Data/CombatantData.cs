@@ -7,8 +7,9 @@ namespace EndlessAdventure.Common.Battle
 		public string Name { get; }
 		public string Description { get; }
 		public int ExpReward { get; }
-
 		public Dictionary<string, double> Drops { get; }
+		
+		public int Level { get; }
 		
 		public int Body { get; }
 		public int Mind { get; }
@@ -23,12 +24,12 @@ namespace EndlessAdventure.Common.Battle
 			string name,
 		    string description,
 			int expReward,
+			Dictionary<string, double> drops,
 			int level,
 			int body,
 			int mind,
 			int soul,
 			Dictionary<string, double> buffs,
-			Dictionary<string, double> drops,
 			int experience = 0,
 			int skillpoints = 0)
 		{

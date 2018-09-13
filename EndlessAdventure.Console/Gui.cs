@@ -1,7 +1,6 @@
 ﻿using System;
 using EndlessAdventure.Common;
 using EndlessAdventure.Common.Battle;
-using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
 using System.Collections.Generic;

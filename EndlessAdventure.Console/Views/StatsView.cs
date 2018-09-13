@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using EndlessAdventure.Common;
-using EndlessAdventure.Common.Characters;
+using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Items;
 
 namespace EndlessAdventure {

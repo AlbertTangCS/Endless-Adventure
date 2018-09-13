@@ -1,5 +1,3 @@
-using EndlessAdventure.Common.Battle;
-
 namespace EndlessAdventure.Common.Interfaces
 {
     public interface IWorld
@@ -7,6 +5,6 @@ namespace EndlessAdventure.Common.Interfaces
         string Name { get; }
         string Description { get; }
 
-        Combatant SpawnEnemy();
+        ICombatant SpawnEnemy();
     }
 }

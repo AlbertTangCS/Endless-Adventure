@@ -2,10 +2,9 @@
 
 namespace EndlessAdventure.Common.Buffs
 {
-	public abstract class ABuff
+	public abstract class AEffect : IEffect
 	{
-
-		protected ABuff(string pName, string pDescription, double pValue, int pDuration)
+		protected AEffect(string pName, string pDescription, double pValue, int pDuration)
 		{
 			Name = pName;
 			Description = pDescription;
@@ -13,12 +12,14 @@ namespace EndlessAdventure.Common.Buffs
 
 			DurationTotal = pDuration;
 			DurationRemaining = pDuration;
+			MaxStacks = 1;
 		}
 
 		public string Name { get; }
 		public string Description { get; }
 		public double Value { get; }
-
+		public int MaxStacks { get; }
+		
 		public int DurationTotal { get; }
 		public int DurationRemaining { get; private set; }
 		
@@ -27,8 +28,5 @@ namespace EndlessAdventure.Common.Buffs
 			if (DurationRemaining > 0)
 				DurationRemaining--;
 		}
-
-		public abstract void Equip(ICombatant c);
-		public abstract void Unequip(ICombatant c);
 	}
 }

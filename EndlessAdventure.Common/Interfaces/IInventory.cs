@@ -9,7 +9,5 @@ namespace EndlessAdventure.Common.Interfaces
         IEnumerable<IItem> Equippables { get; }
         IEnumerable<IItem> Consumables { get; }
         IEnumerable<IItem> Miscellaneous { get; }
-
-        void AddItem(IItem pItem);
     }
 }

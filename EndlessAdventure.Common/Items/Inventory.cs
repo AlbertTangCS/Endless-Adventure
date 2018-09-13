@@ -1,105 +1,118 @@
-﻿using System;
-using System.Collections.Generic;
-using EndlessAdventure.Common.Buffs.Statbuffs;
-using EndlessAdventure.Common.Characters;
+﻿using System.Collections.Generic;
 using EndlessAdventure.Common.Interfaces;
 
 namespace EndlessAdventure.Common.Items
 {
 	public class Inventory : IInventory
 	{
-		private List<Item> _equippables;
-		private List<Item> _consumables;
-		private List<Item> _miscellaneous;
+		#region Private Fields
 		
-		public Dictionary<ItemType, Item> Equipped { get; private set; }
-		public List<Item> Equippables { get; private set; }
-		public List<Item> Consumables { get; private set; }
-		public List<Item> Miscellaneous { get; private set; }
+		private readonly Dictionary<ItemType, IItem> _equipped;
+		private readonly List<IItem> _equippables;
+		private readonly List<IItem> _consumables;
+		private readonly List<IItem> _miscellaneous;
+		
+		#endregion Private Fields
 
-		public Inventory(Dictionary<ItemType, Item> equipped,
-		                 List<Item> equippables,
-										 List<Item> consumables,
-										 List<Item> miscellaneous) {
-			Equipped = equipped ?? new Dictionary<ItemType, Item>();
-			Equippables = equippables ?? new List<Item>();
-			Consumables = consumables ?? new List<Item>();
-			Miscellaneous = miscellaneous ?? new List<Item>();
-		}
-
-		public void Equip(Item item, Character character)
+		public Inventory()
 		{
-			if (item.Type == ItemType.Consumable || item.Type == ItemType.Miscellaneous || !Equippables.Contains(item)) {
-				throw new ArgumentException();
-			}
+			_equipped =  new Dictionary<ItemType, IItem>();
+			_equippables = new List<IItem>();
+			_consumables = new List<IItem>();
+			_miscellaneous = new List<IItem>();
+		}
 
-			// add/remove buffs depending on what was equipped/unequipped
-			Equippables.Remove(item);
-			List<AStatBuff> buffsToAdd = null;
-			List<AStatBuff> buffsToRemove = null;
-			if (Equipped.TryGetValue(item.Type, out Item equipped)) {
-				Equipped.Remove(item.Type);
-				Equippables.Add(equipped);
+		#region Public Fields
 
-				Equipped.Add(item.Type, item);
-				buffsToAdd = item.Buffs;
-				buffsToRemove = equipped.Buffs;
-			}
-			else {
-				Equipped.Add(item.Type, item);
-				buffsToAdd = item.Buffs;
-			}
-
-			if (buffsToAdd != null) {
-				foreach (AStatBuff buff in buffsToAdd) {
-					character.AddBuff(buff);
-				}
-			}
-			if (buffsToRemove != null) {
-				foreach (AStatBuff buff in buffsToRemove) {
-					character.RemoveBuff(buff);
-				}
+		public IReadOnlyDictionary<ItemType, IItem> Equipped => _equipped;
+		public IEnumerable<IItem> Equippables => _equippables;
+		public IEnumerable<IItem> Consumables => _consumables;
+		public IEnumerable<IItem> Miscellaneous => _miscellaneous;
+		
+		#endregion Public Fields
+		
+		#region Public Methods
+		
+		public void AddItem(IItem pItem)
+		{
+			switch (pItem.Type)
+			{
+				case ItemType.Consumable:
+					_consumables.Add(pItem);
+					break;
+				case ItemType.Miscellaneous:
+					_miscellaneous.Add(pItem);
+					break;
+				default:
+					_equippables.Add(pItem);
+					break;
 			}
 		}
 
-		public void Unequip(Item equipment, Character character) {
-			if (!Equipped.TryGetValue(equipment.Type, out Item equipped)) {
-				throw new ArgumentException();
-			}
-
-			// remove buffs depending on what was unequipped
-			List<AStatBuff> buffsToRemove = null;
-			if (equipped == equipment) {
-				Equipped.Remove(equipment.Type);
-				Equippables.Add(equipped);
-				buffsToRemove = equipped.Buffs;
-			}
-			if (buffsToRemove != null) {
-				foreach (AStatBuff buff in buffsToRemove) {
-					character.RemoveBuff(buff);
-				}
+		public void RemoveItem(IItem pItem)
+		{
+			switch (pItem.Type)
+			{
+				case ItemType.Consumable:
+					_consumables.Remove(pItem);
+					break;
+				case ItemType.Miscellaneous:
+					_miscellaneous.Remove(pItem);
+					break;
+				default:
+					_equippables.Remove(pItem);
+					break;
 			}
 		}
+		
+		public bool TryEquipItem(IItem pItem, out IItem pUnequipped)
+		{
+			if (pItem.Type == ItemType.Consumable || pItem.Type == ItemType.Miscellaneous || !_equippables.Contains(pItem))
+			{
+				pUnequipped = null;
+				return false;
+			}
 
-		public void Consume(Item item, Character character) {
-			if (item.Type != ItemType.Consumable) throw new ArgumentException();
-			if (!Consumables.Contains(item)) return;
+			_equippables.Remove(pItem);
+			if (Equipped.TryGetValue(pItem.Type, out var unequipped))
+			{
+				_equipped.Remove(pItem.Type);
+				_equippables.Add(unequipped);
+				pUnequipped = unequipped;
+				_equipped.Add(pItem.Type, pItem);
+			}
+			else
+			{
+				pUnequipped = null;
+				_equipped.Add(pItem.Type, pItem);
+			}
 
-			Consumables.Remove(item);
-			item.Consume(character);
+			return true;
 		}
 
-		public void AddItem(IItem item) {
-			if (item.Type == ItemType.Consumable) {
-				Consumables.Add(item);
-			}
-			else if (item.Type == ItemType.Miscellaneous) {
-				Miscellaneous.Add(item);
-			}
-			else {
-				Equippables.Add(item);
-			}
+		public bool UnequipItem(IItem pItem)
+		{
+			if (!_equipped.ContainsValue(pItem))
+				return false;
+
+			Equipped.TryGetValue(pItem.Type, out var unequipped);
+			_equippables.Add(unequipped);
+			return true;
 		}
 
+		public bool Contains(IItem pItem)
+		{
+			switch (pItem.Type)
+			{
+				case ItemType.Consumable:
+					return _consumables.Contains(pItem);
+				case ItemType.Miscellaneous:
+					return _miscellaneous.Contains(pItem);
+				default:
+					return _equippables.Contains(pItem);
+			}
+		}
+		
+		#endregion Public Methods
 	}
 }

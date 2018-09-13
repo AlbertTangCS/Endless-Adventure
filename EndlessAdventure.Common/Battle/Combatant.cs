@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EndlessAdventure.Common.Buffs.Effects;
 using EndlessAdventure.Common.Buffs.OnHitBuffs;
 using EndlessAdventure.Common.Buffs.Statbuffs;
-using EndlessAdventure.Common.Characters;
 using EndlessAdventure.Common.Interfaces;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources;
@@ -17,24 +17,31 @@ namespace EndlessAdventure.Common.Battle
 		
 		private int _pendingDamage;
 
-		private readonly Dictionary<StatType, List<AStatBuff>> _statBonuses;
-		private readonly List<AEffect> _activeEffects;
-		private readonly List<AOnHitBuff> _onHitBuffs;
+		private readonly Dictionary<StatType, List<IStatBuff>> _statBuffs;
+		private readonly List<IActiveEffect> _activeEffects;
+		private readonly List<IOnHitEffect> _onHitBuffs;
 		
 		#endregion Private Fields;
 		
-		public Combatant(CombatantData pCombatantData)
+		public Combatant(string pName, string pDescription, int pExpReward, int pLevel, int pBody, int pMind, int pSoul, int pExperience, int pSkillPoints)
 		{
-			Name = pCombatantData.Name;
-			Description = pCombatantData.Description;
-			ExpReward = pCombatantData.ExpReward;
+			Name = pName;
+			Description = pDescription;
+			ExpReward = pExpReward;
+
+			Level = pLevel;
 			
-			BaseBody = pCombatantData.Body;
-			BaseMind = pCombatantData.Mind;
-			BaseSoul = pCombatantData.Soul;
+			BaseBody = pBody;
+			BaseMind = pMind;
+			BaseSoul = pSoul;
+
+			// player specific
+			Experience = pExperience;
+			SkillPoints = pSkillPoints;
+
+			_inventory =  new Inventory();
 			
-			_inventory =  new Inventory(null, null, null, null);
-			if (pCombatantData.Drops != null)
+			/*if (pCombatantData.Drops != null)
 			{
 				foreach (var key in pCombatantData.Drops.Keys)
 				{
@@ -43,36 +50,33 @@ namespace EndlessAdventure.Common.Battle
 						continue;
 					
 					var item = new Item(Database.Items[key]);
-					Inventory.AddItem(item);
+					_inventory.AddItem(item);
 				}
-			}
-
-			if (pCombatantData.Buffs != null)
+			}*/
+			
+			_statBuffs = new Dictionary<StatType, List<IStatBuff>>();
+			_activeEffects = new List<IActiveEffect>();
+			_onHitBuffs = new List<IOnHitEffect>();
+			
+			/*if (pCombatantData.Buffs != null)
 			{
 				foreach (var key in pCombatantData.Buffs.Keys)
 				{
 					var isBuff = Database.Buffs.TryGetValue(key, out var buffResult);
 					if (isBuff)
 					{
-						AddBuff(buffResult(pCombatantData.Buffs[key], -1));
+						AddEffect(buffResult(pCombatantData.Buffs[key], -1));
 					}
 					else
 					{
 						var isOnHit = Database.OnHits.TryGetValue(key, out var onHitResult);
 						if (isOnHit)
 						{
-							AddOnHit(onHitResult(pCombatantData.Buffs[key], 5));
+							AddEffect(onHitResult(pCombatantData.Buffs[key], 5));
 						}
 					}
 				}
-			}
-
-			Experience = pCombatantData.Experience;
-			SkillPoints = pCombatantData.SkillPoints;
-
-			_statBonuses = new Dictionary<StatType, List<AStatBuff>>();
-			_activeEffects = new List<AEffect>();
-			_onHitBuffs = new List<AOnHitBuff>();
+			}*/
 		}
 
 		#region Public Fields
@@ -132,8 +136,22 @@ namespace EndlessAdventure.Common.Battle
 		
 		public bool Fallen { get; private set; }
 		
-		public IEnumerable<AEffect> ActiveEffects => _activeEffects;
-		public IEnumerable<AOnHitBuff> OnHitBuffs => _onHitBuffs;
+		public IEnumerable<IActiveEffect> ActiveEffects => _activeEffects;
+		public IEnumerable<IOnHitEffect> OnHitBuffs => _onHitBuffs;
+		
+		// for easy consumption for Battlefield
+		public IEnumerable<IStatBuff> StatBuffs
+		{
+			get
+			{
+				IEnumerable<IStatBuff> statBuffs = new List<IStatBuff>();
+				foreach (var subStatBuffs in _statBuffs.Values)
+				{
+					statBuffs = statBuffs.Concat(subStatBuffs);
+				}
+				return statBuffs;
+			}
+		}
 		
 		#endregion Public Fields
 
@@ -157,6 +175,7 @@ namespace EndlessAdventure.Common.Battle
 		
 		public void AutoHeal()
 		{
+			// TODO: make this heal a dynamic amount
 			Heal(1);
 		}
 		
@@ -218,61 +237,98 @@ namespace EndlessAdventure.Common.Battle
 			return true;
 		}
 
-		/*public bool TryAttack(ICombatant pCombatant, out int pDamage)
+		public void AddEffect(IEffect effect)
 		{
-			if (!Defaults.DidMiss(Accuracy, pCombatant.Evasion)) {
-				int pendingDamage = PhysicalAttack - pCombatant.Defense;
-				if (pendingDamage > 0) {
-					pCombatant.AddPendingDamage(pendingDamage);
+			switch (effect)
+			{
+				case IActiveEffect activeEffect:
+					_activeEffects.Add(activeEffect);
+					break;
+				case IOnHitEffect onHitEffect:
+					_onHitBuffs.Add(onHitEffect);
+					break;
+				case IStatBuff statBuff:
+				{
+					if (!_statBuffs.TryGetValue(statBuff.StatType, out var buffList))
+					{
+						var buffs = new List<IStatBuff> { statBuff };
+						_statBuffs.Add(statBuff.StatType, buffs);
+					}
+					else
+					{
+						buffList.Add(statBuff);
+					}
+					break;
 				}
-				pDamage = pendingDamage;
-				return true;
 			}
-			pDamage = 0;
-			return false;
-		}*/
-		
-		public void Equip(IItem item)
+		}
+
+		public void RemoveEffect(IEffect effect)
 		{
-			//Inventory.Equip(item, Character);
+			switch (effect)
+			{
+				case IActiveEffect activeEffect:
+					_activeEffects.Remove(activeEffect);
+					break;
+				case IOnHitEffect onHitEffect:
+					_onHitBuffs.Remove(onHitEffect);
+					break;
+				case IStatBuff statBuff:
+				{
+					if (_statBuffs.TryGetValue(statBuff.StatType, out var buffList))
+					{
+						buffList.Remove(statBuff);
+					}
+					break;
+				}
+			}
 		}
 
-		public void Unequip(IItem equipment)
+		public void AddItem(IItem pItem) => _inventory.AddItem(pItem);
+		public void RemoveItem(IItem pItem) => _inventory.RemoveItem(pItem);
+
+		public bool TryEquipItem(IItem pItem, out IItem pUnequipped)
 		{
-			//Inventory.Unequip(equipment, Character);
+			if (!_inventory.TryEquipItem(pItem, out var unequipped))
+			{
+				pUnequipped = null;
+				return false;
+			}
+
+			foreach (var effect in unequipped.EquipEffects)
+			{
+				RemoveEffect(effect);
+			}
+			foreach (var effect in pItem.EquipEffects)
+			{
+				AddEffect(effect);
+			}
+			
+			pUnequipped = unequipped;
+			return true;
 		}
 
-		public void Consume(IItem item)
+		public void UnequipItem(IItem pItem)
 		{
-			//Inventory.Consume(item, Character);
-		}
-		
-		public void AddBuff(AStatBuff buff) {
-			if (!_statBonuses.TryGetValue(buff.StatType, out var buffList)) {
-				List<AStatBuff> buffs = new List<AStatBuff> { buff };
-				_statBonuses.Add(buff.StatType, buffs);
-			}
-			else {
-				buffList.Add(buff);
+			if (!_inventory.UnequipItem(pItem))
+				return;
+
+			foreach (var effect in pItem.EquipEffects)
+			{
+				RemoveEffect(effect);
 			}
 		}
 
-		public void RemoveBuff(AStatBuff buff) {
-			if (_statBonuses.TryGetValue(buff.StatType, out var buffList)) {
-				buffList.Remove(buff);
+		public void ConsumeItem(IItem pItem)
+		{
+			if (pItem.Type != ItemType.Consumable || _inventory.Contains(pItem))
+				return;
+
+			foreach (var effect in pItem.EquipEffects)
+			{
+				AddEffect(effect);
 			}
-		}
-
-		public void AddOnHit(AOnHitBuff buff) {
-			_onHitBuffs.Add(buff);
-		}
-
-		public void AddEffect(AEffect effect) {
-			_activeEffects.Add(effect);
-		}
-
-		public void RemoveEffect(AEffect effect) {
-			_activeEffects.Remove(effect);
+			_inventory.RemoveItem(pItem);
 		}
 		
 		#endregion Public Methods
@@ -280,7 +336,7 @@ namespace EndlessAdventure.Common.Battle
 		#region Private Implementation
 		
 		private int GetBuffedStat(StatType type, int baseValue) {
-			if (!_statBonuses.TryGetValue(type, out var buffs))
+			if (!_statBuffs.TryGetValue(type, out var buffs))
 				return baseValue;
 			
 			var buffedValue = baseValue;

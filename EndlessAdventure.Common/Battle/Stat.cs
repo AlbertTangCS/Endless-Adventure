@@ -1,6 +1,7 @@
-﻿namespace EndlessAdventure.Common.Characters {
-
-	public enum StatType {
+﻿namespace EndlessAdventure.Common.Battle
+{
+	public enum StatType
+	{
 		// base stats
 		Body,
 		Mind,

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using EndlessAdventure.Common.Battle;
 using EndlessAdventure.Common.Buffs.Effects;
 using EndlessAdventure.Common.Buffs.OnHitBuffs;
-using EndlessAdventure.Common.Characters;
 
 namespace EndlessAdventure.Common.Interfaces
 {
@@ -48,22 +48,24 @@ namespace EndlessAdventure.Common.Interfaces
 
         bool Fallen { get; }
         
-        IEnumerable<AEffect> ActiveEffects { get; }
-        IEnumerable<AOnHitBuff> OnHitBuffs { get; }
-
-        //void ApplyDamage(int pHealth);
-        //void Heal(int pHealth);
+        IEnumerable<IActiveEffect> ActiveEffects { get; }
+        IEnumerable<IOnHitEffect> OnHitBuffs { get; }
+        IEnumerable<IStatBuff> StatBuffs { get; }
         
         void AddExperience(int pExperience);
         bool AddSkillPoint(StatType pType, int pCount = 1);
         
         void AutoHeal();
-        //bool TryAttack(ICombatant pCombatant, out int pDamage);
         void AddPendingDamage(int pDamage);
         int ApplyPendingDamage();
-        //void DefeatCombatant(ICombatant pCombatant);
 
-        void AddEffect(AEffect pEffect);
-        void RemoveEffect(AEffect pEffect);
+        void AddEffect(IEffect pEffect);
+        void RemoveEffect(IEffect pEffect);
+        
+        void AddItem(IItem pItem);
+        void RemoveItem(IItem pItem);
+        bool TryEquipItem(IItem pItem, out IItem pUnequipped);
+        void UnequipItem(IItem pItem);
+        void ConsumeItem(IItem pItem);
     }
 }

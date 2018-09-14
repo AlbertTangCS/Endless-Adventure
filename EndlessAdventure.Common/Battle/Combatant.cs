@@ -292,7 +292,7 @@ namespace EndlessAdventure.Common.Battle
 
 		public void ConsumeItem(IItem pItem)
 		{
-			if (pItem.Type != ItemType.Consumable || _inventory.Contains(pItem))
+			if (pItem.Type != ItemType.Consumable || !_inventory.Contains(pItem))
 				return;
 
 			foreach (var effect in pItem.EquipEffects)

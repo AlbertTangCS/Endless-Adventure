@@ -96,6 +96,7 @@ namespace EndlessAdventure.Common.Items
 				return false;
 
 			Equipped.TryGetValue(pItem.Type, out var unequipped);
+			_equipped.Remove(pItem.Type);
 			_equippables.Add(unequipped);
 			return true;
 		}

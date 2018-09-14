@@ -24,7 +24,6 @@ namespace EndlessAdventure.ConsoleApp
 			if (frameTime >= 0)
 			{
 				Console.WriteLine("[Frame time: " + frameTime + "ms]");
-				Console.WriteLine("");
 			}
 
 			switch (_parser.Mode) {
@@ -170,17 +169,17 @@ namespace EndlessAdventure.ConsoleApp
 			Console.WriteLine("");
 			Console.WriteLine("Active Effects:");
 			foreach (var effect in protagonist.ActiveEffects) {
-				Console.WriteLine(effect.Name + " (" + effect.Value+"): " + effect.Description);
+				Console.WriteLine(effect.Name + " (" + effect.Value+"): " + effect.Description + " (" + effect.DurationRemaining + "t)");
 			}
 			
 			var titlePrinted = false;
-			foreach (var onhit in protagonist.OnHitBuffs) {
+			foreach (var onHit in protagonist.OnHitBuffs) {
 				if (!titlePrinted)
 				{
 					Console.WriteLine("On Hit Effects:");
 					titlePrinted = true;
 				}
-				Console.WriteLine(onhit.Name + " (" + onhit.Value + "): " + onhit.Description);
+				Console.WriteLine(onHit.Name + " (" + onHit.Value + "): " + onHit.Description);
 			}
 		}
 

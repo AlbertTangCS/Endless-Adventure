@@ -113,10 +113,14 @@ namespace EndlessAdventure.Common.Resources
 				// on hits
 				case Database.KEY_ONHIT_POISON:
 				{
+					IEnumerable<IEffect> getApplyEffects()
+					{
 						var effects = new List<IEffect> {
 							CreateEffect(Database.KEY_EFFECT_POISON, 1, 5)
 						};
-						return new OnHitBuff(data.Name, data.Description, pValue, pDuration, effects);
+						return effects;
+					};
+					return new OnHitBuff(data.Name, data.Description, pValue, pDuration, getApplyEffects);
 				}
 
 				default:

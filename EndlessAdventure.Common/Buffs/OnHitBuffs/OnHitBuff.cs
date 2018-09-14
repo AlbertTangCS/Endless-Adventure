@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EndlessAdventure.Common.Interfaces;
 
 namespace EndlessAdventure.Common.Buffs.OnHitBuffs
 {
-  public class OnHitBuff : AEffect, IOnHitEffect
-  {
-		private readonly List<IEffect> _effectsToApply;
+	public class OnHitBuff : AEffect, IOnHitEffect
+	{
+		private readonly Func<IEnumerable<IEffect>> _getApplyEffects;
 
-		public OnHitBuff(string pName, string pDescription, double pValue, int pDuration, List<IEffect> pEffectsToApply) : base(pName, pDescription, pValue, pDuration)
+		public OnHitBuff(string pName, string pDescription, double pValue, int pDuration, Func<IEnumerable<IEffect>> pGetApplyEffects) : base(pName, pDescription, pValue, pDuration)
 		{
-			_effectsToApply = pEffectsToApply;
+			_getApplyEffects = pGetApplyEffects;
 		}
-
+		
 		public void ApplyToEnemy(ICombatant pCombatant)
 		{
-			foreach (var effect in _effectsToApply)
+			var effects = _getApplyEffects();
+			foreach (var effect in effects)
 			{
 				pCombatant.AddEffect(effect);
 			}
 		}
-  }
+	}
 }

@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SaveFile.cs" />
     <Compile Include="Views\BattleView.cs" />
     <Compile Include="Views\BuffsView.cs" />
     <Compile Include="Driver.cs" />

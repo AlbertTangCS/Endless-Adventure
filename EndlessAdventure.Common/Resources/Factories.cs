@@ -18,7 +18,7 @@ namespace EndlessAdventure.Common.Resources
 
 			var enemySpawns = new SortedDictionary<int, string>();
 			var totalWeight = 0;
-			foreach (string key in data.EnemySpawns.Keys)
+			foreach (var key in data.EnemySpawns.Keys)
 			{
 				totalWeight += data.EnemySpawns[key];
 				enemySpawns.Add(totalWeight, key);
@@ -32,21 +32,37 @@ namespace EndlessAdventure.Common.Resources
 
 				// get the key that is the random value rounded up
 				var key = enemySpawns.Keys.FirstOrDefault(x => x >= result);
-				if (key == 0)
-					return null;
-
-				return CreateCombatant(enemySpawns[key]);
+				return key == 0 ? null : CreateCombatant(enemySpawns[key]);
 			}
 
 			return new World(data.Name, data.Description, spawnFunction);
 		}
 		
-		public static ICombatant CreateCombatant(string pCombatantKey)
+		private static ICombatant CreateCombatant(string pCombatantKey)
 		{
+			var data = Database.Combatants[pCombatantKey];
+			var combatant = new Combatant(data.Name, data.Description, data.ExpReward, data.Level, data.Body, data.Mind, data.Soul, data.Experience, data.SkillPoints);
+
+			foreach (var itemKey in data.Drops.Keys)
+			{
+				var chance = Utilities.Random.NextDouble();
+				if (!(data.Drops[itemKey] - chance > 0))
+					continue;
+		
+				var item = CreateItem(itemKey);
+				combatant.AddItem(item);
+			}
+
+			foreach (var buffKey in data.Buffs.Keys)
+			{
+				var buff = CreateEffect(buffKey, data.Buffs[buffKey], -1);
+				combatant.AddEffect(buff);
+			}
 			
+			return combatant;
 		}
 		
-		public static IItem CreateItem(string pItemKey)
+		private static IItem CreateItem(string pItemKey)
 		{
 			var data = Database.Items[pItemKey];
 
@@ -72,7 +88,7 @@ namespace EndlessAdventure.Common.Resources
 			return item;
 		}
 
-		public static IEffect CreateEffect(string pEffectKey, double pValue, int pDuration = -1)
+		private static IEffect CreateEffect(string pEffectKey, double pValue, int pDuration = -1)
 		{
 			var data = Database.Effects[pEffectKey];
 

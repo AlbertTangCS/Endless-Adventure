@@ -7,9 +7,10 @@ namespace EndlessAdventure.Common.Interfaces
         IReadOnlyList<ICombatant> Protagonists { get; }
         IReadOnlyList<ICombatant> Antagonists { get; }
         string Message { get; }
-        IWorld World { set; }
+        IWorld World { get; }
 
         void Tick();
         void Flee();
+        void TravelToWorld(IWorld pWorld);
     }
 }

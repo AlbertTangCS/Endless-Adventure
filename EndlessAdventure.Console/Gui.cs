@@ -1,29 +1,31 @@
 ﻿using System;
-using EndlessAdventure.Common;
-using EndlessAdventure.Common.Battle;
-using EndlessAdventure.Common.Items;
-using EndlessAdventure.Common.Resources;
 using System.Collections.Generic;
-using EndlessAdventure.Common.Buffs.Statbuffs;
-using EndlessAdventure.Common.Buffs.Effects;
-using EndlessAdventure.Common.Buffs.OnHitBuffs;
 
-namespace EndlessAdventure.ConsoleApp {
+using EndlessAdventure.Common;
+using EndlessAdventure.Common.Resources;
+using EndlessAdventure.ConsoleApp.Views;
 
-	public class Gui {
-
+namespace EndlessAdventure.ConsoleApp
+{
+	public class Gui
+	{
 		private readonly Game _game;
 		private readonly MainView _parser;
 
-		public Gui(Game pGame, MainView pParser) {
+		public Gui(Game pGame, MainView pParser)
+		{
 			_game = pGame;
 			_parser = pParser;
 		}
 		
-		public void Render(long frametime) {
+		public void Render(long frameTime)
+		{
 			Console.Clear();
-			//Console.WriteLine("[Frame time: " + frametime + "ms]");
-			//Console.WriteLine("");
+			if (frameTime >= 0)
+			{
+				Console.WriteLine("[Frame time: " + frameTime + "ms]");
+				Console.WriteLine("");
+			}
 
 			switch (_parser.Mode) {
 				case Mode.Battle:
@@ -46,17 +48,17 @@ namespace EndlessAdventure.ConsoleApp {
 			DisplayMessages();
 		}
 
-		private void PrintGame() {
-			Console.WriteLine("<========== " + _game.World.Name.ToUpper() + " ==========>");
+		private void PrintGame()
+		{
+			Console.WriteLine("<========== " + _game.Battlefield.World.Name.ToUpper() + " ==========>");
 			Console.WriteLine("");
 
-			int hitchance = -1;
-			foreach (Combatant p in _game.Battlefield.Protagonists) {
-				if (hitchance == -1)
-					hitchance = p.Character.Accuracy;
-				Character protagonist = p.Character;
-				Console.Write("<-- Lvl. " + p.Level + " " + protagonist.Name);
-				Console.WriteLine(" (" + p.Experience + "/" + Defaults.NextLevelExpFormula(p.Level) + ") -->");
+			var hitChance = -1;
+			foreach (var protagonist in _game.Battlefield.Protagonists) {
+				if (hitChance == -1)
+					hitChance = protagonist.Accuracy;
+				Console.Write("<-- Lvl. " + protagonist.Level + " " + protagonist.Name);
+				Console.WriteLine(" (" + protagonist.Experience + "/" + Defaults.NextLevelExpFormula(protagonist.Level) + ") -->");
 				Console.WriteLine("Health: " + protagonist.CurrentHealth + " / " + protagonist.MaxHealth);
 				Console.WriteLine("Energy: " + protagonist.CurrentEnergy + " / " + protagonist.MaxEnergy);
 				Console.Write("PA:" + protagonist.PhysicalAttack + "(+" + (protagonist.PhysicalAttack - protagonist.BasePhysicalAttack) + "), ");
@@ -67,9 +69,8 @@ namespace EndlessAdventure.ConsoleApp {
 
 			Console.WriteLine("");
 
-			foreach (Combatant a in _game.Battlefield.Antagonists) {
-				Character antagonist = a.Character;
-				Console.WriteLine("<-- " + antagonist.Name +" ("+Defaults.HitChance(hitchance, a.Character.Evasion)+"%) -->");
+			foreach (var antagonist in _game.Battlefield.Antagonists) {
+				Console.WriteLine("<-- " + antagonist.Name +" ("+Defaults.HitChance(hitChance, antagonist.Evasion)+"%) -->");
 				Console.WriteLine("Health: " + antagonist.CurrentHealth + " / " + antagonist.MaxHealth);
 				Console.WriteLine("Energy: " + antagonist.CurrentEnergy + " / " + antagonist.MaxEnergy);
 				Console.Write("PA:" + antagonist.PhysicalAttack + "(+" + (antagonist.PhysicalAttack - antagonist.BasePhysicalAttack) + "), ");
@@ -80,21 +81,22 @@ namespace EndlessAdventure.ConsoleApp {
 			}
 		}
 
-		private void DisplayInventory() {
+		private void DisplayInventory()
+		{
 			Console.WriteLine("<========== INVENTORY ==========>");
 			Console.WriteLine("");
 
-			Combatant protagonist = _game.Battlefield.Protagonists[0];
+			var protagonist = _game.Battlefield.Protagonists[0];
 
 			Console.WriteLine("> Equipped");
-			foreach (Item equipped in protagonist.Inventory.Equipped.Values) {
+			foreach (var equipped in protagonist.Inventory.Equipped.Values) {
 				Console.WriteLine(equipped.Name);
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("> Equippables");
-			Dictionary<string, int> equippableCount = new Dictionary<string, int>();
-			foreach (Item equippable in protagonist.Inventory.Equippables) {
+			var equippableCount = new Dictionary<string, int>();
+			foreach (var equippable in protagonist.Inventory.Equippables) {
 				if (!equippableCount.ContainsKey(equippable.Name)) {
 					equippableCount.Add(equippable.Name, 1);
 				}
@@ -108,8 +110,8 @@ namespace EndlessAdventure.ConsoleApp {
 
 			Console.WriteLine("");
 			Console.WriteLine("> Consumables");
-			Dictionary<string, int> consumableCount = new Dictionary<string, int>();
-			foreach (Item consumable in protagonist.Inventory.Consumables) {
+			var consumableCount = new Dictionary<string, int>();
+			foreach (var consumable in protagonist.Inventory.Consumables) {
 				if (!consumableCount.ContainsKey(consumable.Name)) {
 					consumableCount.Add(consumable.Name, 1);
 				}
@@ -117,14 +119,14 @@ namespace EndlessAdventure.ConsoleApp {
 					consumableCount[consumable.Name] += 1;
 				}
 			}
-			foreach (string key in consumableCount.Keys) {
+			foreach (var key in consumableCount.Keys) {
 				Console.WriteLine(key + " x" + consumableCount[key]);
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("> Miscellaneous");
-			Dictionary<string, int> miscellaneousCount = new Dictionary<string, int>();
-			foreach (Item miscellaneous in protagonist.Inventory.Miscellaneous) {
+			var miscellaneousCount = new Dictionary<string, int>();
+			foreach (var miscellaneous in protagonist.Inventory.Miscellaneous) {
 				if (!miscellaneousCount.ContainsKey(miscellaneous.Name)) {
 					miscellaneousCount.Add(miscellaneous.Name, 1);
 				}
@@ -132,49 +134,57 @@ namespace EndlessAdventure.ConsoleApp {
 					miscellaneousCount[miscellaneous.Name] += 1;
 				}
 			}
-			foreach (string key in miscellaneousCount.Keys) {
+			foreach (var key in miscellaneousCount.Keys) {
 				Console.WriteLine(key + " x" + miscellaneousCount[key]);
 			}
 		}
 
-		private void DisplaySkills() {
+		private void DisplaySkills()
+		{
 			Console.WriteLine("<========== SKILLS ==========>");
 			Console.WriteLine("");
 
-			Combatant protagonist = _game.Battlefield.Protagonists[0];
+			var protagonist = _game.Battlefield.Protagonists[0];
 			Console.WriteLine("POINTS TO ALLOCATE: " + protagonist.SkillPoints);
-			Console.WriteLine("Body: " + protagonist.Character.BaseBody + " (+" + (protagonist.Character.Body - protagonist.Character.BaseBody) + ")");
-			Console.WriteLine("Mind: " + protagonist.Character.BaseMind + " (+" + (protagonist.Character.Mind - protagonist.Character.BaseMind) + ")");
-			Console.WriteLine("Soul: " + protagonist.Character.BaseSoul + " (+" + (protagonist.Character.Soul - protagonist.Character.BaseSoul) + ")");
-			Console.WriteLine("Luck: " + protagonist.Luck);
+			Console.WriteLine("Body: " + protagonist.BaseBody + " (+" + (protagonist.Body - protagonist.BaseBody) + ")");
+			Console.WriteLine("Mind: " + protagonist.BaseMind + " (+" + (protagonist.Mind - protagonist.BaseMind) + ")");
+			Console.WriteLine("Soul: " + protagonist.BaseSoul + " (+" + (protagonist.Soul - protagonist.BaseSoul) + ")");
+			Console.WriteLine("Fortune: " + protagonist.Fortune);
 		}
 
-		private void DisplayBuffs() {
+		private void DisplayBuffs()
+		{
 			Console.WriteLine("<========== EFFECTS ==========>");
 			Console.WriteLine("");
 
 			Console.WriteLine("Buffs:");
-			Combatant protagonist = _game.Battlefield.Protagonists[0];
-			foreach (StatType type in protagonist.Character.StatBonuses.Keys) {
+			var protagonist = _game.Battlefield.Protagonists[0];
+			
+			/*foreach (StatType type in protagonist.Character.StatBonuses.Keys) {
 				Console.WriteLine("Buffs to " + type + ":");
 				foreach (AStatBuff buff in protagonist.Character.StatBonuses[type]) {
 					Console.WriteLine(buff.Name + " (+" + buff.Value + ")");
 				}
-			}
-			if (protagonist.Character.OnHitBuffs.Count > 0)
-				Console.WriteLine("On Hit Effects:");
-			foreach (AOnHitBuff onhit in protagonist.Character.OnHitBuffs) {
-				Console.WriteLine(onhit.Name + " (" + onhit.Value + "): " + onhit.Description);
-			}
-
+			}*/
+			
 			Console.WriteLine("");
 			Console.WriteLine("Active Effects:");
-			foreach (AEffect effect in protagonist.Character.ActiveEffects) {
+			foreach (var effect in protagonist.ActiveEffects) {
 				Console.WriteLine(effect.Name + " (" + effect.Value+"): " + effect.Description);
+			}
+			
+			var titlePrinted = false;
+			foreach (var onhit in protagonist.OnHitBuffs) {
+				if (!titlePrinted)
+				{
+					Console.WriteLine("On Hit Effects:");
+					titlePrinted = true;
+				}
+				Console.WriteLine(onhit.Name + " (" + onhit.Value + "): " + onhit.Description);
 			}
 		}
 
-		public void DisplayMessages() {
+		private void DisplayMessages() {
 			Console.WriteLine("");
 			Console.Write(_game.Battlefield.Message);
 			Console.WriteLine(_parser.FetchMessage());

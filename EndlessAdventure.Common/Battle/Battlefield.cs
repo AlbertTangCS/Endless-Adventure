@@ -13,8 +13,6 @@ namespace EndlessAdventure.Common.Battle
 		private readonly List<ICombatant> _antagonists;
 		private readonly List<ICombatant> _antagonistQueue;
 
-		private IWorld _world;
-		
 		// TODO: come up with a better way of sending messages to VM
 		private string _message;
 		
@@ -27,7 +25,7 @@ namespace EndlessAdventure.Common.Battle
 			_antagonistQueue = new List<ICombatant>();
 
 			Message = string.Empty;
-			World = pWorld;
+			TravelToWorld(pWorld);
 		}
 
 		#region Public Fields
@@ -45,21 +43,8 @@ namespace EndlessAdventure.Common.Battle
 			private set => _message = value;
 		}
 
-		public IWorld World
-		{
-			get => _world;
-			set
-			{
-				if (_world == value)
-					return;
-				
-				_world = value;
-				Flee();
-				_antagonistQueue.Clear();
-				AddAntagonistToQueue();
-			}
-		}
-		
+		public IWorld World { get; private set; }
+
 		#endregion Public Fields
 		
 		#region Public Methods
@@ -86,11 +71,22 @@ namespace EndlessAdventure.Common.Battle
 			while (Antagonists.Count > 0) {
 				enemyName = Antagonists[0].Name;
 				_antagonists.RemoveAt(0);
-				_antagonistQueue.Add(_world.SpawnEnemy());
+				_antagonistQueue.Add(World.SpawnEnemy());
 			}
 			if (enemyName != null) {
 				Message += "Fled from " + enemyName + "!\n";
 			}
+		}
+
+		public void TravelToWorld(IWorld pWorld)
+		{
+			if (World == pWorld)
+				return;
+				
+			World = pWorld;
+			Flee();
+			_antagonistQueue.Clear();
+			AddAntagonistToQueue();
 		}
 		
 		#endregion Public Methods
@@ -99,7 +95,7 @@ namespace EndlessAdventure.Common.Battle
 		
 		private void AddAntagonistToQueue()
 		{
-			var antagonist = _world.SpawnEnemy();
+			var antagonist = World.SpawnEnemy();
 			if (antagonist != null) {
 				_antagonistQueue.Add(antagonist);
 			}

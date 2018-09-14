@@ -1,14 +1,15 @@
 ﻿using System;
 using EndlessAdventure.Common;
 
-namespace EndlessAdventure {
-
-	public enum Mode {
+namespace EndlessAdventure.ConsoleApp.Views
+{
+	public enum Mode
+	{
 		Battle, Inventory, Stats, Buffs
 	}
 
-	public class MainView : View {
-		
+	public class MainView : View
+	{
 		private const string BATTLE_VIEW_COMMAND = "battle";
 		private const string BUFFS_VIEW_COMMAND = "buffs";
 		private const string INVENTORY_VIEW_COMMAND = "inventory";
@@ -22,7 +23,8 @@ namespace EndlessAdventure {
 		private readonly View[] _subviews;
 		private View _currentSubview;
 
-		public MainView(Game pGame) : base(pGame) {
+		public MainView(Game pGame) : base(pGame)
+		{
 			_commandDictionary.Add(BATTLE_VIEW_COMMAND, ": Switches to the battle view.");
 			_commandDictionary.Add(BUFFS_VIEW_COMMAND, ": Switches to the buffs view.");
 			_commandDictionary.Add(INVENTORY_VIEW_COMMAND, ": Switches to the inventory view.");
@@ -32,7 +34,8 @@ namespace EndlessAdventure {
 			_currentSubview = _subviews[0];
 		}
 
-		public Mode Mode { get {
+		public Mode Mode { get
+			{
 				var index = Array.IndexOf(_subviews, _currentSubview);
 				switch (index) {
 					case BATTLE_VIEW_INDEX:
@@ -50,13 +53,15 @@ namespace EndlessAdventure {
 		}
 
 		private string _message;
-		public string FetchMessage() {
-			string message = _message;
+		public string FetchMessage()
+		{
+			var message = _message;
 			_message = null;
 			return message;
 		}
 
-		public override void ProcessInput(string[] pArgs) {
+		public override void ProcessInput(string[] pArgs)
+		{
 			pArgs[0] = pArgs[0].ToLower();
 			switch (pArgs[0]) {
 				case "":

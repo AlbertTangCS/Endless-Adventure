@@ -1,9 +1,10 @@
 ﻿using EndlessAdventure.Common;
 using EndlessAdventure.Common.Resources;
 
-namespace EndlessAdventure {
-	public class BattleView : View {
-
+namespace EndlessAdventure.ConsoleApp.Views
+{
+	public class BattleView : View
+	{
 		private const string FLEE_COMMAND = "flee";
 		private const string RUN_COMMAND = "run";
 		private const string TRAVEL_COMMAND = "travelto";
@@ -50,10 +51,10 @@ namespace EndlessAdventure {
 					switch (pArgs[1])
 					{
 						case "greenpastures":
-							_game.TravelToWorld(Database.KEY_WORLD_GREEN_PASTURES);
+							_game.Battlefield.TravelToWorld(Factory.CreateWorld(Database.KEY_WORLD_GREEN_PASTURES));
 							break;
 						case "shadywoods":
-							_game.TravelToWorld(Database.KEY_WORLD_SHADY_WOODS);
+							_game.Battlefield.TravelToWorld(Factory.CreateWorld(Database.KEY_WORLD_SHADY_WOODS));
 							break;
 						default:
 							_parseMessage = "Invalid argument.";

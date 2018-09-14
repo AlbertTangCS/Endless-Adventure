@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using EndlessAdventure.Common;
 
-namespace EndlessAdventure {
-	public abstract class View {
-
+namespace EndlessAdventure.ConsoleApp.Views
+{
+	public abstract class View
+	{
 		protected readonly Game _game;
 		protected readonly Dictionary<string, string> _commandDictionary = new Dictionary<string, string>();
 
-		public View(Game pGame)
+		protected View(Game pGame)
 		{
 			_game = pGame;
 		}

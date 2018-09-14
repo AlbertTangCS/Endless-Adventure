@@ -31,49 +31,19 @@ namespace EndlessAdventure.Common.Battle
 			BaseBody = pBody;
 			BaseMind = pMind;
 			BaseSoul = pSoul;
-
+			
 			// player specific
 			Experience = pExperience;
 			SkillPoints = pSkillPoints;
 
 			_inventory =  new Inventory();
 			
-			/*if (pCombatantData.Drops != null)
-			{
-				foreach (var key in pCombatantData.Drops.Keys)
-				{
-					var chance = Utilities.Random.NextDouble();
-					if (!(pCombatantData.Drops[key] - chance > 0))
-						continue;
-					
-					var item = new Item(Database.Items[key]);
-					_inventory.AddItem(item);
-				}
-			}*/
-			
 			_statBuffs = new Dictionary<StatType, List<IStatBuff>>();
 			_activeEffects = new List<IActiveEffect>();
 			_onHitBuffs = new List<IOnHitEffect>();
 			
-			/*if (pCombatantData.Buffs != null)
-			{
-				foreach (var key in pCombatantData.Buffs.Keys)
-				{
-					var isBuff = Database.Buffs.TryGetValue(key, out var buffResult);
-					if (isBuff)
-					{
-						AddEffect(buffResult(pCombatantData.Buffs[key], -1));
-					}
-					else
-					{
-						var isOnHit = Database.OnHits.TryGetValue(key, out var onHitResult);
-						if (isOnHit)
-						{
-							AddEffect(onHitResult(pCombatantData.Buffs[key], 5));
-						}
-					}
-				}
-			}*/
+			CurrentHealth = MaxHealth;
+			CurrentEnergy = MaxEnergy;
 		}
 
 		#region Public Fields
@@ -292,10 +262,14 @@ namespace EndlessAdventure.Common.Battle
 				return false;
 			}
 
-			foreach (var effect in unequipped.EquipEffects)
+			if (unequipped != null)
 			{
-				RemoveEffect(effect);
+				foreach (var effect in unequipped.EquipEffects)
+				{
+					RemoveEffect(effect);
+				}
 			}
+
 			foreach (var effect in pItem.EquipEffects)
 			{
 				AddEffect(effect);

@@ -5,7 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Characters" />
+    <Compile Remove="Characters\**" />
+    <EmbeddedResource Remove="Characters\**" />
+    <None Remove="Characters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Items.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Items.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>

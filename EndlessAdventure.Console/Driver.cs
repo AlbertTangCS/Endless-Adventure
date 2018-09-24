@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using EndlessAdventure.Common;
+using EndlessAdventure.Common.Resources;
 using EndlessAdventure.ConsoleApp.Views;
 
 namespace EndlessAdventure.ConsoleApp

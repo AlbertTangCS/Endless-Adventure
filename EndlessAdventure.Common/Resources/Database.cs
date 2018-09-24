@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using EndlessAdventure.Common.Battle;
-using EndlessAdventure.Common.Buffs.OnHitBuffs;
 using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources.Data;
 
@@ -11,6 +10,9 @@ namespace EndlessAdventure.Common.Resources
 	{
 		public static void Initialize()
 		{
+			Parser.Parse();
+			Console.ReadLine();
+
 			InitializeWorlds();
 			InitializeEnemies();
 			InitializeEffects();

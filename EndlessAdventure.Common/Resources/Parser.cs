@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using EndlessAdventure.Common.Items;
 using Newtonsoft.Json;
 
 namespace EndlessAdventure.Common.Resources
@@ -11,12 +13,6 @@ namespace EndlessAdventure.Common.Resources
 		{
 			string file;
 			var assembly = typeof(Parser).GetTypeInfo().Assembly;
-
-			foreach (var wat in assembly.GetManifestResourceNames())
-			{
-				Console.WriteLine(wat);
-			}
-			Console.ReadLine();
 
 			var space = typeof(Parser).Namespace;
 			using (var stream = assembly.GetManifestResourceStream(space+".Items.json"))
@@ -30,18 +26,8 @@ namespace EndlessAdventure.Common.Resources
 			//var streamreader = new StreamReader("Items.json");
 			//string file = "{ \"bar\": \"Stack Overflow\" }";
 
-			var deserialized = JsonConvert.DeserializeObject<Test>(file);
-			Console.WriteLine(deserialized.Bar);
-		}
-
-		private class Test
-		{
-			public string Bar { get; }
-
-			public Test(string bar)
-			{
-				Bar = bar;
-			}
+			var deserialized = JsonConvert.DeserializeObject<ItemData>(file);
+			var test = 1 + 1; //Console.WriteLine(deserialized.Bar);
 		}
 	}
 }

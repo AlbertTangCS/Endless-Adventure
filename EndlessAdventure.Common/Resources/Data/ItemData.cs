@@ -5,14 +5,14 @@ namespace EndlessAdventure.Common.Resources
 {
 	public class ItemData
 	{
-		public ItemData(string pName, string pDescription, ItemType pType, int pCost, Dictionary<string, double> pEquipEffects)
+		public ItemData(string name, string description, ItemType type, int cost, Dictionary<string, double> equipEffects)
 		{
-			Name = pName;
-			Description = pDescription;
-			Type = pType;
-			Cost = pCost;
+			Name = name;
+			Description = description;
+			Type = type;
+			Cost = cost;
 
-			EquipEffects = pEquipEffects;
+			EquipEffects = equipEffects;
 		}
 
 		public string Name { get; }

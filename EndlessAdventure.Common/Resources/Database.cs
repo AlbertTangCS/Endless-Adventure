@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using EndlessAdventure.Common.Battle;
-using EndlessAdventure.Common.Items;
 using EndlessAdventure.Common.Resources.Data;
+using Newtonsoft.Json;
 
 namespace EndlessAdventure.Common.Resources
 {
@@ -10,13 +12,15 @@ namespace EndlessAdventure.Common.Resources
 	{
 		public static void Initialize()
 		{
-			Parser.Parse();
-			Console.ReadLine();
+			//Parser.Parse();
+			//Console.ReadLine();
 
 			InitializeWorlds();
 			InitializeEnemies();
 			InitializeEffects();
 			InitializeItems();
+
+			Console.ReadLine();
 		}
 
 		#region Worlds
@@ -305,7 +309,7 @@ namespace EndlessAdventure.Common.Resources
 
 		#region Items
 
-		public static readonly Dictionary<string, ItemData> Items = new Dictionary<string, ItemData>();
+		public static Dictionary<string, ItemData> Items = new Dictionary<string, ItemData>();
 
 		private static readonly string KEY_ITEM_STICK = "ItemStick";
 		private static readonly string KEY_ITEM_SHIRT = "ItemShirt";
@@ -316,7 +320,19 @@ namespace EndlessAdventure.Common.Resources
 
 		private static void InitializeItems()
 		{
-			//equippables
+			string file;
+			var assembly = typeof(Parser).GetTypeInfo().Assembly;
+			
+			var space = typeof(Parser).Namespace;
+			using (var stream = assembly.GetManifestResourceStream(space+".Items.json"))
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					file = reader.ReadToEnd();
+				}
+			}
+			Items = JsonConvert.DeserializeObject<Dictionary<string, ItemData>>(file);
+			/*//equippables
 			Items.Add(KEY_ITEM_STICK,
 				new ItemData(
 					Localization.ITEM_STICK_NAME,
@@ -355,7 +371,7 @@ namespace EndlessAdventure.Common.Resources
 					Localization.ITEM_UNICORN_HORN_DESCRIPTION,
 					ItemType.Miscellaneous,
 					100,
-					null));
+					null));*/
 		}
 
 		#endregion

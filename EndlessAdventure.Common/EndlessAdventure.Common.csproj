@@ -8,6 +8,12 @@
     <Compile Remove="Characters\**" />
     <EmbeddedResource Remove="Characters\**" />
     <None Remove="Characters\**" />
+    <None Remove="Resources\Effects.json" />
+    <EmbeddedResource Include="Resources\Effects.json" />
+    <None Remove="Resources\Enemies.json" />
+    <EmbeddedResource Include="Resources\Enemies.json" />
+    <None Remove="Resources\Worlds.json" />
+    <EmbeddedResource Include="Resources\Worlds.json" />
   </ItemGroup>
 
   <ItemGroup>

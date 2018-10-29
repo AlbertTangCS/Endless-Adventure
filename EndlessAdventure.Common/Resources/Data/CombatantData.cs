@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EndlessAdventure.Common.Battle
+namespace EndlessAdventure.Common.Resources
 {
 	public class CombatantData
 	{

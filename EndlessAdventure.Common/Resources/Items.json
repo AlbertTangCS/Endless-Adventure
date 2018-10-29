@@ -1,44 +1,38 @@
 ﻿{
-    "ItemStick":
-    {
+    "ItemStick":{
         "Name":"Stick",
         "Description":"Stick.",
         "Type":0,
         "Cost":1,
-        "EquipEffects":
-        {
+        "EquipEffects":{
             "StatbuffIncPhysicalAttack":1.0
         }
     },
-    "ItemShirt":
-    {
+    "ItemShirt":{
         "Name":"Shirt",
         "Description":"Shirt.",
         "Type":2,
         "Cost":1,
-        "EquipEffects":
-        {
+        "EquipEffects":{
             "StatbuffIncDefense":1.0,
             "StatbuffMultPhysicalAttack":0.5
         }
     },
-    "ItemPotion":
-    {
+    "ItemPotion":{
         "Name":"Potion",
         "Description":"Potion.",
         "Type":4,
         "Cost":5,
-        "EquipEffects":
-        {
+        "EquipEffects":{
             "EffectHeal":3.0
         }
     },
-    "ItemUnicornHorn":
-    {
+    "ItemUnicornHorn":{
         "Name":"Unicorn Horn",
         "Description":"Unicorn horn.",
         "Type":5,
         "Cost":100,
-        "EquipEffects":null
+        "EquipEffects":{
+        }
     }
 }

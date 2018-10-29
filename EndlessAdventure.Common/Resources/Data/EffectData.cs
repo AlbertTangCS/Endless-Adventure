@@ -1,4 +1,4 @@
-namespace EndlessAdventure.Common.Resources.Data
+namespace EndlessAdventure.Common.Resources
 {
     public enum EffectType
     {

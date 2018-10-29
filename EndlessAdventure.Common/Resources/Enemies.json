@@ -1,0 +1,225 @@
+{
+  "Player":{
+    "Name":"Player",
+    "Description":"Player.",
+    "ExpReward":0,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":3,
+    "Mind":3,
+    "Soul":3,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyChicken":{
+    "Name":"Chicken",
+    "Description":"Chicken.",
+    "ExpReward":1,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":1,
+    "Mind":0,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemySheep":{
+    "Name":"Sheep",
+    "Description":"Sheep.",
+    "ExpReward":2,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":3,
+    "Mind":0,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyPig":{
+    "Name":"Pig",
+    "Description":"Pig.",
+    "ExpReward":2,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":3,
+    "Mind":1,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyPony":{
+    "Name":"Pony",
+    "Description":"Pony.",
+    "ExpReward":3,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":5,
+    "Mind":1,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyGoblinDeserter":{
+    "Name":"Goblin Deserter",
+    "Description":"Goblin Deserter.",
+    "ExpReward":5,
+    "Drops":{
+      "ItemPotion":1.0,
+      "ItemStick":0.5,
+      "ItemShirt":0.5
+    },
+    "Level":0,
+    "Body":5,
+    "Mind":2,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyUnicorn":{
+    "Name":"Unicorn",
+    "Description":"Unicorn.",
+    "ExpReward":3,
+    "Drops":{
+      "ItemUnicornHorn":1.0
+    },
+    "Level":0,
+    "Body":5,
+    "Mind":5,
+    "Soul":1,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemySquirrel":{
+    "Name":"Squirrel",
+    "Description":"Squirrel.",
+    "ExpReward":1,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":1,
+    "Mind":0,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyRacoon":{
+    "Name":"Racoon",
+    "Description":"Racoon.",
+    "ExpReward":2,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":2,
+    "Mind":2,
+    "Soul":0,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyDeer":{
+    "Name":"Deer",
+    "Description":"Deer.",
+    "ExpReward":3,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":5,
+    "Mind":1,
+    "Soul":1,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyOwl":{
+    "Name":"Owl",
+    "Description":"Owl.",
+    "ExpReward":3,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":1,
+    "Mind":7,
+    "Soul":0,
+    "Buffs":{
+      "StatbuffIncEvasion":7.0
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyWolf":{
+    "Name":"Wolf",
+    "Description":"Wolf.",
+    "ExpReward":5,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":7,
+    "Mind":5,
+    "Soul":2,
+    "Buffs":{
+
+    },
+    "Experience":0,
+    "SkillPoints":0
+  },
+  "EnemyShroomling":{
+    "Name":"Shroomling",
+    "Description":"Shroomling.",
+    "ExpReward":10,
+    "Drops":{
+
+    },
+    "Level":0,
+    "Body":10,
+    "Mind":5,
+    "Soul":5,
+    "Buffs":{
+      "OnHitPoison":1.0
+    },
+    "Experience":0,
+    "SkillPoints":0
+  }
+}

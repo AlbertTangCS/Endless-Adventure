@@ -1,0 +1,44 @@
+{
+  "EffectHeal":{
+    "Name":"Healing",
+    "Description":"Heals character.",
+    "EffectType":0,
+    "MaxStacks":1
+  },
+  "EffectPoison":{
+    "Name":"Poisoned",
+    "Description":"Damages character.",
+    "EffectType":0,
+    "MaxStacks":1
+  },
+  "StatbuffIncPhysicalAttack":{
+    "Name":"Physical Attack Buff",
+    "Description":"Applies Poison to opponent on hit.",
+    "EffectType":1,
+    "MaxStacks":1
+  },
+  "StatbuffMultPhysicalAttack":{
+    "Name":"Physical Attack Buff",
+    "Description":"Applies Poison to opponent on hit.",
+    "EffectType":1,
+    "MaxStacks":1
+  },
+  "StatbuffIncDefense":{
+    "Name":"Defense Buff",
+    "Description":"Applies Poison to opponent on hit.",
+    "EffectType":1,
+    "MaxStacks":1
+  },
+  "StatbuffIncEvasion":{
+    "Name":"Evasion Buff",
+    "Description":"Applies Poison to opponent on hit.",
+    "EffectType":1,
+    "MaxStacks":1
+  },
+  "OnHitPoison":{
+    "Name":"Poisons On Hit",
+    "Description":"Applies Poison to opponent on hit.",
+    "EffectType":2,
+    "MaxStacks":1
+  }
+}

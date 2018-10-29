@@ -1,0 +1,26 @@
+{
+  "WorldGreenPastures":{
+    "Name":"Green Pastures",
+    "Description":"Green pastures.",
+    "EnemySpawns":{
+      "EnemyChicken":50,
+      "EnemySheep":10,
+      "EnemyPig":10,
+      "EnemyPony":5,
+      "EnemyGoblinDeserter":5,
+      "EnemyUnicorn":1
+    }
+  },
+  "WorldShadyWoods":{
+    "Name":"Shady Woods",
+    "Description":"Shady woods.",
+    "EnemySpawns":{
+      "EnemySquirrel":50,
+      "EnemyRacoon":20,
+      "EnemyDeer":10,
+      "EnemyOwl":10,
+      "EnemyWolf":5,
+      "EnemyShroomling":50
+    }
+  }
+}
